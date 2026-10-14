@@ -456,15 +456,15 @@ def prior_1820_30(theta_in):
     # reasonable limits.
     # Assuming a Gaussing prior for each parameter, the mean and standard deviation are defined below.
     if (
-        (0.0 < X < 0.76)
-        and (0.00001 < Z < 0.056)
+        (0.0 < X < 0.4)
+        and (0.00001 < Z < 0.1)
         and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 20)
+        and (1 < dist < 10)
         and (0.01 < xi_b < 2)
         and (0.01 < xi_p < 10)
         and (1 <= f_t < 10)
         and (1.15 < mass < 2.5)
-        and (9 < radius < 17)
+        and (6 < radius < 17)
     ):
         mu_x, sigma_x = 0.05, 0.05
         mu_z, sigma_z = 0.02, 0.01
