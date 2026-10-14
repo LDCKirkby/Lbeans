@@ -31,6 +31,7 @@ import pickle
 
 # import pkg_resources  # part of setuptools
 from importlib.metadata import version
+
 try:
     # this will fail if the package is not pip-installed
     __version__ = version("beansp")
@@ -46,15 +47,15 @@ USETEX = True
 # Set the default font to Times; this doesn't seem to affect the
 # ChainConsumer plots
 
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['Times']
-plt.rcParams['text.usetex'] = USETEX
+plt.rcParams["font.family"] = "serif"
+plt.rcParams["font.serif"] = ["Times"]
+plt.rcParams["text.usetex"] = USETEX
 
 # figure defaults, based on PASA preprint on A4 paper
 
-FONT_SIZE_DEFAULT = 7.5 # points
-FIGSIZE_COLUMN = (3.3, 3.3) # inches
-FIGSIZE_PAGE = (7, 5) # inches
+FONT_SIZE_DEFAULT = 7.5  # points
+FIGSIZE_COLUMN = (3.3, 3.3)  # inches
+FIGSIZE_PAGE = (7, 5)  # inches
 
 # Keywords etc. for common appearance of ChainConsumer plots
 # configure params below copied initially from Adelle's jupyter notebook
@@ -72,25 +73,34 @@ FIGSIZE_PAGE = (7, 5) # inches
 #
 # we also modify CC_PLOT_CONFIG in do_analysis with the chosen font size
 
-CC_CONFIG = { 'shade': True, 'shade_alpha': 1.0, 'bar_shade': True,
-              'smooth': True, 'sigmas': [0,1,2] , 'statistics': 'cumulative'}
-CC_PLOT_CONFIG = { 'serif': True, 'usetex': USETEX}
+CC_CONFIG = {
+    "shade": True,
+    "shade_alpha": 1.0,
+    "bar_shade": True,
+    "smooth": True,
+    "sigmas": [0, 1, 2],
+    "statistics": "cumulative",
+}
+CC_PLOT_CONFIG = {"serif": True, "usetex": USETEX}
 
 # Some constants & standard units
 
-BSTART_ERR = 10*u.min # Default uncertainty for burst start times
-M_NS = 1.4 # canonical NS mass [M_sun]
-R_NS = 11.2 # canonical NS mass [km]
-FLUX_U, FLUX_U_LATEX = 1e-9*u.erg/u.cm**2/u.s, r"$10^{-9}\,{\rm erg\,cm^{-2}\,s^{-1}}$",
-FLUEN_U, FLUEN_U_LATEX = 1e-6*u.erg/u.cm**2, r"$10^{-6}\,{\rm erg\,cm^{-2}}$"
+BSTART_ERR = 10 * u.min  # Default uncertainty for burst start times
+M_NS = 1.4  # canonical NS mass [M_sun]
+R_NS = 11.2  # canonical NS mass [km]
+FLUX_U, FLUX_U_LATEX = (
+    1e-9 * u.erg / u.cm**2 / u.s,
+    r"$10^{-9}\,{\rm erg\,cm^{-2}\,s^{-1}}$",
+)
+FLUEN_U, FLUEN_U_LATEX = 1e-6 * u.erg / u.cm**2, r"$10^{-6}\,{\rm erg\,cm^{-2}}$"
 
 # Adopted value of the Eddington luminosity/peak luminosity of PRE bursts
 # (preliminary values from Galloway et al. 2026, in prep)
 
-L_EDD = 3.5e38*u.erg/u.s
-L_EDD_ERR = 1.6e38*u.erg/u.s
+L_EDD = 3.5e38 * u.erg / u.s
+L_EDD_ERR = 1.6e38 * u.erg / u.s
 
-BILBY_OUTPUT = 'bilby_out'
+BILBY_OUTPUT = "bilby_out"
 
 # some parameter limits etc
 # current parameter list has at most 9 fit parameters:
@@ -107,22 +117,47 @@ BILBY_OUTPUT = 'bilby_out'
 # 9 = f_t systematic fractional variation in burst times
 
 # utility dicts etc. for parameter labels
-PARAM_LATEX = {"X": r"\ensuremath{X}", "Z": r"\ensuremath{Z_{\rm CNO}}",
-          "Q_b": r"\ensuremath{Q_b}", "d": r"\ensuremath{d}",
-          "xi_b": r"\ensuremath{\xi_b}", "xi_p": r"\ensuremath{\xi_p}",
-          "M": r"\ensuremath{M_{\rm NS}}", "R": r"\ensuremath{R_{\rm NS}}",
-          "f_t": r"\ensuremath{f_t}",
-          # extras
-          "cosi": r"\ensuremath{\cos i}", "g": r"\ensuremath{g}", "1+z": r"\ensuremath{1+z}",
-          # for grid mode
-          "dxi_b": r"\ensuremath{d\xi_b}", "xi_p/xi_b": r"\ensuremath{\xi_p/\xi_b}",
-          # observeables
-          "fluen": r"Fluence", "perflx": r"Persistent flux", "fpeak": r"Peak flux" }
-UNIT_LATEX = {"X": r"", "Z": r"", "Q_b": r"MeV/nucleon", "d": r"kpc", "xi_b": r"", "xi_p": r"",
-              "M": r"$M_\odot$", "R": r"km", "f_t": r"",
-              "cosi": r"", "g": r"$10^{14}\ {\rm cm\,s^{-2}}$", "1+z": r"",
-              "dxi_b": r"kpc", "xi_p/xi_b": r"",
-              "fluen": FLUEN_U_LATEX, "perflx": FLUX_U_LATEX, "fpeak": FLUX_U_LATEX }
+PARAM_LATEX = {
+    "X": r"\ensuremath{X}",
+    "Z": r"\ensuremath{Z_{\rm CNO}}",
+    "Q_b": r"\ensuremath{Q_b}",
+    "d": r"\ensuremath{d}",
+    "xi_b": r"\ensuremath{\xi_b}",
+    "xi_p": r"\ensuremath{\xi_p}",
+    "M": r"\ensuremath{M_{\rm NS}}",
+    "R": r"\ensuremath{R_{\rm NS}}",
+    "f_t": r"\ensuremath{f_t}",
+    # extras
+    "cosi": r"\ensuremath{\cos i}",
+    "g": r"\ensuremath{g}",
+    "1+z": r"\ensuremath{1+z}",
+    # for grid mode
+    "dxi_b": r"\ensuremath{d\xi_b}",
+    "xi_p/xi_b": r"\ensuremath{\xi_p/\xi_b}",
+    # observeables
+    "fluen": r"Fluence",
+    "perflx": r"Persistent flux",
+    "fpeak": r"Peak flux",
+}
+UNIT_LATEX = {
+    "X": r"",
+    "Z": r"",
+    "Q_b": r"MeV/nucleon",
+    "d": r"kpc",
+    "xi_b": r"",
+    "xi_p": r"",
+    "M": r"$M_\odot$",
+    "R": r"km",
+    "f_t": r"",
+    "cosi": r"",
+    "g": r"$10^{14}\ {\rm cm\,s^{-2}}$",
+    "1+z": r"",
+    "dxi_b": r"kpc",
+    "xi_p/xi_b": r"",
+    "fluen": FLUEN_U_LATEX,
+    "perflx": FLUX_U_LATEX,
+    "fpeak": FLUX_U_LATEX,
+}
 assert PARAM_LATEX.keys() == UNIT_LATEX.keys()
 
 NDIM_MIN, NDIM_MAX = 6, 9
@@ -133,9 +168,9 @@ LNPROB_USES_LNLIKE_SYS = True
 
 # plot defaults
 
-FLUX_COLOUR = 'tab:red'
-BURSTS_COLOUR = 'tab:blue'
-OBS_COLOUR = 'tab:grey'
+FLUX_COLOUR = "tab:red"
+BURSTS_COLOUR = "tab:blue"
+OBS_COLOUR = "tab:grey"
 DOT_SIZE = 9
 CIRC_SIZE = 5
 STAR_SIZE = 7
@@ -154,7 +189,7 @@ from .analyse import get_param_uncert_part, get_param_uncert
 has_multiepoch_mcmc = True
 try:
     # TODO perhaps pull the path from an environment variable instead
-    sys.path.append('/Users/duncan/python/multiepoch_mcmc')
+    sys.path.append("/Users/duncan/python/multiepoch_mcmc")
     from multiepoch_mcmc import grid_interpolator
 
     from .grid_interp import grid_interp
@@ -168,13 +203,15 @@ def create_logger():
     See https://docs.python.org/3/library/logging.html
     """
     logger = logging.getLogger(__name__)
-    if not logger.handlers: # Check if created before, otherwise a reload will add handlers
+    if (
+        not logger.handlers
+    ):  # Check if created before, otherwise a reload will add handlers
         logger.setLevel(logging.INFO)
         handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(levelname)s: %(name)s: %(message)s')
+        formatter = logging.Formatter("%(levelname)s: %(name)s: %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.propagate = False # prevent duplicate messages
+        logger.propagate = False  # prevent duplicate messages
 
     return logger
 
@@ -185,12 +222,11 @@ logger = create_logger()
 # -------------------------------------------------------------------------#
 
 
-__all__ = (
-    "Beans"
-)
+__all__ = "Beans"
 
-def strmeas(val, err, err_hi=None, mask_str='--'):
-    '''
+
+def strmeas(val, err, err_hi=None, mask_str="--"):
+    """
     Function to return nicely (TeX) formatted measurements, with errors
     Adapted (and simplified) from strmeas.pro
 
@@ -204,20 +240,20 @@ def strmeas(val, err, err_hi=None, mask_str='--'):
     :param err_hi: upper uncertainty
 
     :returns: formatted string
-    '''
+    """
 
     def min_sig_fig(err):
-        '''
+        """
         Determines the minimum number of significang figures to represent
         an error
-        '''
+        """
 
-        fudge=0.0222764
+        fudge = 0.0222764
 
-        s = np.floor(np.log10(abs(err))+fudge)
-        if (err < 2.*10.**s):
+        s = np.floor(np.log10(abs(err)) + fudge)
+        if err < 2.0 * 10.0**s:
             # need an extra significant figure if the leading digit is 1
-            return s-1
+            return s - 1
 
         return s
 
@@ -236,9 +272,9 @@ def strmeas(val, err, err_hi=None, mask_str='--'):
     if np.ma.is_masked(val):
         return mask_str
 
-    eta=1e-20     # Threshold for non-zero measurements
-    sym_templ = r'${{{}}}\pm{{{}}}$'
-    asym_templ = r'${{{}}}_{{{{{{{}}}}}}}^{{{{{{{}}}}}}}$'
+    eta = 1e-20  # Threshold for non-zero measurements
+    sym_templ = r"${{{}}}\pm{{{}}}$"
+    asym_templ = r"${{{}}}_{{{{{{{}}}}}}}^{{{{{{{}}}}}}}$"
 
     # get the number of significant figures of each of the errors
     n_lo, n_hi = -1, -1
@@ -252,35 +288,34 @@ def strmeas(val, err, err_hi=None, mask_str='--'):
 
     lmin = int(min([n_lo, n_hi]))
 
-    if (lmin < 0):
-
+    if lmin < 0:
         # Floating point value
 
-        rtnfmt = ':.{}f'.format(-lmin)
+        rtnfmt = ":.{}f".format(-lmin)
         if np.allclose(round(err, -lmin), round(err_hi, -lmin)):
             # symmetric errors
             res = sym_templ.format(rtnfmt, rtnfmt).format(val, err)
         else:
             # asymmetric errors
-            errfmt = ':+.{}f'.format(-lmin)
+            errfmt = ":+.{}f".format(-lmin)
             res = asym_templ.format(rtnfmt, errfmt, errfmt).format(val, -err, err_hi)
     else:
-
         # Integer value
 
-        rtnfmt=':d'
+        rtnfmt = ":d"
         # round the quantities and convert to integers
-        ival = int(np.floor(val/10.**lmin+0.5)*10.**lmin)
-        ierr_lo = int(np.floor(err/10.**lmin+0.5)*10**lmin)
-        ierr_hi = int(np.floor(err_hi/10.**lmin+0.5)*10**lmin)
+        ival = int(np.floor(val / 10.0**lmin + 0.5) * 10.0**lmin)
+        ierr_lo = int(np.floor(err / 10.0**lmin + 0.5) * 10**lmin)
+        ierr_hi = int(np.floor(err_hi / 10.0**lmin + 0.5) * 10**lmin)
         if np.allclose(ierr_lo, ierr_hi):
             # symmetric errors
             res = sym_templ.format(rtnfmt, rtnfmt).format(ival, ierr_lo)
         else:
             # asymmetric errors
-            errfmt = ':+d'
-            res = asym_templ.format(rtnfmt, errfmt, errfmt).format(ival, -ierr_lo, ierr_hi)
-
+            errfmt = ":+d"
+            res = asym_templ.format(rtnfmt, errfmt, errfmt).format(
+                ival, -ierr_lo, ierr_hi
+            )
 
     return res
 
@@ -327,21 +362,35 @@ def prior_func(theta_in, latex=False):
 
     # make sure the text version matches the limits below
     if latex:
-        return ['$U[10^{-5},0.76]$', '$U[10^{-5},0.056]$', '$U[10^{-6},5]$',
-            '$U[1,20]$', '$U[0.01,2]$', '$U[0.01,10]$',
-            '$U[1.15,2.5]$', '$U[9,17]$', '$U[1,10]$']
+        return [
+            "$U[10^{-5},0.76]$",
+            "$U[10^{-5},0.056]$",
+            "$U[10^{-6},5]$",
+            "$U[1,20]$",
+            "$U[0.01,2]$",
+            "$U[0.01,10]$",
+            "$U[1.15,2.5]$",
+            "$U[9,17]$",
+            "$U[1,10]$",
+        ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[M_NS, R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
-    if (0.00001 < X < 0.76) and (0.00001 < Z < 0.056) and \
-        (0.000001 <= Q_b < 5.0) and (1 < dist < 20) and \
-        (0.01 < xi_b < 2) and (0.01 < xi_p < 10) and \
-        (1 <= f_t < 10) and \
-        (1.15 < mass < 2.5) and (9 < radius < 17):
+    if (
+        (0.00001 < X < 0.76)
+        and (0.00001 < Z < 0.056)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (9 < radius < 17)
+    ):
         return 0.0
     else:
         return -np.inf
@@ -364,22 +413,88 @@ def prior_kepler(theta_in, latex=False):
 
     # make sure the text version matches the limits below
     if latex:
-        return ['$U[0.2,0.8]$', '$U[0.005},0.1]$', '$U[10^{-6},5]$',
-            '$U[1,20]$', '$U[0.01,2]$', '$U[0.01,10]$',
-            '$U[1.15,2.5]$', '$U[9,17]$', '$U[1,10]$']
+        return [
+            "$U[0.2,0.8]$",
+            "$U[0.005},0.1]$",
+            "$U[10^{-6},5]$",
+            "$U[1,20]$",
+            "$U[0.01,2]$",
+            "$U[0.01,10]$",
+            "$U[1.15,2.5]$",
+            "$U[9,17]$",
+            "$U[1,10]$",
+        ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[M_NS, R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
-    if (0.2 < X < 0.8) and (0.005 < Z < 0.1) and \
-        (0.000001 <= Q_b < 5.0) and (1 < dist < 20) and \
-        (0.01 < xi_b < 2) and (0.01 < xi_p < 10) and \
-        (1 <= f_t < 10) and \
-        (1.15 < mass < 2.5) and (9 < radius < 17):
+    if (
+        (0.2 < X < 0.8)
+        and (0.005 < Z < 0.1)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (9 < radius < 17)
+    ):
         return 0.0
+    else:
+        return -np.inf
+
+
+def prior_1820_30(theta_in):
+    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
+    mass, radius, f_t = extra + [1.4, 10.5, 1.0][len(extra) :]
+
+    # upper bound and lower bounds of each parameter defined here. Bounds were
+    # found by considering an estimated value for each parameter then giving
+    # reasonable limits.
+    # Assuming a Gaussing prior for each parameter, the mean and standard deviation are defined below.
+    if (
+        (0.0 < X < 0.76)
+        and (0.00001 < Z < 0.056)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (9 < radius < 17)
+    ):
+        mu_x, sigma_x = 0.05, 0.05
+        mu_z, sigma_z = 0.02, 0.01
+        mu_qb, sigma_qb = 0.4, 0.1
+        mu_dist, sigma_dist = 7.6, 0.4
+        mu_xi_b, sigma_xi_b = 1.32, 0.1
+        mu_xi_p, sigma_xi_p = 2.0, 0.1
+        mu_mass, sigma_mass = 1.58, 0.3
+        mu_radius, sigma_radius = 9.1, 1.8
+
+        prob_X = -0.5 * (X - mu_x) ** 2 / sigma_x**2
+        prob_Z = -0.5 * (Z - mu_z) ** 2 / sigma_z**2
+        prob_Qb = -0.5 * (Q_b - mu_qb) ** 2 / sigma_qb**2
+        prob_dist = -0.5 * (dist - mu_dist) ** 2 / sigma_dist**2
+        prob_xi_b = -0.5 * (xi_b - mu_xi_b) ** 2 / sigma_xi_b**2
+        prob_xi_p = -0.5 * (xi_p - mu_xi_p) ** 2 / sigma_xi_p**2
+        prob_mass = -0.5 * (mass - mu_mass) ** 2 / sigma_mass**2
+        prob_radius = -0.5 * (radius - mu_radius) ** 2 / sigma_radius**2
+        return (
+            0.0
+            + prob_X
+            + prob_Z
+            + prob_Qb
+            + prob_dist
+            + prob_xi_b
+            + prob_xi_p
+            + prob_mass
+            + prob_radius
+        )
+
     else:
         return -np.inf
 
@@ -399,21 +514,33 @@ def prior_mr(theta_in, latex=False):
 
     # make sure the text version matches the limits below
     if latex:
-        return ['$U[10^{-5},0.76]$', '$U[10^{-5},0.056]$', '$U[10^{-6},5]$',
-            '$U[1,20]$', '$U[0.01,2]$', '$U[0.01,10]$',
-            'steiner', 'steiner', '$U[1,10]$']
+        return [
+            "$U[10^{-5},0.76]$",
+            "$U[10^{-5},0.056]$",
+            "$U[10^{-6},5]$",
+            "$U[1,20]$",
+            "$U[0.01,2]$",
+            "$U[0.01,10]$",
+            "steiner",
+            "steiner",
+            "$U[1,10]$",
+        ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[M_NS, R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
-    if (0.00001 < X < 0.76) and (0.000010000001 < Z < 0.056) and \
-        (0.000001 <= Q_b < 5.0) and (1 < dist < 20) and \
-        (0.01 < xi_b < 2) and (0.01 < xi_p < 10) and \
-        (1 <= f_t < 10):
-
+    if (
+        (0.00001 < X < 0.76)
+        and (0.000010000001 < Z < 0.056)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+    ):
         return 0.0 + mr_prior(mass, radius)
     else:
         return -np.inf
@@ -438,21 +565,33 @@ def prior_1808(theta_in, latex=False):
 
     # make sure the text version matches the limits below
     if latex:
-        return ['$U[10^{-5},0.76]$', 'beta', '$U[10^{-6},5]$',
-            '$U[1,20]$', '$U[0.01,2]$', '$U[0.01,10]$',
-            'steiner', 'steiner', '$U[1,10]$']
+        return [
+            "$U[10^{-5},0.76]$",
+            "beta",
+            "$U[10^{-6},5]$",
+            "$U[1,20]$",
+            "$U[0.01,2]$",
+            "$U[0.01,10]$",
+            "steiner",
+            "steiner",
+            "$U[1,10]$",
+        ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[M_NS, R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
-    if (0.00001 < X < 0.76) and (Z > 0.000010000001) and \
-        (0.000001 <= Q_b < 5.0) and (1 < dist < 20) and \
-        (0.01 < xi_b < 2) and (0.01 < xi_p < 10) and \
-        (1 <= f_t < 10):
-
+    if (
+        (0.00001 < X < 0.76)
+        and (Z > 0.000010000001)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+    ):
         return 0.0 + lnZprior(Z) + mr_prior(mass, radius)
     else:
         return -np.inf
@@ -474,28 +613,41 @@ def prior_grid(theta_in, latex=False):
 
     # make sure the text version matches the limits below
     if latex:
-        return ['$U[0.64,0.76]$', '$U[0.0025,0.03]$', '$U[0.0,0.6]$',
-            '$U[1,20]$', '$U[0.01,2]$', '$U[0.01,10]$',
-            '$g$', '$g$', '$U[1,10]$']
+        return [
+            "$U[0.64,0.76]$",
+            "$U[0.0025,0.03]$",
+            "$U[0.0,0.6]$",
+            "$U[1,20]$",
+            "$U[0.01,2]$",
+            "$U[0.01,10]$",
+            "$g$",
+            "$g$",
+            "$U[1,10]$",
+        ]
 
-    c = const.c.to('cm s-1')
-    G = const.G.to('cm3 g-1 s-2')
+    c = const.c.to("cm s-1")
+    G = const.G.to("cm3 g-1 s-2")
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[M_NS, R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
-    R = radius*1e5*u.cm #cgs
-    M = mass*const.M_sun.to('g') #cgs
-    redshift = np.power((1 - (2*G*M/(R*c**2))), -0.5).value
-    gravity = (M*redshift*G/R**2 / (u.cm/u.s**2)).value / 1e14 #cgs
+    R = radius * 1e5 * u.cm  # cgs
+    M = mass * const.M_sun.to("g")  # cgs
+    redshift = np.power((1 - (2 * G * M / (R * c**2))), -0.5).value
+    gravity = (M * redshift * G / R**2 / (u.cm / u.s**2)).value / 1e14  # cgs
 
     # upper bound and lower bounds of each parameter defined here. Bounds are
     # determined by the limits of the grid
-    if (0.64 <= X <= 0.76) and (0.0025 <= Z <= 0.03) and \
-        (0.0 <= Q_b <= 0.6) and (1 < dist < 20) and \
-        (0.01 < xi_b < 2) and (0.01 < xi_p < 10) and \
-        (1 <= f_t < 10) and \
-        (1.86 < gravity < 3.45):
+    if (
+        (0.64 <= X <= 0.76)
+        and (0.0025 <= Z <= 0.03)
+        and (0.0 <= Q_b <= 0.6)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.86 < gravity < 3.45)
+    ):
         return 0.0
     else:
         return -np.inf
@@ -520,7 +672,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # define theta_in = model parameters, which we define priors for
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius = extra + [self.M_NS, self.R_NS][len(extra):]
+    mass, radius = extra + [self.M_NS, self.R_NS][len(extra) :]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -538,28 +690,37 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
 
     # cpts = (self.y - (model)) ** 2 * inv_sigma2 - (np.log(inv_sigma2))
     # cpts = (self.y - model[:self.ly]) ** 2 * self.inv_sigma2 - self.log_inv_sigma2
-    cpts = -0.5 * (self.y - model[:self.ly]) ** 2 * self.inv_sigma2 + self.log_2pi_sigma2
+    cpts = (
+        -0.5 * (self.y - model[: self.ly]) ** 2 * self.inv_sigma2 + self.log_2pi_sigma2
+    )
 
     # if the peak fluxes are defined, add the components for the
     # likelihood here. First the lower limits for the non-PRE bursts:
 
     for _i in self.non_pre:
-        _log_arg = .5-.5*erf((self.bpflux[_i]-model2['F_Edd'][0])/model2['F_Edd'][1])
+        _log_arg = 0.5 - 0.5 * erf(
+            (self.bpflux[_i] - model2["F_Edd"][0]) / model2["F_Edd"][1]
+        )
         if _log_arg == 0.0:
             return -np.inf, model
-        cpts = np.append(cpts, np.log(_log_arg) )
+        cpts = np.append(cpts, np.log(_log_arg))
 
     # and then for the PRE bursts
 
     for _i in self.pre:
-        cpts = np.append(cpts,
-      -0.5 * (((self.bpflux[_i]-model2['F_Edd'][0])/model2['F_Edd'][1])**2
-      + np.log(2.*np.pi*model2['F_Edd'][1]**2) ) )
+        cpts = np.append(
+            cpts,
+            -0.5
+            * (
+                ((self.bpflux[_i] - model2["F_Edd"][0]) / model2["F_Edd"][1]) ** 2
+                + np.log(2.0 * np.pi * model2["F_Edd"][1] ** 2)
+            ),
+        )
 
     # if the components flag is set, also add those to the model dict
 
     if components:
-        model2['cpts'] = cpts
+        model2["cpts"] = cpts
 
     # Test if the result string is defined here. It is, so we return the selected elements of result
     # instead of the downselection in model
@@ -586,7 +747,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # define theta_in = model parameters, which we define priors for
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra):]
+    mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra) :]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -599,20 +760,25 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
         return -np.inf, model
 
     # To simplify final likelihood expression we define inv_sigma2 for each
-	# data parameter that describe the error.  The variance for the
-	# burst times is (we hypothesize) underestimated by some
-	# fractional amount, f_t; in early versions we also had systematic
-	# contributions to fluence and alpha, but these are no longer used
+    # data parameter that describe the error.  The variance for the
+    # burst times is (we hypothesize) underestimated by some
+    # fractional amount, f_t; in early versions we also had systematic
+    # contributions to fluence and alpha, but these are no longer used
 
     # Forgot to include an extra err_fac for the extra time, now that
     # we keep the reference burst time in the data array (now fixed)
     # so the length of the err_fac times cpt is self.numburstsobs, not
     # self.numburstsobs-ato
 
-    ato = int(bean.train) # array "train" offset
-    err_fac = np.concatenate(( np.full(bean.numburstsobs, 1./f_t**2),
-        np.full(bean.numburstsobs, 1.0), np.full(bean.numburstsobs-ato, 1.0)))
-    inv_sigma2 = bean.inv_sigma2[:bean.ly] * err_fac[:bean.ly]
+    ato = int(bean.train)  # array "train" offset
+    err_fac = np.concatenate(
+        (
+            np.full(bean.numburstsobs, 1.0 / f_t**2),
+            np.full(bean.numburstsobs, 1.0),
+            np.full(bean.numburstsobs - ato, 1.0),
+        )
+    )
+    inv_sigma2 = bean.inv_sigma2[: bean.ly] * err_fac[: bean.ly]
 
     # Final likelihood expression
     # Because the y (observed value) vector may or may not include the
@@ -621,31 +787,39 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # 2\pi in this expression!
 
     # cpts = (self.y - (model)) ** 2 * inv_sigma2 - (np.log(inv_sigma2))
-    cpts = -0.5 * (bean.y - model[:bean.ly]) ** 2 * inv_sigma2 \
-        + np.log(2.*np.pi/inv_sigma2)
+    cpts = -0.5 * (bean.y - model[: bean.ly]) ** 2 * inv_sigma2 + np.log(
+        2.0 * np.pi / inv_sigma2
+    )
 
     # if the peak fluxes are defined, add the components for the
     # likelihood here; also want to trap underflows
     # First the lower limits for the non-PRE bursts:
 
     for _i in bean.non_pre:
-        _log_arg = .5-.5*erf((bean.bpflux[_i]-model2['F_Edd'][0])/model2['F_Edd'][1])
+        _log_arg = 0.5 - 0.5 * erf(
+            (bean.bpflux[_i] - model2["F_Edd"][0]) / model2["F_Edd"][1]
+        )
         if _log_arg == 0.0:
             return -np.inf, model
 
-        cpts = np.append(cpts, np.log(_log_arg) )
+        cpts = np.append(cpts, np.log(_log_arg))
 
     # and then for the PRE bursts
 
     for _i in bean.pre:
-        cpts = np.append(cpts,
-      -0.5 * (((bean.bpflux[_i]-model2['F_Edd'][0])/model2['F_Edd'][1])**2
-      + np.log(2.*np.pi*model2['F_Edd'][1]**2) ) )
+        cpts = np.append(
+            cpts,
+            -0.5
+            * (
+                ((bean.bpflux[_i] - model2["F_Edd"][0]) / model2["F_Edd"][1]) ** 2
+                + np.log(2.0 * np.pi * model2["F_Edd"][1] ** 2)
+            ),
+        )
 
     # if the components flag is set, also add those to the model dict
 
     if components:
-        model2['cpts'] = cpts
+        model2["cpts"] = cpts
 
     # Test if the result string is defined here. It is, so we return the selected elements of result
     # instead of the downselection in model
@@ -670,7 +844,7 @@ def corr_goodwin19(burst, **kwargs):
     :return: tuple with any necessary corrections performed
     """
 
-    return (burst[0], burst[1]*0.65, burst[2]*0.65)
+    return (burst[0], burst[1] * 0.65, burst[2] * 0.65)
 
 
 def corr_kepler(burst, **kwargs):
@@ -687,18 +861,31 @@ def corr_kepler(burst, **kwargs):
     :return: tuple with any necessary corrections performed
     """
 
-    #Scale Fluence
-    Fluence_coef= [-0.01494263, 0.61500959,  0.13263262]
-    E_error = Fluence_coef[0]*burst[2]**2 + Fluence_coef[1]*burst[2] + Fluence_coef[2]
+    # Scale Fluence
+    Fluence_coef = [-0.01494263, 0.61500959, 0.13263262]
+    E_error = (
+        Fluence_coef[0] * burst[2] ** 2 + Fluence_coef[1] * burst[2] + Fluence_coef[2]
+    )
 
-    #Scale trec
-    a = burst[1]; b = kwargs['Z']; c = kwargs['X']
-    form = [1, a, b, c, a ** 2, a * b, a * c, b ** 2, b * c, c ** 2]
-    tdel_coff = [4.00396086e-24,  1.78459388e+00, 6.37416752e+01, -4.06404901e+00,
-                2.94290411e-02,  4.52264987e+00, -2.35649145e+00, -4.64376836e+02,
-                -2.73559070e+01,  8.08332362e+00]
+    # Scale trec
+    a = burst[1]
+    b = kwargs["Z"]
+    c = kwargs["X"]
+    form = [1, a, b, c, a**2, a * b, a * c, b**2, b * c, c**2]
+    tdel_coff = [
+        4.00396086e-24,
+        1.78459388e00,
+        6.37416752e01,
+        -4.06404901e00,
+        2.94290411e-02,
+        4.52264987e00,
+        -2.35649145e00,
+        -4.64376836e02,
+        -2.73559070e01,
+        8.08332362e00,
+    ]
     intercept = -0.8976578105076352
-    t_error = np.dot(tdel_coff,form) + intercept
+    t_error = np.dot(tdel_coff, form) + intercept
 
     # alpha ~ tdel/E_b, thus scale alpha as well
     t_fac = (burst[1] - t_error) / burst[1]
@@ -719,11 +906,17 @@ def model_str(model):
     :return: string representation of the model dict
     """
 
-    return ("{'time': ["+','.join(['{:.4f}'.format(x) for x in model['time']])
-        +"], 'mdot': ["+','.join(['{:.5f}'.format(x) for x in model['mdot']])
-        +"], 'alpha': ["+','.join(['{:.3f}'.format(x) for x in model['alpha']])
-        +"], 'e_b': ["+','.join(['{:.4f}'.format(x) for x in model['e_b']])
-        +"]}").replace(' ','')
+    return (
+        "{'time': ["
+        + ",".join(["{:.4f}".format(x) for x in model["time"]])
+        + "], 'mdot': ["
+        + ",".join(["{:.5f}".format(x) for x in model["mdot"]])
+        + "], 'alpha': ["
+        + ",".join(["{:.3f}".format(x) for x in model["alpha"]])
+        + "], 'e_b': ["
+        + ",".join(["{:.4f}".format(x) for x in model["e_b"]])
+        + "]}"
+    ).replace(" ", "")
 
 
 def mean_flux_spline(t1, t2, bean):
@@ -739,7 +932,7 @@ def mean_flux_spline(t1, t2, bean):
     :result: mean flux
     """
 
-    return splint(t1,t2,bean.tck_s)/(t2-t1)
+    return splint(t1, t2, bean.tck_s) / (t2 - t1)
 
 
 def mean_flux_linear(t1, t2, bean):
@@ -777,12 +970,10 @@ def mean_flux_linear(t1, t2, bean):
 
     sum = 0.0
     if (i1 < 0) and (i2 < 0):
-
         # Modified this section to just report the flux from the first measurement
 
         sum += (t2 - t1) * (a[0] + b[0] * tobs[0])
     else:
-
         # Add the contribution from the start time through to tobs[0], using the
         # gradient between the first pair of observations
 
@@ -850,23 +1041,30 @@ def restore(savefile=None):
     """
 
     if savefile is None:
-        logger.error('please enter a valid pickle file name for the archived Beans object')
+        logger.error(
+            "please enter a valid pickle file name for the archived Beans object"
+        )
         return
 
     if os.path.exists(savefile):
-        _bean = pickle.load(open(savefile, 'rb'))
-        logger.info('restored beans v{} object with run_id {}'.format(_bean.version, _bean.run_id))
+        _bean = pickle.load(open(savefile, "rb"))
+        logger.info(
+            "restored beans v{} object with run_id {}".format(
+                _bean.version, _bean.run_id
+            )
+        )
 
         # set the samples here
 
-        _bean.samples_burnin = _bean.nsteps_completed - \
-            int(np.shape(_bean.samples)[0]/_bean.nwalkers)
+        _bean.samples_burnin = _bean.nsteps_completed - int(
+            np.shape(_bean.samples)[0] / _bean.nwalkers
+        )
         _bean.models_burnin = _bean.samples_burnin
 
         return _bean
 
     else:
-        logger.error('file {} not found'.format(savefile))
+        logger.error("file {} not found".format(savefile))
 
 
 class Beans:
@@ -885,6 +1083,7 @@ class Beans:
     try:
         # Required for the distance_limit method
         import concord as cd
+
         HAS_CONCORD = True
     except:
         pass
@@ -894,19 +1093,39 @@ class Beans:
         # required for using dynesty sampler
         import bilby
         from .run_bilby import runbilby
+
         HAS_BILBY = True
     except:
         pass
 
-    def __init__(self, config_file=None, run_id="test",
-                 prior=prior_func, lnlike=lnlike_sys, corr=None,
-                 obsname=None, burstname=None, gtiname=None,
-                 continuous=True, maxgap=2,
-                 interp='linear', smooth=0.02, model = settle,
-                 theta= (0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8),
-                 sampler='emcee', fluen=True, alpha=False, pflux=True,
-                 numburstssim=3, bc=1.0, ref_ind=1, threads = 4,
-                 test_model=True, restart=False, **kwargs):
+    def __init__(
+        self,
+        config_file=None,
+        run_id="test",
+        prior=prior_func,
+        lnlike=lnlike_sys,
+        corr=None,
+        obsname=None,
+        burstname=None,
+        gtiname=None,
+        continuous=True,
+        maxgap=2,
+        interp="linear",
+        smooth=0.02,
+        model=settle,
+        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8),
+        sampler="emcee",
+        fluen=True,
+        alpha=False,
+        pflux=True,
+        numburstssim=3,
+        bc=1.0,
+        ref_ind=1,
+        threads=4,
+        test_model=True,
+        restart=False,
+        **kwargs,
+    ):
         """
         Initialise a Beans object. In addition to the parameters below,
         the user can specify additional parameter relevant to the various
@@ -964,40 +1183,50 @@ class Beans:
 
         self.from_archive = False
         self.valid = False
-        if 'ndim' in kwargs.keys():
-            logger.warning('parameter ndim is redundant (ignored), setting from len of param array')
-        if 'numburstsobs' in kwargs.keys():
-            logger.warning('parameter numburstsobs is redundant (ignored), setting from len of burst data')
-        if 'gti_checking' in kwargs.keys():
-            logger.warning('parameter gti_checking is redundant (ignored), setting from value of gtiname param')
+        if "ndim" in kwargs.keys():
+            logger.warning(
+                "parameter ndim is redundant (ignored), setting from len of param array"
+            )
+        if "numburstsobs" in kwargs.keys():
+            logger.warning(
+                "parameter numburstsobs is redundant (ignored), setting from len of burst data"
+            )
+        if "gti_checking" in kwargs.keys():
+            logger.warning(
+                "parameter gti_checking is redundant (ignored), setting from value of gtiname param"
+            )
 
         # Conversion factor between model predicted burst energy and
         # observed fluence. Multiply by this value to convert the burst
         # energy from settle (in 1e39, the observer frame) to fluence at 1
         # kpc in units of 1e-6 erg/cm^2
 
-        self.dist_fac = (1./(4*np.pi*u.kpc**2)).decompose()
-        self.fluen_fac = ((1e39*u.erg * self.dist_fac)
-            / (1e-6*u.erg/u.cm**2)).decompose()
+        self.dist_fac = (1.0 / (4 * np.pi * u.kpc**2)).decompose()
+        self.fluen_fac = (
+            (1e39 * u.erg * self.dist_fac) / (1e-6 * u.erg / u.cm**2)
+        ).decompose()
 
         # Eddington luminosity and error, already multiplied by the
-	# distance factor & divided by flux units (i.e. units of 1e-9
-	# erg/cm^2/s kpc^2); for use comparing the peak fluxes in runmodel
+        # distance factor & divided by flux units (i.e. units of 1e-9
+        # erg/cm^2/s kpc^2); for use comparing the peak fluxes in runmodel
 
-        self.L_Edd = (L_EDD*self.dist_fac/FLUX_U).decompose().value
-        self.L_Edd_err = (L_EDD_ERR*self.dist_fac/FLUX_U).decompose().value
+        self.L_Edd = (L_EDD * self.dist_fac / FLUX_U).decompose().value
+        self.L_Edd_err = (L_EDD_ERR * self.dist_fac / FLUX_U).decompose().value
 
         # Conversion factor between persistent flux (in units of 1e-9
         # erg/cm^2/s) and the accretion rate
 
-        self.r1 = (1e-9*u.erg/u.cm**2/u.s*u.kpc**2
-            / (u.km*const.c)**2).decompose()
+        self.r1 = (
+            1e-9 * u.erg / u.cm**2 / u.s * u.kpc**2 / (u.km * const.c) ** 2
+        ).decompose()
 
         # Conversion factor for redshift, GM/Rc^2
 
-        self.gmrc2 = (2.*const.G*const.M_sun/(const.c**2*u.km)).decompose()
+        self.gmrc2 = (2.0 * const.G * const.M_sun / (const.c**2 * u.km)).decompose()
 
-        print("# ---------------------------------------------------------------------------#")
+        print(
+            "# ---------------------------------------------------------------------------#"
+        )
         logger.info("initialising Beans object ...")
 
         # MCU: this is a solution to load packaged data compatible
@@ -1006,7 +1235,7 @@ class Beans:
         # alternative method is "from importlib.resources import files"
         # see https://setuptools.pypa.io/en/latest/userguide/datafiles.html
 
-        self.data_path = os.path.join(os.path.dirname(__file__), 'data')
+        self.data_path = os.path.join(os.path.dirname(__file__), "data")
         # print("data_path = " + data_path)
 
         # Only want to set the default values if both obsname and burstname
@@ -1015,15 +1244,17 @@ class Beans:
         # and we might want to set burstname=None if we're doing some
         # simulations, e.g. using the :meth:`Beans.sim_data` method).
         if (config_file is None) & (obsname is None) & (burstname is None):
-            logger.warning('no config file or input data files provided, setting defaults for 2002 outburst of SAX J1808.4-3658')
-            obsname = os.path.join(self.data_path, '1808_obs.txt')
-            burstname = os.path.join(self.data_path, '1808_bursts_newalpha.txt')
+            logger.warning(
+                "no config file or input data files provided, setting defaults for 2002 outburst of SAX J1808.4-3658"
+            )
+            obsname = os.path.join(self.data_path, "1808_obs.txt")
+            burstname = os.path.join(self.data_path, "1808_bursts_newalpha.txt")
             bc = 2.21
 
         if run_id is None:
             # run_id = os.path.join(self.data_path, '1808/test1')
             # moving away from including the path in the run_id
-            run_id = 'test1'
+            run_id = "test1"
 
         # apply the keyword values or defaults
 
@@ -1063,12 +1294,17 @@ class Beans:
         # :param stretch_a: the Goodman & Weare (2010) stretch move scale parameter, passed to emcee
 
         for key in kwargs:
-            if key in ['stretch_a','nwalkers','nsteps', # emcee params
-                'nlive','dlogz', # dynesty params
-                'outdir']: # bilby param
+            if key in [
+                "stretch_a",
+                "nwalkers",
+                "nsteps",  # emcee params
+                "nlive",
+                "dlogz",  # dynesty params
+                "outdir",
+            ]:  # bilby param
                 setattr(self, key, kwargs[key])
             else:
-                logger.warning('ignored init option {}={}'.format(key, kwargs[key]))
+                logger.warning("ignored init option {}={}".format(key, kwargs[key]))
 
         # following parameters control what goes into the likelihood
         # calcualtion
@@ -1081,31 +1317,31 @@ class Beans:
         # override the defaults above):
 
         config_file_exists = None
-        if (config_file is not None):
-            if (os.path.exists(config_file)):
+        if config_file is not None:
+            if os.path.exists(config_file):
                 config_file_exists = True
                 cmpr_alpha, cmpr_fluen, cmpr_pflux = False, True, True
-                logger.info('Reading run params from {} ...'.format(config_file))
+                logger.info("Reading run params from {} ...".format(config_file))
                 self.read_config(config_file)
-                logger.info('... done')
+                logger.info("... done")
                 # special here for the alpha and fluen parameters, which
-		# are replaced by the actual data values (if the option is
-		# True); (pre-v2.10 config files don't list alpha or fluen)
+                # are replaced by the actual data values (if the option is
+                # True); (pre-v2.10 config files don't list alpha or fluen)
                 # pflux is even more confusing, because this is the name
                 # for the persistent fluxes (while the peak burst fluxes
                 # are bpflux)
-                if hasattr(self, 'alpha'):
+                if hasattr(self, "alpha"):
                     self.cmpr_alpha = self.alpha
                     alpha = self.alpha
-                if hasattr(self, 'fluen'):
+                if hasattr(self, "fluen"):
                     self.cmpr_fluen = self.fluen
                     fluen = self.fluen
-                if hasattr(self, 'pflux'):
+                if hasattr(self, "pflux"):
                     self.cmpr_pflux = self.pflux
                     pflux = self.pflux
 
             else:
-                logger.error('config file not found, applying keywords')
+                logger.error("config file not found, applying keywords")
                 config_file_exists = False
 
         # below set the parameters which are not part of the config
@@ -1119,12 +1355,12 @@ class Beans:
 
         self.ndim = len(self.theta)
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
-            logger.error('number of dimensions of input parameter vector should be 6-9')
+            logger.error("number of dimensions of input parameter vector should be 6-9")
             return
-        self.num_systematic = self.ndim-(NDIM_MAX-1)
+        self.num_systematic = self.ndim - (NDIM_MAX - 1)
         if (self.num_systematic > 0) & (not LNPROB_USES_LNLIKE_SYS):
-            logger.warning('''likelihood calculation does not currently support systematic errors;
-                you need to swap out the lnlike method for lnlike_sys''')
+            logger.warning("""likelihood calculation does not currently support systematic errors;
+                you need to swap out the lnlike method for lnlike_sys""")
         # this check is redundant now that we only have systematic error on the times
         # if ((self.ndim == 9) & (not self.cmpr_fluen)) | \
         #     ((self.ndim == 10) & (not (self.cmpr_alpha and self.cmpr_fluen))):
@@ -1137,9 +1373,9 @@ class Beans:
         # which means a burst train will be generated; set obsname=None for
         # non-contiguous (ensemble mode) run
 
-        self.train = (self.obsname is not None)
+        self.train = self.obsname is not None
 
-        self.bstart_err = BSTART_ERR.to('d').value
+        self.bstart_err = BSTART_ERR.to("d").value
         self.M_NS = M_NS
         self.R_NS = R_NS
 
@@ -1157,117 +1393,133 @@ class Beans:
         result = get_obs(self, logger, alpha, fluen, pflux)
 
         if not result:
-            logger.error('please check the supplied input name(s) and re-try')
+            logger.error("please check the supplied input name(s) and re-try")
             return
 
         # for some older runs we need to add parameters here, that
         # are not listed in the .ini file
 
-        if (self.sampler == 'emcee') & (not hasattr(self, 'stretch_a')):
-            logger.warning('stretch_a not set or provided by .ini file, assuming default')
+        if (self.sampler == "emcee") & (not hasattr(self, "stretch_a")):
+            logger.warning(
+                "stretch_a not set or provided by .ini file, assuming default"
+            )
             self.stretch_a = 2.0
 
         # pre-calculate the sigmas and other parameters, for use in lnlike
 
         if self.burstname is not None:
-            self.inv_sigma2 = 1. / self.yerr[:self.ly] ** 2
+            self.inv_sigma2 = 1.0 / self.yerr[: self.ly] ** 2
             # In versons 2.56.1 and earlier, there was a missing factor of
             # 2\pi in this expression!
-            self.log_2pi_sigma2 = np.log(2.*np.pi/self.inv_sigma2)
+            self.log_2pi_sigma2 = np.log(2.0 * np.pi / self.inv_sigma2)
             if self.train:
                 # self.log_inv_sigma2[self.ref_ind] = 0.  # no contribution from the reference burst
-                self.log_2pi_sigma2[self.ref_ind] = 0.  # no contribution from the reference burst
+                self.log_2pi_sigma2[self.ref_ind] = (
+                    0.0  # no contribution from the reference burst
+                )
 
         # Set interpolation mode, and define averaging function
 
-        if not hasattr(self, 'interp'):
+        if not hasattr(self, "interp"):
             self.interp = interp
-        assert self.interp in ('linear','spline')
-        if self.interp == 'linear':
+        assert self.interp in ("linear", "spline")
+        if self.interp == "linear":
             self.a, self.b = get_a_b(self.pflux, self.pfluxe, self.tobs)
             self.mean_flux = mean_flux_linear
             self.smooth = None
         else:
-            if not hasattr(self, 'smooth'):
+            if not hasattr(self, "smooth"):
                 self.smooth = smooth
             self.tck_s = splrep(self.tobs, self.pflux, s=self.smooth)
             self.mean_flux = mean_flux_spline
 
         # some final checks for default sampler
 
-        if (self.sampler == 'emcee'):
-            if not hasattr(self, 'nwalkers'):
-                self.nwalkers=100
-            if not hasattr(self, 'nsteps'):
-                self.nsteps=100
+        if self.sampler == "emcee":
+            if not hasattr(self, "nwalkers"):
+                self.nwalkers = 100
+            if not hasattr(self, "nsteps"):
+                self.nsteps = 100
 
         # here we want to parse the model function, which should have a
         # string representation something like <function settle at 0x1599b68b0>
-        _tmp = str(model).split(' ')
+        _tmp = str(model).split(" ")
         model_type, self.model_name = _tmp[0], None
         if len(_tmp) > 1:
             self.model_name = _tmp[1]
-        if (model_type != '<function') | (self.model_name not in['settle','grid_interp']):
-            logger.error('model unknown or invalid, use one of settle or grid_interp')
+        if (model_type != "<function") | (
+            self.model_name not in ["settle", "grid_interp"]
+        ):
+            logger.error("model unknown or invalid, use one of settle or grid_interp")
             return
-        elif self.model_name == 'grid_interp':
+        elif self.model_name == "grid_interp":
             if not has_multiepoch_mcmc:
-                logger.error('can\'t find multiepoch_mcmc, cannot initialise GridInterpolator')
+                logger.error(
+                    "can't find multiepoch_mcmc, cannot initialise GridInterpolator"
+                )
                 return
 
             if self.cmpr_alpha:
-                logger.error('grid_interp doesn\'t currently provide alphas, set alpha=False')
+                logger.error(
+                    "grid_interp doesn't currently provide alphas, set alpha=False"
+                )
                 return
 
             # initialise the GridInterpolator object
-            self.model_file = '/'.join((self.data_path, 'burst_model_grid.txt'))
-            self.gi = grid_interpolator.GridInterpolator(file=self.model_file,
-                reconstruct=True)
-            self.grid_mdot_min = min(self.gi.grid['mdot'])
-            self.grid_mdot_max = max(self.gi.grid['mdot'])
+            self.model_file = "/".join((self.data_path, "burst_model_grid.txt"))
+            self.gi = grid_interpolator.GridInterpolator(
+                file=self.model_file, reconstruct=True
+            )
+            self.grid_mdot_min = min(self.gi.grid["mdot"])
+            self.grid_mdot_max = max(self.gi.grid["mdot"])
         else:
             self.model_file, self.gi = None, None
 
         # Some checks here
 
-        if (self.sampler != 'emcee') & (not self.HAS_BILBY):
-            logger.error('using samplers other than emcee requires bilby')
+        if (self.sampler != "emcee") & (not self.HAS_BILBY):
+            logger.error("using samplers other than emcee requires bilby")
             return
 
         if self.cmpr_alpha and (not self.cmpr_fluen):
-            logger.error('need to include fluences as well as alphas')
+            logger.error("need to include fluences as well as alphas")
             return
 
         if self.lnprior(self.theta) == -np.inf:
-            logger.error('supplied parameter vector is excluded by the prior')
+            logger.error("supplied parameter vector is excluded by the prior")
             return
 
-        print("# ---------------------------------------------------------------------------#")
+        print(
+            "# ---------------------------------------------------------------------------#"
+        )
 
         # # -------------------------------------------------------------------------#
         # # TEST THE MODEL WORKS
         # # -------------------------------------------------------------------------#
         if test_model:
-
             logger.info("testing the model works & is valid ...")
 
-
-            test, valid, test2 = runmodel(self.theta, self, debug=False) # set debug to True for testing
-            logger.info("\nresult: {} ({})".format( test, "OK" if valid else
-                "can't match observations & model predictions"))
+            test, valid, test2 = runmodel(
+                self.theta, self, debug=False
+            )  # set debug to True for testing
+            logger.info(
+                "\nresult: {} ({})".format(
+                    test,
+                    "OK" if valid else "can't match observations & model predictions",
+                )
+            )
 
             # MCU Note: commented out - no interactive windows for automated testing
             # self.plot_model(test2)
 
             if (not valid) & (self.numburstsobs > 0):
-                logger.warning ('''the model is not valid. You need to adjust the model
-                parameters to better suit the data.  ''')
+                logger.warning("""the model is not valid. You need to adjust the model
+                parameters to better suit the data.  """)
 
         # having completed the __init__ routine, we mark the object as
         # "valid" and ready to run e.g. with do_run
 
         self.valid = True
-
 
     def __str__(self):
         """
@@ -1289,28 +1541,46 @@ No. of bursts to simulate: {} ({} mode{})
   {}/{} threads
 Initial parameters:
 {}
-==============================================================================""".format("" if self.valid else "\n** WARNING ** object is not valid, check params\n",
-         self.run_id,
-            'Observation data file: {}\n  bolometric correction: {}\n'.format( self.obsname, self.bc) if self.train else '',
-            '' if self.gtiname is None else 'GTI data file: {}\n'.format(self.gtiname),
-            self.burstname, self.numburstsobs,
-            '' if (self.obsname is None) | ~self.continuous else ', ref. to #{}'.format(self.ref_ind),
-            self.train+self.numburstssim*(1+self.train) if self.continuous else self.numburstsobs,
-            'train' if self.train else 'ensemble',
-            ', continuous' if (self.continuous & self.train) else '',
+==============================================================================""".format(
+            "" if self.valid else "\n** WARNING ** object is not valid, check params\n",
+            self.run_id,
+            "Observation data file: {}\n  bolometric correction: {}\n".format(
+                self.obsname, self.bc
+            )
+            if self.train
+            else "",
+            "" if self.gtiname is None else "GTI data file: {}\n".format(self.gtiname),
+            self.burstname,
+            self.numburstsobs,
+            ""
+            if (self.obsname is None) | ~self.continuous
+            else ", ref. to #{}".format(self.ref_ind),
+            self.train + self.numburstssim * (1 + self.train)
+            if self.continuous
+            else self.numburstsobs,
+            "train" if self.train else "ensemble",
+            ", continuous" if (self.continuous & self.train) else "",
             self.model_name,
             # sampler-specific part
-            self.sampler, (' with {} walkers, {} steps{}, a={}'.format(
-                self.nwalkers, self.nsteps, ', resuming' if self.restart else '', self.stretch_a)
-                if (self.sampler=='emcee') | (self.sampler=='bilby') else
-                ' with nlive={}, dlogz={}'.format(self.nlive, self.dlogz)),
-            'recurrence ' if not self.train else '',
-            ', fluences' if self.cmpr_fluen else '',
-            ', alphas' if self.cmpr_alpha else '',
-            ', peak fluxes' if self.cmpr_pflux else '',
-            self.threads, cpu_count(),
-        self.theta_table(self.theta, indent=2) )
-
+            self.sampler,
+            (
+                " with {} walkers, {} steps{}, a={}".format(
+                    self.nwalkers,
+                    self.nsteps,
+                    ", resuming" if self.restart else "",
+                    self.stretch_a,
+                )
+                if (self.sampler == "emcee") | (self.sampler == "bilby")
+                else " with nlive={}, dlogz={}".format(self.nlive, self.dlogz)
+            ),
+            "recurrence " if not self.train else "",
+            ", fluences" if self.cmpr_fluen else "",
+            ", alphas" if self.cmpr_alpha else "",
+            ", peak fluxes" if self.cmpr_pflux else "",
+            self.threads,
+            cpu_count(),
+            self.theta_table(self.theta, indent=2),
+        )
 
     def theta_table(self, theta, indent=0):
         """
@@ -1324,7 +1594,7 @@ Initial parameters:
         """
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = theta
-        mass, radius, f_t = extra+[self.M_NS, self.R_NS, 1.0][len(extra):]
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
 #Z = {:.5f} \\ CNO mass fraction
@@ -1332,20 +1602,22 @@ Initial parameters:
 #d = {:.2f} kpc \\ source distance
 #xi_b = {:.3f} \\ anisotropy factor for burst emission
 #xi_p = {:.3f} \\ anisotropy factor for persistent emission""".format(
-    X, Z, Q_b, dist, xi_b, xi_p)
-        result = result+"\n#M_NS = {:.3f} M_sun \\ neutron star mass".format(mass)
+            X, Z, Q_b, dist, xi_b, xi_p
+        )
+        result = result + "\n#M_NS = {:.3f} M_sun \\ neutron star mass".format(mass)
         if len(theta) <= 6:
-            result += ' (fixed)'
-        result = result+"\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
+            result += " (fixed)"
+        result = result + "\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
         if len(theta) <= 7:
-            result += ' (fixed)'
+            result += " (fixed)"
         if self.num_systematic == 1:
-            return (result+"""
-#f_t = {:.3f} \\ systematic error term for burst times""".format(
-    f_t)).replace('#',' '*indent)
+            return (
+                result
+                + """
+#f_t = {:.3f} \\ systematic error term for burst times""".format(f_t)
+            ).replace("#", " " * indent)
 
-        return result.replace('#', ' '*indent)
-
+        return result.replace("#", " " * indent)
 
     def mdot_Edd(self, X, radius):
         """
@@ -1363,11 +1635,16 @@ Initial parameters:
         :return: accretion rate in g/cm^2/s
         """
 
-        return (1.75e-8*1.7/(1+X)*5.01837638e24)/(radius*1e5)**2 * u.g/u.cm**2/u.s
+        return (
+            (1.75e-8 * 1.7 / (1 + X) * 5.01837638e24)
+            / (radius * 1e5) ** 2
+            * u.g
+            / u.cm**2
+            / u.s
+        )
         # alternative value here for the grid interpolation
         # Johnston et al. 2020: The Eddington-limited accretion rate,
         # return 8.775E4*u.g/u.cm**2/u.s
-
 
     def save_config(self, file=None, clobber=True):
         """
@@ -1385,62 +1662,61 @@ Initial parameters:
         """
 
         if file is None:
-            file = self.run_id+'.ini'
+            file = self.run_id + ".ini"
 
         if (not clobber) and (os.path.isfile(file)):
-            logger.error('config file already exists, skipping write')
+            logger.error("config file already exists, skipping write")
             return
         else:
-           cfgfile = open(file, "w")
+            cfgfile = open(file, "w")
 
-           Config = ConfigParser()
-           Config.add_section("beans")
-           Config.set("beans", "run_id", self.run_id)
-           Config.set("beans", "version", __version__)
-           Config.set("beans", "model", str(self.model))
+            Config = ConfigParser()
+            Config.add_section("beans")
+            Config.set("beans", "run_id", self.run_id)
+            Config.set("beans", "version", __version__)
+            Config.set("beans", "model", str(self.model))
 
-           Config.add_section("data")
-           Config.set("data", "obsname", str(self.obsname))
-           Config.set("data", "burstname", self.burstname)
-           Config.set("data", "gtiname", str(self.gtiname))
-           Config.set("data", "alpha", str(self.cmpr_alpha))
-           Config.set("data", "fluen", str(self.cmpr_fluen))
-           Config.set("data", "pflux", str(self.cmpr_pflux))
+            Config.add_section("data")
+            Config.set("data", "obsname", str(self.obsname))
+            Config.set("data", "burstname", self.burstname)
+            Config.set("data", "gtiname", str(self.gtiname))
+            Config.set("data", "alpha", str(self.cmpr_alpha))
+            Config.set("data", "fluen", str(self.cmpr_fluen))
+            Config.set("data", "pflux", str(self.cmpr_pflux))
 
-           if self.obsname is not None:
-               # These parameters only used for "train" mode
-               Config.set("data", "tref", str(self.tref))
-               Config.set("data", "ref_ind", str(self.ref_ind))
-               Config.set("data", "bc", str(self.bc))
-               Config.set("data", "interp", str(self.interp))
-               if self.interp == 'spline':
-                   Config.set("data", "smooth", str(self.smooth))
-               Config.set("beans", "continuous", str(self.continuous))
-               if not self.continuous:
-                   Config.set("beans", "maxgap", str(self.maxgap))
+            if self.obsname is not None:
+                # These parameters only used for "train" mode
+                Config.set("data", "tref", str(self.tref))
+                Config.set("data", "ref_ind", str(self.ref_ind))
+                Config.set("data", "bc", str(self.bc))
+                Config.set("data", "interp", str(self.interp))
+                if self.interp == "spline":
+                    Config.set("data", "smooth", str(self.smooth))
+                Config.set("beans", "continuous", str(self.continuous))
+                if not self.continuous:
+                    Config.set("beans", "maxgap", str(self.maxgap))
 
-           # Config.add_section("emcee")
-           Config.add_section("sampler")
-           Config.set("sampler", "theta", str(self.theta))
-           Config.set("sampler", "numburstssim", str(self.numburstssim))
-           Config.set("sampler", "prior", str(self.lnprior))
-           Config.set("sampler", "corr", str(self.corr))
-           Config.set("sampler", "threads", str(self.threads))
-           Config.set("sampler", "sampler", str(self.sampler))
-           if (self.sampler == 'emcee') | (self.sampler == 'bilby'):
-               Config.set("sampler", "nwalkers", str(self.nwalkers))
-               Config.set("sampler", "nsteps", str(self.nsteps))
-           elif (self.sampler == 'dynesty'):
-               Config.set("sampler", "nlive", str(self.nlive))
-               Config.set("sampler", "dlogz", str(self.dlogz))
-           if (self.sampler == 'emcee'):
-               Config.set("sampler", "stretch_a", str(self.stretch_a))
-           if (self.sampler != 'emcee'):
-               Config.set("sampler", "outdir", self.outdir)
+            # Config.add_section("emcee")
+            Config.add_section("sampler")
+            Config.set("sampler", "theta", str(self.theta))
+            Config.set("sampler", "numburstssim", str(self.numburstssim))
+            Config.set("sampler", "prior", str(self.lnprior))
+            Config.set("sampler", "corr", str(self.corr))
+            Config.set("sampler", "threads", str(self.threads))
+            Config.set("sampler", "sampler", str(self.sampler))
+            if (self.sampler == "emcee") | (self.sampler == "bilby"):
+                Config.set("sampler", "nwalkers", str(self.nwalkers))
+                Config.set("sampler", "nsteps", str(self.nsteps))
+            elif self.sampler == "dynesty":
+                Config.set("sampler", "nlive", str(self.nlive))
+                Config.set("sampler", "dlogz", str(self.dlogz))
+            if self.sampler == "emcee":
+                Config.set("sampler", "stretch_a", str(self.stretch_a))
+            if self.sampler != "emcee":
+                Config.set("sampler", "outdir", self.outdir)
 
-           Config.write(cfgfile)
-           cfgfile.close()
-
+            Config.write(cfgfile)
+            cfgfile.close()
 
     def read_config(self, file=None):
         """
@@ -1451,13 +1727,21 @@ Initial parameters:
         """
 
         if file is None:
-            run_id = os.path.join(self.data_path, 'beans.ini')
+            run_id = os.path.join(self.data_path, "beans.ini")
 
-        int_params = ('ref_ind', 'numburstssim', 'nwalkers', 'nsteps', 'threads', 'maxgap', 'nlive')
-        float_params = ('bc', 'smooth', 'tref', 'stretch_a', 'dlogz')
+        int_params = (
+            "ref_ind",
+            "numburstssim",
+            "nwalkers",
+            "nsteps",
+            "threads",
+            "maxgap",
+            "nlive",
+        )
+        float_params = ("bc", "smooth", "tref", "stretch_a", "dlogz")
 
         if not os.path.isfile(file):
-            logger.error('config file not found')
+            logger.error("config file not found")
             return
 
         config = ConfigParser(allow_no_value=True)
@@ -1467,67 +1751,79 @@ Initial parameters:
 
         for section in config.sections():
             # print("Section: %s" % section)
-            if section == 'emcee':
+            if section == "emcee":
                 # read the older formats prior to the different sampling options
-                setattr(self, 'sampler', 'emcee')
+                setattr(self, "sampler", "emcee")
             for option in config.options(section):
                 # print(
                 #     "x %s:::%s:::%s"
                 #     % (option, config.get(section, option), str(type(option))))
-                if option == 'theta':
-                    setattr(self, option,
-                        tuple(map(float, config.get(section, option)[1:-1].split(', '))))
+                if option == "theta":
+                    setattr(
+                        self,
+                        option,
+                        tuple(
+                            map(float, config.get(section, option)[1:-1].split(", "))
+                        ),
+                    )
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
-                elif (option == 'prior'):
-                    function_name = config.get(section, option).split(' ')[1]
-                    if (function_name != str(self.lnprior).split(' ')[1]):
-                        logger.warning ('''config file lists the prior function as {},
+                elif option == "prior":
+                    function_name = config.get(section, option).split(" ")[1]
+                    if function_name != str(self.lnprior).split(" ")[1]:
+                        logger.warning(
+                            """config file lists the prior function as {},
                 but supplied prior is {}
               To fully replicate the previous run you need to specify the
                 same prior using the prior=beans.{} flag on init
-'''.format(function_name, str(self.lnprior).split(' ')[1], function_name))
-                elif (option == 'model'):
-                    function_name = config.get(section, option).split(' ')[1]
-                    if (function_name != str(self.model).split(' ')[1]):
-                        logger.warning('''config file lists the model as {},
+""".format(function_name, str(self.lnprior).split(" ")[1], function_name)
+                        )
+                elif option == "model":
+                    function_name = config.get(section, option).split(" ")[1]
+                    if function_name != str(self.model).split(" ")[1]:
+                        logger.warning(
+                            """config file lists the model as {},
                 but supplied value is {}
               To fully replicate the previous run you need to specify the
                 same model using the model={} specification on init
-'''.format(function_name, str(self.model).split(' ')[1], function_name))
-                elif (option == 'corr'):
+""".format(function_name, str(self.model).split(" ")[1], function_name)
+                        )
+                elif option == "corr":
                     function_name = config.get(section, option)
-                    if function_name != 'None':
-                        function_name = function_name.split(' ')[1]
+                    if function_name != "None":
+                        function_name = function_name.split(" ")[1]
                     _scorr = str(self.corr)
-                    if _scorr != 'None':
-                        _scorr = _scorr.split(' ')[1]
-                    if (function_name != _scorr):
-                        logger.warning('''config file lists {} for the correction,
+                    if _scorr != "None":
+                        _scorr = _scorr.split(" ")[1]
+                    if function_name != _scorr:
+                        logger.warning(
+                            """config file lists {} for the correction,
                 but supplied value is {}
               To fully replicate the previous run you need to specify the
                 same option/condition using the corr=beans.{} flag on init
-'''.format(function_name, _scorr, function_name))
+""".format(function_name, _scorr, function_name)
+                        )
                 elif option in int_params:
                     setattr(self, option, config.getint(section, option))
-                elif (option == 'continuous') & (config.get(section, option) == 'False'):
+                elif (option == "continuous") & (
+                    config.get(section, option) == "False"
+                ):
                     self.continuous = False
                     self.train_model = punkt_train
                 else:
                     # string options (including "None")
                     _value = config.get(section, option)
-                    if _value == 'None':
+                    if _value == "None":
                         setattr(self, option, None)
-                    elif _value == 'True':
+                    elif _value == "True":
                         setattr(self, option, True)
-                    elif _value == 'False':
+                    elif _value == "False":
                         setattr(self, option, False)
                     else:
                         setattr(self, option, _value)
 
-        if (self.sampler != 'emcee') & (not hasattr(self, 'outdir')):
-            setattr(self, 'outdir', BILBY_OUTPUT)
-
+        if (self.sampler != "emcee") & (not hasattr(self, "outdir")):
+            setattr(self, "outdir", BILBY_OUTPUT)
 
     def flux_to_mdot(self, X, dist, xi_p, mass, radius, flux=None):
         """
@@ -1548,26 +1844,37 @@ Initial parameters:
         """
 
         if flux is None:
-            return self.flux_to_mdot(X, dist, xi_p, mass, radius, self.pflux), \
-                self.flux_to_mdot(X, dist, xi_p, mass, radius, self.pfluxe)
+            return self.flux_to_mdot(
+                X, dist, xi_p, mass, radius, self.pflux
+            ), self.flux_to_mdot(X, dist, xi_p, mass, radius, self.pfluxe)
 
         # Johnston et al. 2020: The Eddington-limited accretion rate,
         # scaled independent of composition or NS radius.
         # for use with the grid_interp model
 
-        _mdot_Edd = 8.775E4*u.g/u.cm**2/u.s
-        if self.model_name == 'settle':
+        _mdot_Edd = 8.775e4 * u.g / u.cm**2 / u.s
+        if self.model_name == "settle":
             # different prescription for settle, via the mdot_Edd function
             _mdot_Edd = self.mdot_Edd(X, radius)
 
-        opz = 1./(np.sqrt(1.-self.gmrc2*mass/radius))
+        opz = 1.0 / (np.sqrt(1.0 - self.gmrc2 * mass / radius))
 
         # prior to v2.68.1 there was a spurious bolometric correction in the expression below;
         # introduced in v2.25.0. no longer needed since we apply the bolometric correction once
         # only on reading in the data, since v1.6.0 (10/6/23)
-        return (self.r1 * flux * dist**2 * xi_p * opz**2
-            / (radius**2 * (opz-1)) / _mdot_Edd ).decompose().value
-
+        return (
+            (
+                self.r1
+                * flux
+                * dist**2
+                * xi_p
+                * opz**2
+                / (radius**2 * (opz - 1))
+                / _mdot_Edd
+            )
+            .decompose()
+            .value
+        )
 
     # -------------------------------------------------------------------------#
     # Finally we combine the likelihood and prior into the overall lnprob function, called by emcee
@@ -1581,7 +1888,7 @@ Initial parameters:
         the sampler (in the :meth:`Beans.do_run` method).
 
         Calls self.lnprior and self.lnlike; these are pointers to
-	functions that can be modified, and the theta_in is not unpacked
+        functions that can be modified, and the theta_in is not unpacked
         here, so you can add your own combinations to customise the code
 
         :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
@@ -1598,7 +1905,7 @@ Initial parameters:
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
         # the model run it if not
-        if (not np.isfinite(lp)):
+        if not np.isfinite(lp):
             return -np.inf, -np.inf, None
 
         # Now also returns the model, to accumulate along with the likelihoods
@@ -1607,17 +1914,23 @@ Initial parameters:
 
         like, model = self.lnlike(self, theta_in, x, y, yerr)
 
-        if (not np.isfinite(like)):
+        if not np.isfinite(like):
             return -np.inf, -np.inf, model
 
         # encoding below is so we have a suitable object for including in
         # the blobs (see the dtype specification in runemcee)
 
-        return lp + like, lp, model_str(model).encode('ASCII')
+        return lp + like, lp, model_str(model).encode("ASCII")
 
-
-    def plot(self, show_model=True, model=None, mdot=True, imatch=None,
-        title=None, savefig=False):
+    def plot(
+        self,
+        show_model=True,
+        model=None,
+        mdot=True,
+        imatch=None,
+        title=None,
+        savefig=False,
+    ):
         """
         Display a plot of the data and model results, for a burst train
         calculated with :func:`burstrain.generate_burst_train`;
@@ -1637,24 +1950,24 @@ Initial parameters:
         # for the default linear interpolation connect the flux
         # measurements by lines
 
-        ls = '-'
-        if self.interp == 'spline':
-            ls = ''
+        ls = "-"
+        if self.interp == "spline":
+            ls = ""
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra+[self.M_NS, self.R_NS, 1.0][len(extra):]
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
-        itoff = 1 # time offset for models produced with generate_burst_train
+        itoff = 1  # time offset for models produced with generate_burst_train
         if (model is None) & show_model:
             # no need to do the matching here
-            test, valid, model = runmodel(self.theta, self,
-                match=(False or not self.continuous),
-                debug=False)
+            test, valid, model = runmodel(
+                self.theta, self, match=(False or not self.continuous), debug=False
+            )
             if not valid:
-                logger.warning('''the model is not valid. You need to adjust the model
-                    parameters to better suit the data.  ''')
+                logger.warning("""the model is not valid. You need to adjust the model
+                    parameters to better suit the data.  """)
             else:
-                logger.info('plotting model for theta = {}'.format(self.theta))
+                logger.info("plotting model for theta = {}".format(self.theta))
 
             show_model = valid
 
@@ -1663,149 +1976,251 @@ Initial parameters:
             valid = show_model
 
         if show_model & valid & self.train:
-            if (imatch is None) & ('imatch' not in model) & (self.numburstsobs > 0):
+            if (imatch is None) & ("imatch" not in model) & (self.numburstsobs > 0):
                 # ... but it's useful to know if it's possible
                 # (not relevant for punkt_train, or ensemble mode)
 
-                imatch = burst_time_match(self.ref_ind, self.bstart,
-                    model['iref'], np.array(model['time']))
+                imatch = burst_time_match(
+                    self.ref_ind, self.bstart, model["iref"], np.array(model["time"])
+                )
 
                 if imatch is None:
-                    logger.warning ("can't match predicted bursts to observations")
+                    logger.warning("can't match predicted bursts to observations")
 
-            elif 'imatch' in model:
-                imatch = model['imatch']
+            elif "imatch" in model:
+                imatch = model["imatch"]
                 itoff = 0
 
         full_model = False  # Flag to remember whether we're plotting the
-                            # full model output of generate burst train or
-                            # the packed output array
+        # full model output of generate burst train or
+        # the packed output array
         if type(model) == dict:
             full_model = True
             timepred = model["time"]
             if (len(timepred) == 1) | (not valid):
-                logger.error('no/insufficient predicted times to show')
+                logger.error("no/insufficient predicted times to show")
                 show_model = False
             else:
                 ebpred = np.array(model["fluen"])
         elif type(model) == list:
-	    # The other way to return the model is as an array with the
-	    # burst times, fluences and alphas all together. So unpack
-	    # those here
+            # The other way to return the model is as an array with the
+            # burst times, fluences and alphas all together. So unpack
+            # those here
             # This mode is deprecated hence the breakpoint
             breakpoint()
-            timepred = model[:self.numburstssim+1]
-            ebpred = np.array(model[self.numburstssim+int(self.train):self.numburstssim*2+int(self.train)]) * self.fluen_fac/xi_b/dist**2
+            timepred = model[: self.numburstssim + 1]
+            ebpred = (
+                np.array(
+                    model[
+                        self.numburstssim + int(self.train) : self.numburstssim * 2
+                        + int(self.train)
+                    ]
+                )
+                * self.fluen_fac
+                / xi_b
+                / dist**2
+            )
 
         # Now set up the figure
 
         if self.train & show_model & (imatch is not None):
-            fig, axs = plt.subplot_mosaic([['main'],['main'],['resid']])
-            ax1 = axs['main']
+            fig, axs = plt.subplot_mosaic([["main"], ["main"], ["resid"]])
+            ax1 = axs["main"]
         else:
             fig, ax1 = plt.subplots()
         # fig.figure(figsize=(10,7))
 
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         if self.train & self.gti_checking:
-            #plot satellite gtis
-            for i in range(1,len(self.st)):
-                ax1.axvspan(self.st[i],self.et[i],facecolor='0.5', alpha=0.2)
-            ax1.axvspan(self.st[0],self.et[0], facecolor='0.5',alpha=0.2,label='Satellite GTIs')
+            # plot satellite gtis
+            for i in range(1, len(self.st)):
+                ax1.axvspan(self.st[i], self.et[i], facecolor="0.5", alpha=0.2)
+            ax1.axvspan(
+                self.st[0],
+                self.et[0],
+                facecolor="0.5",
+                alpha=0.2,
+                label="Satellite GTIs",
+            )
 
         # first show the flux/mdot
         if mdot and full_model:
             # this is the usual (only?) plot style, showing mdot vs. time,
             # along with the burst model and observation comparison
-            ax1.set_ylabel('Accretion rate (fraction of Eddington)', color=FLUX_COLOUR)
+            ax1.set_ylabel("Accretion rate (fraction of Eddington)", color=FLUX_COLOUR)
             _mdot, _mdot_err = self.flux_to_mdot(X, dist, xi_p, mass, radius)
             if self.train:
                 # show the mdot values
-                ax1.errorbar(self.tobs, _mdot, _mdot_err,
-                    marker='.', ls=ls, color=FLUX_COLOUR, label='mdot')
-                if self.interp == 'spline':
+                ax1.errorbar(
+                    self.tobs,
+                    _mdot,
+                    _mdot_err,
+                    marker=".",
+                    ls=ls,
+                    color=FLUX_COLOUR,
+                    label="mdot",
+                )
+                if self.interp == "spline":
                     t = np.arange(min(self.tobs), max(self.tobs), 0.1)
-                    ax1.plot(t, self.flux_to_mdot(X, dist, xi_p, mass, radius,
-                        BSpline(*self.tck_s)(t)), color=FLUX_COLOUR)
+                    ax1.plot(
+                        t,
+                        self.flux_to_mdot(
+                            X, dist, xi_p, mass, radius, BSpline(*self.tck_s)(t)
+                        ),
+                        color=FLUX_COLOUR,
+                    )
                 # show the time of the "reference" burst
                 # ax2.axvline(timepred[self.iref], c='k')
                 if self.numburstsobs > 0:
-                    ax2.axvline(self.bstart[self.ref_ind], c='k', ls='--')
+                    ax2.axvline(self.bstart[self.ref_ind], c="k", ls="--")
                 ax1.set_xlabel("Time (days after MJD {})".format(self.tref))
             else:
                 # show the ensemble comparison, which is much simpler
-                ax1.errorbar(self.bstart, _mdot, _mdot_err, fmt='.',
-                         color=FLUX_COLOUR, label='mdot')
+                ax1.errorbar(
+                    self.bstart,
+                    _mdot,
+                    _mdot_err,
+                    fmt=".",
+                    color=FLUX_COLOUR,
+                    label="mdot",
+                )
                 ax1.set_xlabel("Epoch (MJD)")
         else:
             # showing here the persistent flux rather than mdot
-            ax1.set_ylabel('{} ({})'.format(PARAM_LATEX['perflx'], UNIT_LATEX['perflx']), color=FLUX_COLOUR)
+            ax1.set_ylabel(
+                "{} ({})".format(PARAM_LATEX["perflx"], UNIT_LATEX["perflx"]),
+                color=FLUX_COLOUR,
+            )
             if self.train:
-                ax1.errorbar(self.tobs, self.pflux, self.pfluxe,
-                    marker = '.', ls=ls, color=FLUX_COLOUR, label = PARAM_LATEX['perflx'].lower())
-                if self.interp == 'spline':
+                ax1.errorbar(
+                    self.tobs,
+                    self.pflux,
+                    self.pfluxe,
+                    marker=".",
+                    ls=ls,
+                    color=FLUX_COLOUR,
+                    label=PARAM_LATEX["perflx"].lower(),
+                )
+                if self.interp == "spline":
                     t = np.arange(min(self.tobs), max(self.tobs), 0.1)
                     ax1.plot(t, BSpline(*self.tck_s)(t), color=FLUX_COLOUR)
                 if show_model:
-                    ax2.scatter(timepred[0], ebpred[0], marker = '*',color=BURSTS_COLOUR,s = 100)
+                    ax2.scatter(
+                        timepred[0], ebpred[0], marker="*", color=BURSTS_COLOUR, s=100
+                    )
                 ax1.set_xlabel("Time (days after MJD {})".format(self.tref))
             else:
                 # "ensemble" mode plot vs. epoch, rather than observation time
-                ax1.errorbar(self.bstart, self.pflux, self.pfluxe, fmt='.', color=FLUX_COLOUR,
-                         label=PARAM_LATEX['perflx'].lower())
+                ax1.errorbar(
+                    self.bstart,
+                    self.pflux,
+                    self.pfluxe,
+                    fmt=".",
+                    color=FLUX_COLOUR,
+                    label=PARAM_LATEX["perflx"].lower(),
+                )
                 ax1.set_xlabel("Epoch (MJD)")
 
-        ax1.tick_params(axis='y', labelcolor=FLUX_COLOUR)
+        ax1.tick_params(axis="y", labelcolor=FLUX_COLOUR)
 
         # Plot the bursts here
-        ax2.set_ylabel("{} ({})".format(PARAM_LATEX['fluen'], UNIT_LATEX['fluen']), color=OBS_COLOUR)
+        ax2.set_ylabel(
+            "{} ({})".format(PARAM_LATEX["fluen"], UNIT_LATEX["fluen"]),
+            color=OBS_COLOUR,
+        )
         if self.train:
             if self.bstart is not None:
                 # Plot the observed bursts, if available
                 # ax2.scatter(tobs,ebobs, color = 'darkgrey', marker = '.', label='observed', s =200)
-                ax2.errorbar(self.bstart[self.ifluen], self.fluen[self.ifluen],
+                ax2.errorbar(
+                    self.bstart[self.ifluen],
+                    self.fluen[self.ifluen],
                     yerr=self.fluene[self.ifluen],
-                    color=OBS_COLOUR, linestyle='', marker='.', ms=DOT_SIZE,
-                    label='observed bursts')
+                    color=OBS_COLOUR,
+                    linestyle="",
+                    marker=".",
+                    ms=DOT_SIZE,
+                    label="observed bursts",
+                )
                 for i in range(self.numburstsobs):
                     if (i not in self.ifluen) & (i != self.ref_ind):
-                        ax2.axvline(self.bstart[i], color=OBS_COLOUR, ls='--')
+                        ax2.axvline(self.bstart[i], color=OBS_COLOUR, ls="--")
 
             if show_model:
-                ax2.scatter(timepred[itoff:], ebpred, marker = '*',color=BURSTS_COLOUR,s = 100, label = 'predicted bursts')
-            # we have time but not fluence for the first burst
+                ax2.scatter(
+                    timepred[itoff:],
+                    ebpred,
+                    marker="*",
+                    color=BURSTS_COLOUR,
+                    s=100,
+                    label="predicted bursts",
+                )
+                # we have time but not fluence for the first burst
                 if itoff == 1:
-                    ax2.axvline(timepred[0], color=BURSTS_COLOUR, ls='--')
+                    ax2.axvline(timepred[0], color=BURSTS_COLOUR, ls="--")
                 # and the averaged mdot over the burst interval (predicted)
                 av_mdot = []
-                for i in range(len(timepred)-1):
-                    av_mdot.append(self.flux_to_mdot(X, dist, xi_p, mass, radius,
-                        self.mean_flux(timepred[i], timepred[i+1], self)))
+                for i in range(len(timepred) - 1):
+                    av_mdot.append(
+                        self.flux_to_mdot(
+                            X,
+                            dist,
+                            xi_p,
+                            mass,
+                            radius,
+                            self.mean_flux(timepred[i], timepred[i + 1], self),
+                        )
+                    )
                 av_mdot.insert(0, av_mdot[0])
-                ax1.step(timepred, av_mdot, where='pre', color=FLUX_COLOUR)
+                ax1.step(timepred, av_mdot, where="pre", color=FLUX_COLOUR)
 
                 if imatch is not None:
                     # show the burst time comparison
-                    resid = -(self.bstart-np.array(timepred)[imatch])*24.
-                    axs['resid'].plot(imatch, resid,
-                        linestyle='', marker='.', ms=DOT_SIZE, color=OBS_COLOUR)
+                    resid = -(self.bstart - np.array(timepred)[imatch]) * 24.0
+                    axs["resid"].plot(
+                        imatch,
+                        resid,
+                        linestyle="",
+                        marker=".",
+                        ms=DOT_SIZE,
+                        color=OBS_COLOUR,
+                    )
                     for i in range(self.numburstsobs):
-                        axs['resid'].annotate(' {}'.format(i+1),
-                            (imatch[i], resid[i]) )
-                    axs['resid'].axhline(0.0, color=OBS_COLOUR, ls='--')
-                    axs['resid'].set_xlabel('Burst number (predicted)')
-                    axs['resid'].set_ylabel('Time offset (hr)')
-                    logger.info ('RMS obs-model offset = {:.4f} hr'.format(
-                        np.sqrt(np.mean(resid**2))))
+                        axs["resid"].annotate(
+                            " {}".format(i + 1), (imatch[i], resid[i])
+                        )
+                    axs["resid"].axhline(0.0, color=OBS_COLOUR, ls="--")
+                    axs["resid"].set_xlabel("Burst number (predicted)")
+                    axs["resid"].set_ylabel("Time offset (hr)")
+                    logger.info(
+                        "RMS obs-model offset = {:.4f} hr".format(
+                            np.sqrt(np.mean(resid**2))
+                        )
+                    )
 
         else:
             # ensemble mode plot here
-            ax2.errorbar(self.bstart, self.fluen, yerr=self.fluene,
-                linestyle='', color = OBS_COLOUR, marker = '.', label='observed', ms =13)
+            ax2.errorbar(
+                self.bstart,
+                self.fluen,
+                yerr=self.fluene,
+                linestyle="",
+                color=OBS_COLOUR,
+                marker=".",
+                label="observed",
+                ms=13,
+            )
             if show_model:
-                ax2.scatter(self.bstart, ebpred, marker = '*',color=BURSTS_COLOUR,s = 100, label = 'predicted')
+                ax2.scatter(
+                    self.bstart,
+                    ebpred,
+                    marker="*",
+                    color=BURSTS_COLOUR,
+                    s=100,
+                    label="predicted",
+                )
 
-        ax2.tick_params(axis='y', labelcolor=OBS_COLOUR)
+        ax2.tick_params(axis="y", labelcolor=OBS_COLOUR)
 
         if title is not None:
             plt.title(title)
@@ -1815,8 +2230,8 @@ Initial parameters:
         fig.legend(loc=1)
 
         if savefig:
-            file = savefig if type(savefig) is str else f'{self.run_id}_plot.pdf'
-            logger.info ('Saving figure plot to {}'.format(file))
+            file = savefig if type(savefig) is str else f"{self.run_id}_plot.pdf"
+            logger.info("Saving figure plot to {}".format(file))
             fig.savefig(file)
 
         fig.show()
@@ -1840,76 +2255,127 @@ Initial parameters:
         :return:
         """
 
-        logger.info ("generating simulated data based on parameter vector\n theta={}...".format(self.theta))
+        logger.info(
+            "generating simulated data based on parameter vector\n theta={}...".format(
+                self.theta
+            )
+        )
 
-        test, valid, full_model = runmodel(self.theta, self,
-            match=(self.numburstsobs > 0))
-        _n = len(full_model['time'])
+        test, valid, full_model = runmodel(
+            self.theta, self, match=(self.numburstsobs > 0)
+        )
+        _n = len(full_model["time"])
 
         if _n <= 1:
-            logger.error('no bursts generated by model, adjust your model parameters')
+            logger.error("no bursts generated by model, adjust your model parameters")
             return
 
         if file is None:
             f = sys.stdout
-            _comm = ''
+            _comm = ""
         else:
-            f = open(file, 'w')
-            print ('''# File {}
+            f = open(file, "w")
+            print(
+                """# File {}
 # Created {}
 #
 # Simulated burst data generated by beansp v{} (see
 #   https://github.com/adellej/beans for the code, and
 #   https://beans-7.readthedocs.io/en/latest/index.html for documentation)
 #
-# Parameter vector theta={}'''.format(file, time.strftime("%Y-%m-%d %H:%M:%S"),
-            __version__, self.theta), file=f)
-            _comm = '# '
+# Parameter vector theta={}""".format(
+                    file, time.strftime("%Y-%m-%d %H:%M:%S"), __version__, self.theta
+                ),
+                file=f,
+            )
+            _comm = "# "
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra+[self.M_NS, self.R_NS, 1.0][len(extra):]
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
-        opz = 1./(np.sqrt(1.-self.gmrc2*mass/radius))
-        print ('{}corresponding to source at\n{}  d={:.2f} kpc, xi_b={:.4f}, xi_p={:.4f}, X={:.2f}, Z={:.3f}, M_NS={:.2f}, R_NS={:.2f}, 1+z={:.3f}, Q_b={:.2f}'.format(
-            _comm, _comm, dist,  xi_b, xi_p, X, Z, mass, radius, opz, Q_b), file=f)
-        print ('{}Persistent fluxes from {}{}'.format(
-            _comm, self.obsname if self.obsname is not None else self.burstname,
-            ', interp={}{}, bc={}'.format(self.interp,
-                ('' if self.smooth is None else ', smooth={}'.format(self.smooth)), self.bc) if self.train else ''),
-            file=f)
+        opz = 1.0 / (np.sqrt(1.0 - self.gmrc2 * mass / radius))
+        print(
+            "{}corresponding to source at\n{}  d={:.2f} kpc, xi_b={:.4f}, xi_p={:.4f}, X={:.2f}, Z={:.3f}, M_NS={:.2f}, R_NS={:.2f}, 1+z={:.3f}, Q_b={:.2f}".format(
+                _comm, _comm, dist, xi_b, xi_p, X, Z, mass, radius, opz, Q_b
+            ),
+            file=f,
+        )
+        print(
+            "{}Persistent fluxes from {}{}".format(
+                _comm,
+                self.obsname if self.obsname is not None else self.burstname,
+                ", interp={}{}, bc={}".format(
+                    self.interp,
+                    ("" if self.smooth is None else ", smooth={}".format(self.smooth)),
+                    self.bc,
+                )
+                if self.train
+                else "",
+            ),
+            file=f,
+        )
 
         if self.corr is not None:
-            print ('{}Correction function {}'.format(_comm, self.corr), file=f)
+            print("{}Correction function {}".format(_comm, self.corr), file=f)
 
         # assign fluence and alpha errors here, and match string, if
         # we have observed bursts to match to
-        _matched = [''] * _n
+        _matched = [""] * _n
         if self.numburstsobs > 0:
             if self.train:
-                _fluene, _alphae = np.full(_n, np.mean(self.fluene)), np.full(_n, np.mean(self.alphae[1:]))
-                _matched = ['	'+str(i in full_model['imatch']) for i in range(_n)]
-                if hasattr(self, 'tdele'):
+                _fluene, _alphae = (
+                    np.full(_n, np.mean(self.fluene)),
+                    np.full(_n, np.mean(self.alphae[1:])),
+                )
+                _matched = ["	" + str(i in full_model["imatch"]) for i in range(_n)]
+                if hasattr(self, "tdele"):
                     # only for ensemble mode input data, I think
                     _tdele = np.full(_n, mean(self.tdele))
                 else:
-                    _tdele = np.full(_n, 0.1) # hr
+                    _tdele = np.full(_n, 0.1)  # hr
             else:
                 # for ensemble mode we can just use the actual errors
                 _fluene, _alphae, _tdele = self.fluene, self.alphae, self.tdele
         else:
-            _fluene, _alphae, _tdele = np.full(_n, 0.01), np.full(_n, 1.0), np.full(_n, 0.1) # dummy values
+            _fluene, _alphae, _tdele = (
+                np.full(_n, 0.01),
+                np.full(_n, 1.0),
+                np.full(_n, 0.1),
+            )  # dummy values
 
         if self.train & (not ensemble):
-            print ('{}\n{}"burst start time [d]"	"bolometric fluence [1e-6 erg/cm^2]"	"error on bolometric fluence"	"alpha"	"error on alpha"'.format(_comm, _comm), file=f)
-            _line_fmt = '{:.5f}	{:.4f}	{:.4f}	{:.1f}	{:.1f}{}'
+            print(
+                '{}\n{}"burst start time [d]"	"bolometric fluence [1e-6 erg/cm^2]"	"error on bolometric fluence"	"alpha"	"error on alpha"'.format(
+                    _comm, _comm
+                ),
+                file=f,
+            )
+            _line_fmt = "{:.5f}	{:.4f}	{:.4f}	{:.1f}	{:.1f}{}"
             for i in range(_n):
                 if i == 0:
-                    print(_line_fmt.format(full_model['time'][0]+self.tref,
-                        full_model['fluen'][0],_fluene[i],0.,0., _matched[i]), file=f)
+                    print(
+                        _line_fmt.format(
+                            full_model["time"][0] + self.tref,
+                            full_model["fluen"][0],
+                            _fluene[i],
+                            0.0,
+                            0.0,
+                            _matched[i],
+                        ),
+                        file=f,
+                    )
                 else:
-                    print(_line_fmt.format(full_model['time'][i]+self.tref,
-                        full_model['fluen'][i-1], _fluene[i],
-                        full_model['alpha_obs'][i-1], _alphae[i], _matched[i]), file=f)
+                    print(
+                        _line_fmt.format(
+                            full_model["time"][i] + self.tref,
+                            full_model["fluen"][i - 1],
+                            _fluene[i],
+                            full_model["alpha_obs"][i - 1],
+                            _alphae[i],
+                            _matched[i],
+                        ),
+                        file=f,
+                    )
 
         else:
             # originally this was for the ensemble mode data, now tested on SRGA J144459.2-604207
@@ -1918,29 +2384,48 @@ Initial parameters:
             # as a component of the "ensemble" (reasonable to do for a simulation)
 
             breakpoint()
-            print ('{}\n{}"burst epoch [MJD]"	"bolometric fluence [1e-6 erg/cm^2]"	"error on bolometric fluence"	"alpha value"	"error on alpha value"	"bolometric persistant flux [1e-9 erg/cm^2/s^-1]"	"error on bol.  per flux"	"inferred recurrence time [hr]"	"error on recurrence time"'.format(_comm, _comm), file=f)
-            _line_fmt = '{:.5f}	{:.3f}	{:.3f}	{:.1f}	{:.1f}	{:.3f}	{:.3f}	{:.3f}	{:.3f}'
+            print(
+                '{}\n{}"burst epoch [MJD]"	"bolometric fluence [1e-6 erg/cm^2]"	"error on bolometric fluence"	"alpha value"	"error on alpha value"	"bolometric persistant flux [1e-9 erg/cm^2/s^-1]"	"error on bol.  per flux"	"inferred recurrence time [hr]"	"error on recurrence time"'.format(
+                    _comm, _comm
+                ),
+                file=f,
+            )
+            _line_fmt = "{:.5f}	{:.3f}	{:.3f}	{:.1f}	{:.1f}	{:.3f}	{:.3f}	{:.3f}	{:.3f}"
             # for i in range(len(self.bstart)):
-            for i in range(1-(not self.train), _n):
-                print(_line_fmt.format(
-                    full_model['time'][i] if self.train else self.bstart[i],
-                    full_model['fluen'][i-self.train], _fluene[i],
-                    full_model['alpha_obs'][i-self.train], _alphae[i],
-                    self.mean_flux(full_model['time'][i-1],full_model['time'][i],self) if self.train else self.pflux[i],
-                    0.0 if self.train else self.pfluxe[i],
-                    (full_model['time'][i]-full_model['time'][i-1])*24. if self.train else full_model['time'][i], _tdele[i],
-                    # self.bstart[i], self.fluen[i], self.fluene[i],
-                    # self.alpha[i],self.alphae[i],self.pflux[i],
-                    # self.pfluxe[i],self.tdel[i],self.tdele[i]
-                    ), file=f)
+            for i in range(1 - (not self.train), _n):
+                print(
+                    _line_fmt.format(
+                        full_model["time"][i] if self.train else self.bstart[i],
+                        full_model["fluen"][i - self.train],
+                        _fluene[i],
+                        full_model["alpha_obs"][i - self.train],
+                        _alphae[i],
+                        self.mean_flux(
+                            full_model["time"][i - 1], full_model["time"][i], self
+                        )
+                        if self.train
+                        else self.pflux[i],
+                        0.0 if self.train else self.pfluxe[i],
+                        (full_model["time"][i] - full_model["time"][i - 1]) * 24.0
+                        if self.train
+                        else full_model["time"][i],
+                        _tdele[i],
+                        # self.bstart[i], self.fluen[i], self.fluene[i],
+                        # self.alpha[i],self.alphae[i],self.pflux[i],
+                        # self.pfluxe[i],self.tdel[i],self.tdele[i]
+                    ),
+                    file=f,
+                )
 
         if file is not None:
             f.close()
-            logger.info('Simulated data saved in file {}.'.format(file))
+            logger.info("Simulated data saved in file {}.".format(file))
 
     # -------------------------------------------------------------- #
 
-    def distance_limit(self, distrange=[1,10], Xmin= 0.01, gridsize=10, numtrains=100, skiplo=True):
+    def distance_limit(
+        self, distrange=[1, 10], Xmin=0.01, gridsize=10, numtrains=100, skiplo=True
+    ):
         """
         Generate burst trains and test how many of them are consistent with the GTIs
         """
@@ -1948,7 +2433,7 @@ Initial parameters:
         assert len(distrange) == 2
 
         X_0, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra+[self.M_NS, self.R_NS, 1.0][len(extra):]
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
         # Loop over the distance values
 
@@ -1962,72 +2447,105 @@ Initial parameters:
         result = np.zeros((gridsize, gridsize))
 
         for i, _distance in enumerate(distance):
-
             # For each distance, loop over the h-fraction range
             for j, _X in enumerate(X):
-
                 # initialise result array
                 valid_array = []
 
-                print('Drawing one of {} values for xi_p:'.format(len(xi_p.distribution)))
+                print(
+                    "Drawing one of {} values for xi_p:".format(len(xi_p.distribution))
+                )
                 # For each distance and h-fraction, draw a bunch of inclination values and xi_p's:
                 for _xi_p in xi_p.distribution:
-
-                    r1 = _xi_p.value*(_distance/10)**2
+                    r1 = _xi_p.value * (_distance / 10) ** 2
                     theta_1 = (_X, Z, Q_b, f_a, f_E, r1, r2, r3, mass, radius)
 
                     # Run for just one burst to get the initial interval
                     # Set ref_ind to be zero, will subsequently distribute the start burst times
                     # between up to the simulated interval
-                    test, valid, result = runmodel(theta_1, self.y, 0.0, self.bstart,
-                                           self.pflux, self.pfluxe, self.tobs, 1,1, 0.0,
-                                           0, self.train, debug=False)
+                    test, valid, result = runmodel(
+                        theta_1,
+                        self.y,
+                        0.0,
+                        self.bstart,
+                        self.pflux,
+                        self.pfluxe,
+                        self.tobs,
+                        1,
+                        1,
+                        0.0,
+                        0,
+                        self.train,
+                        debug=False,
+                    )
                     print("result: ", test, valid)
                     # self.plot_model(test)
 
                     # find the initial range of start times to distribute the bursts over
 
-                    if (test is not None) & (len(test['time']) > 1):
+                    if (test is not None) & (len(test["time"]) > 1):
                         # iref = np.argmin(abs(np.array(test['time'])-self.tref))
-                        iref = np.argmin(abs(np.array(test['time'])))
-                        intvl = test['time'][iref+1]
+                        iref = np.argmin(abs(np.array(test["time"])))
+                        intvl = test["time"][iref + 1]
                     else:
                         # If we can't get an initial burst train, distribute the start times
                         # over the entire outburst
                         intvl = max(self.tobs)
                     # This piece of code is probably redundant now that next_burst checks for
                     # predicted burst times beyond tobs
-                    if (intvl > 2.*max(self.tobs)) and skiplo:
-                        print ('Skipping trials with d={:.4f} and X={:.4f} due to excessive tdel {} >> {}'.format(
-                            _distance, _X, intvl, max(self.tobs) ))
+                    if (intvl > 2.0 * max(self.tobs)) and skiplo:
+                        print(
+                            "Skipping trials with d={:.4f} and X={:.4f} due to excessive tdel {} >> {}".format(
+                                _distance, _X, intvl, max(self.tobs)
+                            )
+                        )
                         valid_array.append(True)
                     else:
                         # intvl = min([test['time'][iref+1], max(self.tobs)])
 
-                        trials = np.linspace(0., intvl, numtrains)
-                        print ('Simulating {} trains with reference burst distributed within (0, {:.3f})'.format(numtrains, intvl))
+                        trials = np.linspace(0.0, intvl, numtrains)
+                        print(
+                            "Simulating {} trains with reference burst distributed within (0, {:.3f})".format(
+                                numtrains, intvl
+                            )
+                        )
 
                         for trial in trials:
-
-                            print ('trial {:.4f}:'.format(trial))
+                            print("trial {:.4f}:".format(trial))
                             # Set nburstssim to 100 below, just need to make sure it's sufficient to cover
                             # the whole outburst. Replace ref_ind with trial, as the starting burst time
                             # (ref_ind is meaningless if there's no bursts)
-                            test, valid, result = runmodel(theta_1, self.y, 0.0, self.bstart,
-                                                   self.pflux, self.pfluxe, self.tobs, 100,100, trial,
-                                                   1,self.train, gti_start=self.st, gti_end=self.et, debug=False)
+                            test, valid, result = runmodel(
+                                theta_1,
+                                self.y,
+                                0.0,
+                                self.bstart,
+                                self.pflux,
+                                self.pfluxe,
+                                self.tobs,
+                                100,
+                                100,
+                                trial,
+                                1,
+                                self.train,
+                                gti_start=self.st,
+                                gti_end=self.et,
+                                debug=False,
+                            )
 
                             # for debugging
                             # self.plot_model(test)
                             # breakpoint()
 
                             valid_array.append(valid)
-                            print ('  valid={}'.format(valid))
+                            print("  valid={}".format(valid))
 
-
-                result[i,j] = len(np.where(valid_array)[0])/len(valid_array)
-                print ('End of loop for d={}, X={}, % valid is {}'.format(
-                    _distance, _X, 100*result[i,j] ))
+                result[i, j] = len(np.where(valid_array)[0]) / len(valid_array)
+                print(
+                    "End of loop for d={}, X={}, % valid is {}".format(
+                        _distance, _X, 100 * result[i, j]
+                    )
+                )
 
         breakpoint()
 
@@ -2052,115 +2570,140 @@ Initial parameters:
         """
 
         if not self.valid:
-            logger.error('beans object is not valid, check parameters')
+            logger.error("beans object is not valid, check parameters")
             return
 
         # sampler attribute passed to do_run overrides the existing value
-        if hasattr(self, 'sampler'):
+        if hasattr(self, "sampler"):
             if sampler is not None:
                 if sampler != self.sampler:
-                    logger.warning ('sampler={} passed to do_run, overriding Beans attribute {}'.format(
-                        sampler, self.sampler))
+                    logger.warning(
+                        "sampler={} passed to do_run, overriding Beans attribute {}".format(
+                            sampler, self.sampler
+                        )
+                    )
             else:
                 sampler = self.sampler
         else:
-            sampler = 'emcee'
+            sampler = "emcee"
 
-        if sampler not in ('emcee','bilby','dynesty'):
-            logger.error('sampler {} not yet implemented'.format(sampler))
+        if sampler not in ("emcee", "bilby", "dynesty"):
+            logger.error("sampler {} not yet implemented".format(sampler))
 
         # store the most recent value of the sampler
         self.sampler = sampler
-        if self.sampler == 'emcee':
-
+        if self.sampler == "emcee":
             # Check here if we've already run the analysis
-            if hasattr(self, 'reader'):
-                logger.warning ('''re-running the sampler after calling do_analysis can lead
-                    to memory issues; proceed with caution!''')
-                value = input('              Press [RETURN] to continue: ')
+            if hasattr(self, "reader"):
+                logger.warning("""re-running the sampler after calling do_analysis can lead
+                    to memory issues; proceed with caution!""")
+                value = input("              Press [RETURN] to continue: ")
 
             # Want to avoid overwriting existing log & config files
 
-            if (self.restart is False) and (os.path.exists(self.run_id+'.h5')):
-                logger.error ('run will overwrite existing log file {}, set restart=True to extend'.format(self.run_id+'.h5'))
+            if (self.restart is False) and (os.path.exists(self.run_id + ".h5")):
+                logger.error(
+                    "run will overwrite existing log file {}, set restart=True to extend".format(
+                        self.run_id + ".h5"
+                    )
+                )
                 return
 
         else:
-            if not hasattr(self, 'outdir'):
+            if not hasattr(self, "outdir"):
                 self.outdir = BILBY_OUT
 
-        if (self.sampler == 'emcee') | (self.sampler == 'bilby'):
-
+        if (self.sampler == "emcee") | (self.sampler == "bilby"):
             # check for start parameters and set defaults
 
-            if not hasattr(self, 'nwalkers'):
+            if not hasattr(self, "nwalkers"):
                 self.nwalkers = 200
-            if not hasattr(self, 'nsteps'):
+            if not hasattr(self, "nsteps"):
                 self.nsteps = 100
-            if not hasattr(self, 'stretch_a'):
+            if not hasattr(self, "stretch_a"):
                 self.stretch_a = 2.0
 
-        elif (self.sampler == 'dynesty'):
-
+        elif self.sampler == "dynesty":
             # check for start parameters and set defaults
 
-            if not hasattr(self, 'nlive'):
+            if not hasattr(self, "nlive"):
                 self.nlive = 1000
-            if not hasattr(self, 'dlogz'):
-                self.nlive = 1.
+            if not hasattr(self, "dlogz"):
+                self.nlive = 1.0
             # params are passed via kwargs, so need to make sure they're
             # set here
-            kwargs['nlive'] = self.nlive
-            kwargs['dlogz'] = self.dlogz
+            kwargs["nlive"] = self.nlive
+            kwargs["dlogz"] = self.dlogz
 
         # Check the number of threads here
 
         ncpu = cpu_count()
         if self.threads > ncpu:
-            logger.error ('number of threads is greater than number of CPUs ({} > {}); this seems ill-advised'.format(self.threads, ncpu))
+            logger.error(
+                "number of threads is greater than number of CPUs ({} > {}); this seems ill-advised".format(
+                    self.threads, ncpu
+                )
+            )
             return
 
-        if (os.path.exists(self.run_id+'.ini')):
-            logger.warning ('run will overwrite existing config file {}'.format(self.run_id+'.ini'))
-            value = input('              enter Y[RETURN] to continue: ')
-            if (value != 'y') and (value != 'Y'):
-                logger.info ('do_run terminated')
+        if os.path.exists(self.run_id + ".ini"):
+            logger.warning(
+                "run will overwrite existing config file {}".format(
+                    self.run_id + ".ini"
+                )
+            )
+            value = input("              enter Y[RETURN] to continue: ")
+            if (value != "y") and (value != "Y"):
+                logger.info("do_run terminated")
                 return
 
         self.save_config(clobber=True)
 
-        print("# ---------------------------------------------------------------------------#")
-        print (self)
-        print("# ---------------------------------------------------------------------------#")
+        print(
+            "# ---------------------------------------------------------------------------#"
+        )
+        print(self)
+        print(
+            "# ---------------------------------------------------------------------------#"
+        )
         # Testing the various functions. Each of these will display the likelihood value, followed by the model-results "blob"
         logger.info("testing the prior and likelihood functions..")
         print("lnlike:", self.lnlike(self, self.theta, None, self.y, self.yerr))
-        if self.sampler == 'emcee':
+        if self.sampler == "emcee":
             print("lnprior:", self.lnprior(self.theta))
             print("lnprob:", self.lnprob(self.theta, None, self.y, self.yerr))
-        print("# ---------------------------------------------------------------------------#")
+        print(
+            "# ---------------------------------------------------------------------------#"
+        )
 
         # for supplied positions, you want to check that they are all
         # valid
         # I think this is only necessary to define for emcee and bilby/emcee
 
-        if 'pos' in kwargs:
-
+        if "pos" in kwargs:
             # now also has the option to read in the positions from a
             # pickle file
 
-            if type(kwargs['pos']) == str:
-                logger.info ('reading in positions from file {}...'.format(kwargs['pos']))
-                new_pos = pickle.load(open(kwargs['pos'],'rb'))
-                logger.info ('... done')
+            if type(kwargs["pos"]) == str:
+                logger.info(
+                    "reading in positions from file {}...".format(kwargs["pos"])
+                )
+                new_pos = pickle.load(open(kwargs["pos"], "rb"))
+                logger.info("... done")
             else:
-                new_pos = kwargs['pos'].copy()
+                new_pos = kwargs["pos"].copy()
 
             if np.shape(new_pos) != (self.nwalkers, self.ndim):
-                logger.error ('supplied positions array has wrong dimensions; {} != {}'.format(np.shape(new_pos), (self.nwalkers, self.ndim)))
+                logger.error(
+                    "supplied positions array has wrong dimensions; {} != {}".format(
+                        np.shape(new_pos), (self.nwalkers, self.ndim)
+                    )
+                )
                 return None
 
-            logger.warning('walkers will start at provided position vector.\n              checking supplied positions...')
+            logger.warning(
+                "walkers will start at provided position vector.\n              checking supplied positions..."
+            )
             # assert len(kwargs['pos']) == self.nwalkers
             # we need to make sure the supplied positions will give a
             # valid model BUT also that the likelihoods will not all be
@@ -2169,69 +2712,98 @@ Initial parameters:
             for i, pos in enumerate(new_pos):
                 # _test, _valid, _model = runmodel(pos, self)
                 # print (pos, _test, _valid, _model)
-                _test, _prior, _model = self.lnprob(pos, None, self.y, self.yerr )
+                _test, _prior, _model = self.lnprob(pos, None, self.y, self.yerr)
                 # print (pos, _test, _prior, _model)
                 bad[i] = not np.isfinite(_test)
             nbad = len(np.where(bad)[0])
 
             if nbad == 0:
-                logger.info ('... done. all OK, continuing')
+                logger.info("... done. all OK, continuing")
             # elif nbad == self.nwalkers:
-            elif nbad > self.nwalkers*2./3.:
+            elif nbad > self.nwalkers * 2.0 / 3.0:
                 # if you have too many bad positions, you'll get an error
                 # running with too many duplicates; this is a rule of
                 # thumb which probably needs testing
-                logger.error ('... done. Too many (>2/3) of the supplied positions are invalid (lnprob = -np.inf), run will likely fail')
+                logger.error(
+                    "... done. Too many (>2/3) of the supplied positions are invalid (lnprob = -np.inf), run will likely fail"
+                )
                 return
             else:
-                logger.info ('... done. {}/{} positions invalid; redistributing...'.format(nbad, self.nwalkers))
-                for i in (np.where(bad)[0]):
-                    new_pos[i] = new_pos[np.random.choice(np.where(~bad)[0])] #+ scale*np.random.randn(ndim)
-                logger.info ('... done')
+                logger.info(
+                    "... done. {}/{} positions invalid; redistributing...".format(
+                        nbad, self.nwalkers
+                    )
+                )
+                for i in np.where(bad)[0]:
+                    new_pos[i] = new_pos[
+                        np.random.choice(np.where(~bad)[0])
+                    ]  # + scale*np.random.randn(ndim)
+                logger.info("... done")
 
-            kwargs['pos'] = new_pos
+            kwargs["pos"] = new_pos
 
         if plot:
-            logger.info("plotting the initial guess.. (you want the predicted bursts to match approximately the observed bursts here)")
+            logger.info(
+                "plotting the initial guess.. (you want the predicted bursts to match approximately the observed bursts here)"
+            )
             # make plot of observed burst comparison with predicted bursts:
-            self.plot(title='Initial guess of parameters')
-            value = input('Press [RETURN] to continue: ')
+            self.plot(title="Initial guess of parameters")
+            value = input("Press [RETURN] to continue: ")
 
         _start = time.time()
 
-        if sampler == 'emcee':
+        if sampler == "emcee":
             # This is the original MCMC implementation for beansp, which uses vanilla emcee
             #   https://github.com/dfm/emcee
             # run the chains and save the output as a h5 file
             # TODO to simplify the subsequent analysis I think this object should be added to the Beans object
-            result = runemcee(self.nwalkers, self.nsteps,
-                self.theta, self.lnprob, self.lnprior, None, self.y, self.yerr,
-                self.run_id, self.restart, self.threads, self.stretch_a, **kwargs)
+            result = runemcee(
+                self.nwalkers,
+                self.nsteps,
+                self.theta,
+                self.lnprob,
+                self.lnprior,
+                None,
+                self.y,
+                self.yerr,
+                self.run_id,
+                self.restart,
+                self.threads,
+                self.stretch_a,
+                **kwargs,
+            )
 
-        elif sampler == 'bilby':
+        elif sampler == "bilby":
             # This is (will eventually?) be the native bilby sampler, or perhaps bilby's implementation of emcee,
             # for comparison; see https://bilby-dev.github.io/bilby/api/bilby.core.sampler.emcee.Emcee.html#bilby.core.sampler.emcee.Emcee
-            logger.error ("'bilby' sampler not yet implemented; might call bilby/emcee, or bilby's native sampler")
+            logger.error(
+                "'bilby' sampler not yet implemented; might call bilby/emcee, or bilby's native sampler"
+            )
 
-        elif sampler == 'dynesty':
+        elif sampler == "dynesty":
             # bilby's implementation of dynesty, see
             #
             breakpoint()
             result = self.runbilby(self, sampler=sampler, **kwargs)
 
         _end = time.time()
-        logger.info (" run_id {} took {:.1f} seconds to reach {} steps".format(
-            self.run_id, _end-_start, self.nsteps))
+        logger.info(
+            " run_id {} took {:.1f} seconds to reach {} steps".format(
+                self.run_id, _end - _start, self.nsteps
+            )
+        )
 
-        if analyse & (sampler == 'emcee'):
-            logger.info ("running analyses with do_analysis...")
+        if analyse & (sampler == "emcee"):
+            logger.info("running analyses with do_analysis...")
             self.do_analysis(burnin=burnin)
-        #if self.restart == False:
-            #sampler.reset()
+        # if self.restart == False:
+        # sampler.reset()
 
-# -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
-    def plot_autocorr(self, samples=None, reader=None, title=None, savefile=None, figsize=(8,5) ):
+    def plot_autocorr(
+        self, samples=None, reader=None, title=None, savefile=None, figsize=(8, 5)
+    ):
         """
         This method shows the estimated autocorrelation time for the run
         Extracted from do_analysis, and originally based on the analysis
@@ -2241,7 +2813,7 @@ Initial parameters:
         :param samples: numpy array with samples, to calculate the
           autocorrelation from
         :param reader: object to get the chains from (if not supplied via
-	  the samples parameter), via the get_chain method. TODO just pass
+          the samples parameter), via the get_chain method. TODO just pass
           the samples to make this more general
         :param title: title for the figure; set to None for some generic info, or False to skip
         :param savefile: name of file to save as (skip if None)
@@ -2263,16 +2835,15 @@ Initial parameters:
             n = next_pow_two(len(x))
 
             # Compute the FFT and then (from that) the auto-correlation function
-            f = np.fft.fft(x - np.mean(x), n=2*n)
-            acf = np.fft.ifft(f * np.conjugate(f))[:len(x)].real
-            acf /= 4*n
+            f = np.fft.fft(x - np.mean(x), n=2 * n)
+            acf = np.fft.ifft(f * np.conjugate(f))[: len(x)].real
+            acf /= 4 * n
 
             # Optionally normalize
             if norm:
                 acf /= acf[0]
 
             return acf
-
 
         def auto_window(taus, c):
             """
@@ -2284,41 +2855,45 @@ Initial parameters:
                 return np.argmin(m)
             return len(taus) - 1
 
-
         def autocorr_gw2010(y, c=5.0):
             """
             Following the suggestion from Goodman & Weare (2010)
             """
 
             f = autocorr_func_1d(np.mean(y, axis=0))
-            taus = 2.0*np.cumsum(f)-1.0
+            taus = 2.0 * np.cumsum(f) - 1.0
             window = auto_window(taus, c)
             return taus[window]
-
 
         def autocorr_new(y, c=5.0):
             f = np.zeros(y.shape[1])
             for yy in y:
                 f += autocorr_func_1d(yy)
             f /= len(y)
-            taus = 2.0*np.cumsum(f)-1.0
+            taus = 2.0 * np.cumsum(f) - 1.0
             window = auto_window(taus, c)
             return taus[window]
 
-
         if (samples is None) and (reader is None):
             # load in sampler:
-            logger.info ('loading reader from {}.h5...'.format(self.run_id))
-            reader = emcee.backends.HDFBackend(filename=self.run_id+".h5")
+            logger.info("loading reader from {}.h5...".format(self.run_id))
+            reader = emcee.backends.HDFBackend(filename=self.run_id + ".h5")
 
         if reader is not None:
             samples = reader.get_chain(flat=False)
-            #tau = 20
-            tau = reader.get_autocorr_time(tol=0) #using tol=0 means we'll always get an estimate even if it isn't trustworthy.
-            thin = int(0.5 * np.min(tau)) # seems to be ignored - dkg
-            print(f"The autocorrelation time for each parameter as calculated by emcee is: {tau}")
-            print ("  mean {:.1f}, min {:.1f}, max {:.1f}".format(np.mean(tau),
-                min(tau), max(tau)))
+            # tau = 20
+            tau = reader.get_autocorr_time(
+                tol=0
+            )  # using tol=0 means we'll always get an estimate even if it isn't trustworthy.
+            thin = int(0.5 * np.min(tau))  # seems to be ignored - dkg
+            print(
+                f"The autocorrelation time for each parameter as calculated by emcee is: {tau}"
+            )
+            print(
+                "  mean {:.1f}, min {:.1f}, max {:.1f}".format(
+                    np.mean(tau), min(tau), max(tau)
+                )
+            )
 
         # alternate method of checking if the chains are converged:
         # This code is from https://dfm.io/posts/autocorr/
@@ -2334,7 +2909,9 @@ Initial parameters:
             chain = samples[:, :, j].T
             # print(np.shape(sampler))
 
-            N = np.exp(np.linspace(np.log(100), np.log(chain.shape[1]), self.ndim)).astype(int)
+            N = np.exp(
+                np.linspace(np.log(100), np.log(chain.shape[1]), self.ndim)
+            ).astype(int)
             # print(N)
             gw2010 = np.empty(len(N))
             new = np.empty(len(N))
@@ -2343,30 +2920,29 @@ Initial parameters:
                 new[i] = autocorr_new(chain[:, :n])
 
             # Plot the comparisons
-            #plt.loglog(N, gw2010, "o-", label="G\&W 2010")
+            # plt.loglog(N, gw2010, "o-", label="G\&W 2010")
             plt.loglog(N, new, "o-", label=f"{list(PARAM_LATEX.values())[j]}")
-            plt.loglog(N, gw2010, "o-", label=None, color='grey')
+            plt.loglog(N, gw2010, "o-", label=None, color="grey")
             ylim = plt.gca().get_ylim()
 
-            #plt.ylim(ylim)
-        plt.xlabel("Number of samples, $N$")#, fontsize='xx-large')
-        plt.ylabel(r"$\tau$ estimates")#,fontsize='xx-large')
+            # plt.ylim(ylim)
+        plt.xlabel("Number of samples, $N$")  # , fontsize='xx-large')
+        plt.ylabel(r"$\tau$ estimates")  # ,fontsize='xx-large')
 
         if title is not False:
-            plt.title(title, loc='right')
+            plt.title(title, loc="right")
 
-        plt.plot(N, np.array(N)/50.0, "--k")# label=r"$\tau = N/50$")
-        plt.legend(loc='best',ncol=2) #fontsize='large',bbox_to_anchor=(0.99, 1.02)
+        plt.plot(N, np.array(N) / 50.0, "--k")  # label=r"$\tau = N/50$")
+        plt.legend(loc="best", ncol=2)  # fontsize='large',bbox_to_anchor=(0.99, 1.02)
         # plt.xticks(fontsize=14)
         # plt.yticks(fontsize=14)
         if savefile is not None:
-            logger.info ('saving autocorrelation plot to {}'.format(savefile))
+            logger.info("saving autocorrelation plot to {}".format(savefile))
             plt.savefig(savefile)
         else:
-            logger.info ('skipping autocorrelation plot save')
+            logger.info("skipping autocorrelation plot save")
 
         plt.show()
-
 
     def burst_table(self, show=True, nsep=None, predicted=False, key=None):
         """
@@ -2387,67 +2963,87 @@ Initial parameters:
         """
 
         if not self.HAS_CONCORD:
-            logger.error ('alpha calculation requires concord')
+            logger.error("alpha calculation requires concord")
             return None
 
         has_model = True
-        if not hasattr(self, 'model_pred'):
+        if not hasattr(self, "model_pred"):
             # logger.error ('no model predictions available, run the comparison first')
             # return None
             has_model = False
 
             if nsep is not None:
                 if (len(nsep) != self.numburstsobs) | (nsep[0] != 0):
-                    logger.error ('problem with nsep array; should be the same length as the number of bursts, with the first element zero (null)')
+                    logger.error(
+                        "problem with nsep array; should be the same length as the number of bursts, with the first element zero (null)"
+                    )
                     return None
         else:
             # if we have a model then check we know which one to use
-            if (key is None) & (len(self.model_pred['time_stats'].keys()) > 1):
-                logger.error ('multiple solutions are available, please specify one with the key keyword')
-                print (self.model_pred['time_stats'].keys())
+            if (key is None) & (len(self.model_pred["time_stats"].keys()) > 1):
+                logger.error(
+                    "multiple solutions are available, please specify one with the key keyword"
+                )
+                print(self.model_pred["time_stats"].keys())
                 return None
 
             elif key is None:
-                key = list(self.model_pred['time_stats'].keys())[0]
-            _sel = np.where(np.array(self.model_pred['partition']) == key)[0]
+                key = list(self.model_pred["time_stats"].keys())[0]
+            _sel = np.where(np.array(self.model_pred["partition"]) == key)[0]
 
             if nsep is not None:
-                logger.warning ('nsep parameter ignored when model predictions are available')
+                logger.warning(
+                    "nsep parameter ignored when model predictions are available"
+                )
         # Now create the table
 
         bursts = Table()
-        bursts['num'] = np.arange(self.numburstsobs) + 1
-        bursts['num'].info.description = 'Burst number'
-        bursts['minbar_id'] = np.full(self.numburstsobs, 9999)  # filler
-        bursts['minbar_id'].info.description = 'MINBAR DR1 ID'
-        bursts['time'] = Time(self.bstart + self.tref, format='mjd')
+        bursts["num"] = np.arange(self.numburstsobs) + 1
+        bursts["num"].info.description = "Burst number"
+        bursts["minbar_id"] = np.full(self.numburstsobs, 9999)  # filler
+        bursts["minbar_id"].info.description = "MINBAR DR1 ID"
+        bursts["time"] = Time(self.bstart + self.tref, format="mjd")
         # we can set this, but it doesn't seem to be written when output
         # as MRT
-        bursts['time'].info.description = 'Burst start time'
-        bursts['bfluen'] = MaskedColumn(self.fluen, mask=self.fluen <= 0.,
-                                        unit=FLUEN_U, description='Integrated burst fluence')
-        bursts['e_bfluen'] = MaskedColumn(self.fluene, mask=self.fluen <= 0.,
-                                          unit=FLUEN_U, description='Error on burst fluence')
+        bursts["time"].info.description = "Burst start time"
+        bursts["bfluen"] = MaskedColumn(
+            self.fluen,
+            mask=self.fluen <= 0.0,
+            unit=FLUEN_U,
+            description="Integrated burst fluence",
+        )
+        bursts["e_bfluen"] = MaskedColumn(
+            self.fluene,
+            mask=self.fluen <= 0.0,
+            unit=FLUEN_U,
+            description="Error on burst fluence",
+        )
         # following list comprehension mask expression is to trap the
         # blanks that come from MINBAR
         # bursts['alpha_obs'] = MaskedColumn(self.alpha, mask=self.alpha <=0.,
-        bursts['alpha_obs'] = MaskedColumn(self.alpha,
-                                           mask=[float(x) <= 0.0 if x != '--' else True for x in self.alpha],
-                                           description='Burst alpha-value')
+        bursts["alpha_obs"] = MaskedColumn(
+            self.alpha,
+            mask=[float(x) <= 0.0 if x != "--" else True for x in self.alpha],
+            description="Burst alpha-value",
+        )
         # bursts['e_alpha_obs'] = MaskedColumn(self.alphae, mask=self.alpha <=0.,
-        bursts['e_alpha_obs'] = MaskedColumn(self.alphae,
-                                             mask=[float(x) <= 0.0 if x != '--' else True for x in self.alpha],
-                                             description='Error on alpha-value')
+        bursts["e_alpha_obs"] = MaskedColumn(
+            self.alphae,
+            mask=[float(x) <= 0.0 if x != "--" else True for x in self.alpha],
+            description="Error on alpha-value",
+        )
 
         if has_model:
-            timepred = [x[0] for x in self.model_pred['time_stats'][key]]
-            ref_tpred = np.argmin(np.abs(self.bstart[self.ref_ind]-timepred))
+            timepred = [x[0] for x in self.model_pred["time_stats"][key]]
+            ref_tpred = np.argmin(np.abs(self.bstart[self.ref_ind] - timepred))
 
             # have to do different matching procedures if not continuous
             # cf. with the comparison option of do_analysis
 
             if self.continuous:
-                imatch = burst_time_match(self.ref_ind, self.bstart, ref_tpred, np.array(timepred))
+                imatch = burst_time_match(
+                    self.ref_ind, self.bstart, ref_tpred, np.array(timepred)
+                )
             else:
                 imatch = burst_time_match(0, self.bstart, 0, np.array(timepred))
 
@@ -2455,39 +3051,45 @@ Initial parameters:
             # generate imatch from user-specified nsep array
             imatch = list(np.cumsum(nsep))
         else:
-            logger.warning ('no model predictions are available, estimating recurrence time as best-guess')
+            logger.warning(
+                "no model predictions are available, estimating recurrence time as best-guess"
+            )
             # dummy here for 1808
             # imatch = [0, 3, 4, 5]
             # a more general attempt
-            _dt = np.array(self.bstart[1:])-np.array(self.bstart[:-1])
+            _dt = np.array(self.bstart[1:]) - np.array(self.bstart[:-1])
             _dt_imin = np.argmin(_dt)
-            n_missed = [0] # implied
+            n_missed = [0]  # implied
             _dt_trial = _dt[_dt_imin]
-            for _i in np.arange(_dt_imin-1,-1,-1):
+            for _i in np.arange(_dt_imin - 1, -1, -1):
                 # print ('backwards',_dt_imin,_i)
-                _nb = int(_dt[_i]/_dt_trial+0.5)
-                n_missed.insert(0, _nb-1)
-                _dt_trial = _dt[_i]/_nb
+                _nb = int(_dt[_i] / _dt_trial + 0.5)
+                n_missed.insert(0, _nb - 1)
+                _dt_trial = _dt[_i] / _nb
             _dt_trial = _dt[_dt_imin]
-            for _i in np.arange(_dt_imin+1, len(_dt)):
+            for _i in np.arange(_dt_imin + 1, len(_dt)):
                 # print ('forwards',_dt_imin,_i)
-                _nb = int(_dt[_i]/_dt_trial+0.5)
-                n_missed.append(_nb-1)
-                _dt_trial = _dt[_i]/_nb
-            imatch = [0]+list(np.cumsum([x+1 for x in n_missed]))
+                _nb = int(_dt[_i] / _dt_trial + 0.5)
+                n_missed.append(_nb - 1)
+                _dt_trial = _dt[_i] / _nb
+            imatch = [0] + list(np.cumsum([x + 1 for x in n_missed]))
             # print (imatch, n_missed)
 
-        bursts['n_missed'] = MaskedColumn([-1]+[x-imatch[_i]-1 for _i, x in enumerate(imatch[1:])],
-                                          mask=[True]+[False]*(len(imatch)-1),
-                                          description='Number of missed bursts inferred')
+        bursts["n_missed"] = MaskedColumn(
+            [-1] + [x - imatch[_i] - 1 for _i, x in enumerate(imatch[1:])],
+            mask=[True] + [False] * (len(imatch) - 1),
+            description="Number of missed bursts inferred",
+        )
         if show:
             # show the headers for the LaTeX table
-            print (r'''
+            print(
+                r"""
 \\begin{{tabular}}{{ccccccc}}
   \hline
         & MINBAR & Start  & $\Delta t$ & & {} & \multicolumn{{2}}{{c}}{{$\\alpha$-value}} \\\\
   Burst & ID     & (MJD)  & (hr)       & $n_{{\rm missed}}$ & {} & Measured & Inferred \\\\
-  \hline '''.format(PARAM_LATEX['fluen'], UNIT_LATEX['fluen']))
+  \hline """.format(PARAM_LATEX["fluen"], UNIT_LATEX["fluen"])
+            )
 
         # Now loop over the bursts and calculate the derived quantities
         # TODO: implement the printing of the predicted (but not observed) bursts (predicted=True)
@@ -2495,87 +3097,150 @@ Initial parameters:
         for i in np.arange(self.numburstsobs):
             if imatch[i] > 0:
                 # burst was matched, so let's display it
-                _db = imatch[i]-imatch[i-1]
+                _db = imatch[i] - imatch[i - 1]
                 if (_db == 1) | (not has_model):
                     # split up the interval evenly if there were missed bursts
-                    _dt = (self.bstart[i]-self.bstart[i-1])/_db*24.
-                    perflx = self.mean_flux(self.bstart[i-1] + (_db-1)/_db*(self.bstart[i]-self.bstart[i-1]),
-                                            self.bstart[i], self)
+                    _dt = (self.bstart[i] - self.bstart[i - 1]) / _db * 24.0
+                    perflx = self.mean_flux(
+                        self.bstart[i - 1]
+                        + (_db - 1) / _db * (self.bstart[i] - self.bstart[i - 1]),
+                        self.bstart[i],
+                        self,
+                    )
                 else:
-		    # one or more missed bursts, so use the model
-		    # predictions for the previous time
+                    # one or more missed bursts, so use the model
+                    # predictions for the previous time
                     # NOTE have to preserve the key selection here
-                    _dt = [(self.bstart[i] - self.model_pred['times'][x][imatch[i]-1])*24.0 for x in _sel]
-                    perflx = [self.mean_flux(self.model_pred['times'][x][imatch[i]-1], self.bstart[i], self) for x in _sel]
+                    _dt = [
+                        (self.bstart[i] - self.model_pred["times"][x][imatch[i] - 1])
+                        * 24.0
+                        for x in _sel
+                    ]
+                    perflx = [
+                        self.mean_flux(
+                            self.model_pred["times"][x][imatch[i] - 1],
+                            self.bstart[i],
+                            self,
+                        )
+                        for x in _sel
+                    ]
 
                 # calculate the alpha based on the model-predicted time, but only
                 # if the measured fluence is nonzero
                 if self.fluen[i] > 0.0:
-                    _alpha = self.cd.alpha(_dt,(self.fluen[i], self.fluene[i]), perflx).value
+                    _alpha = self.cd.alpha(
+                        _dt, (self.fluen[i], self.fluene[i]), perflx
+                    ).value
                 else:
                     _alpha = (0.0, 0.0, 0.0)
 
                 if np.shape(_dt) == ():
                     # scalar _dt, exact recurrence time
                     dt.append(_dt)
-                    e_dt.append(0.)
+                    e_dt.append(0.0)
                     if show:
-                        print ("{} & [minbar ID] & {} & {:.2f} & {} & {} & {} & {} \\\\".format(
-                            bursts['num'][i], bursts['time'][i], dt[-1], bursts['n_missed'][i],
-                            (strmeas(bursts['bfluen'][i], bursts['e_bfluen'][i]) if bursts['bfluen'][i] > 0. else '--'),
-                            strmeas(bursts['alpha_obs'][i], bursts['e_alpha_obs'][i]),
-                            (strmeas(_alpha[0], _alpha[1], _alpha[2]) if bursts['bfluen'][i] > 0. else '--')))
+                        print(
+                            "{} & [minbar ID] & {} & {:.2f} & {} & {} & {} & {} \\\\".format(
+                                bursts["num"][i],
+                                bursts["time"][i],
+                                dt[-1],
+                                bursts["n_missed"][i],
+                                (
+                                    strmeas(bursts["bfluen"][i], bursts["e_bfluen"][i])
+                                    if bursts["bfluen"][i] > 0.0
+                                    else "--"
+                                ),
+                                strmeas(
+                                    bursts["alpha_obs"][i], bursts["e_alpha_obs"][i]
+                                ),
+                                (
+                                    strmeas(_alpha[0], _alpha[1], _alpha[2])
+                                    if bursts["bfluen"][i] > 0.0
+                                    else "--"
+                                ),
+                            )
+                        )
                 else:
-                    dt_stats = np.percentile(np.array(_dt), [16,50,84])
+                    dt_stats = np.percentile(np.array(_dt), [16, 50, 84])
                     dt.append(dt_stats[1])
-                    e_dt.append((dt_stats[2]-dt_stats[0])*0.5)
+                    e_dt.append((dt_stats[2] - dt_stats[0]) * 0.5)
                     if show:
-                        print ("{} & [minbar ID] & {} & {} & {} & {} & {} & {} \\\\".format(
-                            bursts['num'][i], bursts['time'][i],
-                            strmeas(dt[-1], e_dt[-1]), bursts['n_missed'][i],
-                            (strmeas(bursts['bfluen'][i], bursts['e_bfluen'][i]) if bursts['bfluen'][i] > 0. else '--'),
-                            strmeas(bursts['alpha_obs'][i], bursts['e_alpha_obs'][i]),
-                            (strmeas(_alpha[0], _alpha[1], _alpha[2]) if bursts['bfluen'][i] > 0. else '--')))
+                        print(
+                            "{} & [minbar ID] & {} & {} & {} & {} & {} & {} \\\\".format(
+                                bursts["num"][i],
+                                bursts["time"][i],
+                                strmeas(dt[-1], e_dt[-1]),
+                                bursts["n_missed"][i],
+                                (
+                                    strmeas(bursts["bfluen"][i], bursts["e_bfluen"][i])
+                                    if bursts["bfluen"][i] > 0.0
+                                    else "--"
+                                ),
+                                strmeas(
+                                    bursts["alpha_obs"][i], bursts["e_alpha_obs"][i]
+                                ),
+                                (
+                                    strmeas(_alpha[0], _alpha[1], _alpha[2])
+                                    if bursts["bfluen"][i] > 0.0
+                                    else "--"
+                                ),
+                            )
+                        )
                 alpha.append(_alpha[0])
                 e_alpha.append(_alpha[1])
                 E_alpha.append(_alpha[2])
             else:
                 # not sure what this case is for (excluded bursts?)
                 # I think first observed burst, where we have no prior event
-                dt.append(0.)
-                e_dt.append(0.)
-                alpha.append(0.)
-                e_alpha.append(0.)
-                E_alpha.append(0.)
+                dt.append(0.0)
+                e_dt.append(0.0)
+                alpha.append(0.0)
+                e_alpha.append(0.0)
+                E_alpha.append(0.0)
                 if show:
-                    print ("{} & [minbar ID] & {} & \\nodata & {} & \\nodata & \\nodata \\\\".format(
-                        bursts['num'][i], bursts['time'][i],
-                        strmeas(bursts['bfluen'][i], bursts['e_bfluen'][i])))
+                    print(
+                        "{} & [minbar ID] & {} & \\nodata & {} & \\nodata & \\nodata \\\\".format(
+                            bursts["num"][i],
+                            bursts["time"][i],
+                            strmeas(bursts["bfluen"][i], bursts["e_bfluen"][i]),
+                        )
+                    )
 
         if show:
             # print the end of the LaTeX table
-            print (r'  \hline\n\end{tabular}')
+            print(r"  \hline\n\end{tabular}")
 
-        bursts['trec'] = MaskedColumn(dt, mask=np.array(dt) <=0., unit=u.hr,
-            description='Burst recurrence time')
-        bursts['e_trec'] = MaskedColumn(e_dt, mask=np.array(dt) <=0., unit=u.hr,
-            description='Error on recurrence time')
-        bursts['alpha_mod'] = MaskedColumn(alpha, mask=np.array(alpha) <= 0.,
-            description='Model-informed alpha value')
-        bursts['e_alpha_mod'] = MaskedColumn(e_alpha, mask=np.array(alpha) <= 0.,
-            description='Lower limit on model alpha')
-        bursts['E_alpha_mod'] = MaskedColumn(E_alpha, mask=np.array(alpha) <= 0.,
-            description='Upper limit on model alpha')
+        bursts["trec"] = MaskedColumn(
+            dt, mask=np.array(dt) <= 0.0, unit=u.hr, description="Burst recurrence time"
+        )
+        bursts["e_trec"] = MaskedColumn(
+            e_dt,
+            mask=np.array(dt) <= 0.0,
+            unit=u.hr,
+            description="Error on recurrence time",
+        )
+        bursts["alpha_mod"] = MaskedColumn(
+            alpha, mask=np.array(alpha) <= 0.0, description="Model-informed alpha value"
+        )
+        bursts["e_alpha_mod"] = MaskedColumn(
+            e_alpha,
+            mask=np.array(alpha) <= 0.0,
+            description="Lower limit on model alpha",
+        )
+        bursts["E_alpha_mod"] = MaskedColumn(
+            E_alpha,
+            mask=np.array(alpha) <= 0.0,
+            description="Upper limit on model alpha",
+        )
 
         # set the formats here. These should be OK for most cases!
-        bursts['trec'].info.format='5.2f'
-        bursts['e_trec'].info.format='5.2f'
-        bursts['alpha_mod'].info.format='6.2f'
-        bursts['e_alpha_mod'].info.format='4.2f'
-        bursts['E_alpha_mod'].info.format='4.2f'
+        bursts["trec"].info.format = "5.2f"
+        bursts["e_trec"].info.format = "5.2f"
+        bursts["alpha_mod"].info.format = "6.2f"
+        bursts["e_alpha_mod"].info.format = "4.2f"
+        bursts["E_alpha_mod"].info.format = "4.2f"
 
         return bursts
-
 
     def write_param_uncert(self, clobber=False, latex=True, rst=False):
         """
@@ -2595,11 +3260,11 @@ Initial parameters:
             import re
 
             # print ('_rma: '+text)
-            _temp = ':math:`{}`'
-            if text.find('$') >= 0:
+            _temp = ":math:`{}`"
+            if text.find("$") >= 0:
                 # math text of the form '$<latex maths>$'
-                return _temp.format(re.search(r'\$(.*)\$$', text)[1])
-            elif text.find('ensuremath') >= 0:
+                return _temp.format(re.search(r"\$(.*)\$$", text)[1])
+            elif text.find("ensuremath") >= 0:
                 # math text of the form '\ensuremath{<latex maths>}'
                 return _temp.format(re.search("(ensuremath{)(.*)}$", text)[2])
             elif text == "":
@@ -2610,40 +3275,52 @@ Initial parameters:
 
             return text
 
-        if not hasattr(self, 'reader'):
-            logger.error ('no samples available, run do_analysis first')
+        if not hasattr(self, "reader"):
+            logger.error("no samples available, run do_analysis first")
             return
 
-        file = f'{self.run_id}_parameterconstraints_pred.txt'
+        file = f"{self.run_id}_parameterconstraints_pred.txt"
 
         # get prior information, if available
         try:
             priors = self.lnprior(None, latex=True)
         except:
             logger.warning("can't get prior string from {}".format(self.lnprior))
-            priors = [''] * len(self.cc_parameters)
+            priors = [""] * len(self.cc_parameters)
 
         latex_header = "Parameter & Units & Prior"
-        latex_rows = [" & ".join((PARAM_LATEX[key], UNIT_LATEX[key],
-            '' if i>=self.ndim else priors[i])) for i, key in enumerate(self.cc_parameters)]
+        latex_rows = [
+            " & ".join(
+                (PARAM_LATEX[key], UNIT_LATEX[key], "" if i >= self.ndim else priors[i])
+            )
+            for i, key in enumerate(self.cc_parameters)
+        ]
 
         # rst is a bit tricky, as I can't fully assemble the table until I
         # know the maximum width of each row. So set it up as a table
-        rst_header = ['Parameter','Units','Prior']
+        rst_header = ["Parameter", "Units", "Prior"]
         rst_rows = [
-            [_rma(PARAM_LATEX[key]),
-             _rma(UNIT_LATEX[key]),
-             "\\" if i>=self.ndim else _rma(priors[i]) ] for i, key in enumerate(self.cc_parameters)]
+            [
+                _rma(PARAM_LATEX[key]),
+                _rma(UNIT_LATEX[key]),
+                "\\" if i >= self.ndim else _rma(priors[i]),
+            ]
+            for i, key in enumerate(self.cc_parameters)
+        ]
 
         if (clobber is False) and (os.path.exists(file)):
-            logger.error ('will overwrite existing parameter file {}, set clobber=True to replace'.format(file))
+            logger.error(
+                "will overwrite existing parameter file {}, set clobber=True to replace".format(
+                    file
+                )
+            )
             return
 
         # constants:
-        c = const.c.to('cm s-1')
-        G = const.G.to('cm3 g-1 s-2')
+        c = const.c.to("cm s-1")
+        G = const.G.to("cm3 g-1 s-2")
 
-        header='''beansp v{} parameter file
+        header = """beansp v{} parameter file
 
 run_id {}, nsteps_completed={}, skipping {} steps for burnin
 
@@ -2651,22 +3328,23 @@ Each row has the 50th percentile value, upper & lower 68% uncertainties (resp)
 
 Rows are:
 H mass fraction (X), metallicity (Z), base flux (Q_b), distance (d, kpc),
-persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
-            __version__, self.run_id, self.nsteps_completed,self.samples_burnin)
+persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
+            __version__, self.run_id, self.nsteps_completed, self.samples_burnin
+        )
 
         # Now get the remainder of the parameter uncertainties and
         # save to the text file
 
         n_samples = np.shape(self.samples)[0]
-        if hasattr(self, 'model_pred'):
-            parts = list(set(self.model_pred['partition']))
-            sel = np.array(self.model_pred['partition']) == parts[0]
+        if hasattr(self, "model_pred"):
+            parts = list(set(self.model_pred["partition"]))
+            sel = np.array(self.model_pred["partition"]) == parts[0]
             if len(parts) > 1:
                 # something missing here?
                 pass
         else:
             # select all the samples for the parameter ranges
-            parts = ['all']
+            parts = ["all"]
             sel = np.full(n_samples, True)
 
         # have to duplicate the calculation of redshift and gravity here, as
@@ -2674,145 +3352,261 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         # TODO I think this really should be 7 below, as the (optional) 7 & 8th parameters are mass and radius; but they
         #   are always both present, so probably no issue
         if self.ndim >= 8:
-            M = np.array(self.samples[:,6])*const.M_sun.to('g') #cgs
-            R = np.array(self.samples[:,7])*1e5*u.cm #cgs
+            M = np.array(self.samples[:, 6]) * const.M_sun.to("g")  # cgs
+            R = np.array(self.samples[:, 7]) * 1e5 * u.cm  # cgs
 
-            redshift = np.power((1 - (2*G*M/(R*c**2))), -0.5).value
-            gravity = (M*redshift*G/R**2 / (u.cm/u.s**2)).value #cgs
+            redshift = np.power((1 - (2 * G * M / (R * c**2))), -0.5).value
+            gravity = (M * redshift * G / R**2 / (u.cm / u.s**2)).value  # cgs
 
-        with open(file, 'w') as f:
-
+        with open(file, "w") as f:
             # set up all the columns for the first header
             if self.ndim == 6:
-                header = header + ',\ncos i (fuji88)\n'
+                header = header + ",\ncos i (fuji88)\n"
             elif self.ndim == 7:
-                header = header + ',\nNS mass (M_sun), cos i (fuji88)\n'
+                header = header + ",\nNS mass (M_sun), cos i (fuji88)\n"
             elif self.ndim == 8:
-                header = header + ',\nNS mass (M_sun), NS radius (km), cos i (fuji88), gravity (g, 10^14 cm/s^2),\nredshift (1+z)\n'
+                header = (
+                    header
+                    + ",\nNS mass (M_sun), NS radius (km), cos i (fuji88), gravity (g, 10^14 cm/s^2),\nredshift (1+z)\n"
+                )
             else:
-                header = header + ',\nNS mass (M_sun), NS radius (km), cos i (fuji88), gravity (g, 10^14 cm/s^2),\nredshift (1+z), f_t\n'
+                header = (
+                    header
+                    + ",\nNS mass (M_sun), NS radius (km), cos i (fuji88), gravity (g, 10^14 cm/s^2),\nredshift (1+z), f_t\n"
+                )
 
             for i, _part in enumerate(parts):
-                Xpred = get_param_uncert(self.samples[sel,0])
-                Zpred = get_param_uncert(self.samples[sel,1])
-                basepred = get_param_uncert(self.samples[sel,2])
-                dpred = get_param_uncert(self.samples[sel,3])
-                xibpred = get_param_uncert(self.samples[sel,4])
-                xippred = get_param_uncert(self.samples[sel,5])
-                cosipred = get_param_uncert(self.samples[sel,self.ndim])
+                Xpred = get_param_uncert(self.samples[sel, 0])
+                Zpred = get_param_uncert(self.samples[sel, 1])
+                basepred = get_param_uncert(self.samples[sel, 2])
+                dpred = get_param_uncert(self.samples[sel, 3])
+                xibpred = get_param_uncert(self.samples[sel, 4])
+                xippred = get_param_uncert(self.samples[sel, 5])
+                cosipred = get_param_uncert(self.samples[sel, self.ndim])
 
                 if len(parts) > 1:
-                    latex_header += ' & {} ({:.2f}%)'.format(_part,
-                        100*self.model_pred['part_stats'][_part]/n_samples)
-                    rst_header.append('{} ({:.2f}%)'.format(_part,
-                        100*self.model_pred['part_stats'][_part]/n_samples))
+                    latex_header += " & {} ({:.2f}%)".format(
+                        _part, 100 * self.model_pred["part_stats"][_part] / n_samples
+                    )
+                    rst_header.append(
+                        "{} ({:.2f}%)".format(
+                            _part,
+                            100 * self.model_pred["part_stats"][_part] / n_samples,
+                        )
+                    )
                 else:
-                    latex_header += ' & '+self.run_id
+                    latex_header += " & " + self.run_id
                     rst_header.append(self.run_id)
 
                 # get_param_uncert returns 50th percentile, upper, lower error; so have to reverse
                 # error ordering for stremas
-                latex_rows[0] += ' & {}'.format(strmeas(Xpred[0], Xpred[2], Xpred[1]))
+                latex_rows[0] += " & {}".format(strmeas(Xpred[0], Xpred[2], Xpred[1]))
                 rst_rows[0].append(_rma(strmeas(Xpred[0], Xpred[2], Xpred[1])))
-                latex_rows[1] += ' & {}'.format(strmeas(Zpred[0], Zpred[2], Zpred[1]))
+                latex_rows[1] += " & {}".format(strmeas(Zpred[0], Zpred[2], Zpred[1]))
                 rst_rows[1].append(_rma(strmeas(Zpred[0], Zpred[2], Zpred[1])))
-                latex_rows[2] += ' & {}'.format(strmeas(basepred[0], basepred[2], basepred[1]))
+                latex_rows[2] += " & {}".format(
+                    strmeas(basepred[0], basepred[2], basepred[1])
+                )
                 rst_rows[2].append(_rma(strmeas(basepred[0], basepred[2], basepred[1])))
-                latex_rows[3] += ' & {}'.format(strmeas(dpred[0], dpred[2], dpred[1]))
+                latex_rows[3] += " & {}".format(strmeas(dpred[0], dpred[2], dpred[1]))
                 rst_rows[3].append(_rma(strmeas(dpred[0], dpred[2], dpred[1])))
-                latex_rows[4] += ' & {}'.format(strmeas(xibpred[0], xibpred[2], xibpred[1]))
+                latex_rows[4] += " & {}".format(
+                    strmeas(xibpred[0], xibpred[2], xibpred[1])
+                )
                 rst_rows[4].append(_rma(strmeas(xibpred[0], xibpred[2], xibpred[1])))
-                latex_rows[5] += ' & {}'.format(strmeas(xippred[0], xippred[2], xippred[1]))
+                latex_rows[5] += " & {}".format(
+                    strmeas(xippred[0], xippred[2], xippred[1])
+                )
                 rst_rows[5].append(_rma(strmeas(xippred[0], xippred[2], xippred[1])))
 
-                latex_rows[self.ndim] += ' & {}'.format(strmeas(cosipred[0], cosipred[2], cosipred[1]))
-                rst_rows[self.ndim].append(_rma(strmeas(cosipred[0], cosipred[2], cosipred[1])))
+                latex_rows[self.ndim] += " & {}".format(
+                    strmeas(cosipred[0], cosipred[2], cosipred[1])
+                )
+                rst_rows[self.ndim].append(
+                    _rma(strmeas(cosipred[0], cosipred[2], cosipred[1]))
+                )
 
                 if self.ndim >= 7:
-                    masspred = get_param_uncert(self.samples[sel,6])
-                    latex_rows[6] += ' & {}'.format(strmeas(masspred[0], masspred[2], masspred[1]))
-                    rst_rows[6].append(_rma(strmeas(masspred[0], masspred[2], masspred[1])))
+                    masspred = get_param_uncert(self.samples[sel, 6])
+                    latex_rows[6] += " & {}".format(
+                        strmeas(masspred[0], masspred[2], masspred[1])
+                    )
+                    rst_rows[6].append(
+                        _rma(strmeas(masspred[0], masspred[2], masspred[1]))
+                    )
                 if self.ndim >= 8:
-                    radiuspred = get_param_uncert(self.samples[sel,7])
+                    radiuspred = get_param_uncert(self.samples[sel, 7])
                     redshiftpred = get_param_uncert(redshift[sel])
-                    gravitypred = get_param_uncert(gravity[sel]/1e14)
-                    latex_rows[7] += ' & {}'.format(strmeas(radiuspred[0], radiuspred[2], radiuspred[1]))
-                    rst_rows[7].append(_rma(strmeas(radiuspred[0], radiuspred[2], radiuspred[1])))
-                    latex_rows[self.ndim+1] += ' & {}'.format(strmeas(gravitypred[0], gravitypred[2], gravitypred[1]))
-                    rst_rows[self.ndim+1].append(_rma(strmeas(gravitypred[0], gravitypred[2], gravitypred[1])))
-                    latex_rows[self.ndim+2] += ' & {}'.format(strmeas(redshiftpred[0], redshiftpred[2], redshiftpred[1]))
-                    rst_rows[self.ndim+2].append(_rma(strmeas(redshiftpred[0], redshiftpred[2], redshiftpred[1])))
+                    gravitypred = get_param_uncert(gravity[sel] / 1e14)
+                    latex_rows[7] += " & {}".format(
+                        strmeas(radiuspred[0], radiuspred[2], radiuspred[1])
+                    )
+                    rst_rows[7].append(
+                        _rma(strmeas(radiuspred[0], radiuspred[2], radiuspred[1]))
+                    )
+                    latex_rows[self.ndim + 1] += " & {}".format(
+                        strmeas(gravitypred[0], gravitypred[2], gravitypred[1])
+                    )
+                    rst_rows[self.ndim + 1].append(
+                        _rma(strmeas(gravitypred[0], gravitypred[2], gravitypred[1]))
+                    )
+                    latex_rows[self.ndim + 2] += " & {}".format(
+                        strmeas(redshiftpred[0], redshiftpred[2], redshiftpred[1])
+                    )
+                    rst_rows[self.ndim + 2].append(
+                        _rma(strmeas(redshiftpred[0], redshiftpred[2], redshiftpred[1]))
+                    )
 
-                if self.ndim >=9:
-                    ftpred = get_param_uncert(self.samples[sel,8])
-                    latex_rows[8] += ' & {}'.format(strmeas(ftpred[0], ftpred[2], ftpred[1]))
+                if self.ndim >= 9:
+                    ftpred = get_param_uncert(self.samples[sel, 8])
+                    latex_rows[8] += " & {}".format(
+                        strmeas(ftpred[0], ftpred[2], ftpred[1])
+                    )
                     rst_rows[8].append(_rma(strmeas(ftpred[0], ftpred[2], ftpred[1])))
 
                 if len(parts) > 1:
-                    header += '''------------------------------------------------------------------------------
+                    header += """------------------------------------------------------------------------------
  Sample subset {} of {}, label {}, {}%
-------------------------------------------------------------------------------'''.format(i+1,len(parts),_part,
-    100*self.model_pred['part_stats'][_part]/n_samples)
+------------------------------------------------------------------------------""".format(
+                        i + 1,
+                        len(parts),
+                        _part,
+                        100 * self.model_pred["part_stats"][_part] / n_samples,
+                    )
 
-            # save to text file with columns: value, upper uncertainty,
-	        # lower uncertainty
-            # have to have a few options here depending on whether the
-            # mass is included or not
+                # save to text file with columns: value, upper uncertainty,
+                # lower uncertainty
+                # have to have a few options here depending on whether the
+                # mass is included or not
 
                 if self.ndim == 6:
-                    np.savetxt(f, (Xpred, Zpred, basepred, dpred, xippred, xibpred, cosipred),
-                        fmt='%9.6f', header=header)
+                    np.savetxt(
+                        f,
+                        (Xpred, Zpred, basepred, dpred, xippred, xibpred, cosipred),
+                        fmt="%9.6f",
+                        header=header,
+                    )
                 elif self.ndim == 7:
-                    np.savetxt(f, (Xpred, Zpred, basepred, dpred, xippred, xibpred,
-                        masspred, cosipred), fmt='%9.6f', header=header)
+                    np.savetxt(
+                        f,
+                        (
+                            Xpred,
+                            Zpred,
+                            basepred,
+                            dpred,
+                            xippred,
+                            xibpred,
+                            masspred,
+                            cosipred,
+                        ),
+                        fmt="%9.6f",
+                        header=header,
+                    )
                 elif self.ndim == 8:
-                    np.savetxt(f, (Xpred, Zpred, basepred, dpred, xippred, xibpred,
-                        masspred, radiuspred, cosipred, gravitypred, redshiftpred),
-                        fmt='%9.6f', header=header)
+                    np.savetxt(
+                        f,
+                        (
+                            Xpred,
+                            Zpred,
+                            basepred,
+                            dpred,
+                            xippred,
+                            xibpred,
+                            masspred,
+                            radiuspred,
+                            cosipred,
+                            gravitypred,
+                            redshiftpred,
+                        ),
+                        fmt="%9.6f",
+                        header=header,
+                    )
                 else:
-                    np.savetxt(f, (Xpred, Zpred, basepred, dpred, xippred, xibpred,
-                        masspred, radiuspred, cosipred, gravitypred, redshiftpred, ftpred),
-                        fmt='%9.6f', header=header)
+                    np.savetxt(
+                        f,
+                        (
+                            Xpred,
+                            Zpred,
+                            basepred,
+                            dpred,
+                            xippred,
+                            xibpred,
+                            masspred,
+                            radiuspred,
+                            cosipred,
+                            gravitypred,
+                            redshiftpred,
+                            ftpred,
+                        ),
+                        fmt="%9.6f",
+                        header=header,
+                    )
 
-                if i < len(parts)-1:
+                if i < len(parts) - 1:
                     # get the next selection, and also reset the header, to avoid displaying it for each set
-                    sel = np.array(self.model_pred['partition']) == parts[i+1]
-                    header = ''
+                    sel = np.array(self.model_pred["partition"]) == parts[i + 1]
+                    header = ""
 
             # output as LaTeX as well, to paste into a paper (for example)
             # this version has each part as a column, so we only need to do it once
 
             if latex:
-                print ('\\begin{tabular}{cl'+'c' * len(parts)+'}\n\\hline')
-                print (latex_header+'\\\\\n\\hline')
+                print("\\begin{tabular}{cl" + "c" * len(parts) + "}\n\\hline")
+                print(latex_header + "\\\\\n\\hline")
                 for i, row in enumerate(latex_rows):
-                    print (row+' \\\\')
-                print ('\\hline\n\\end{tabular}')
+                    print(row + " \\\\")
+                print("\\hline\n\\end{tabular}")
 
             if rst:
                 # determine the max. length of each of the columns
                 maxlen = []
                 _nrows, _ncols = np.shape(rst_rows)
                 for i in range(_ncols):
-                    _max = max([len(s) for s in np.array(rst_rows)[:,i]])
-                    maxlen.append( max([_max, len(rst_header[i])]) )
+                    _max = max([len(s) for s in np.array(rst_rows)[:, i]])
+                    maxlen.append(max([_max, len(rst_header[i])]))
                 _temp = ["{{:{}s}}".format(x) for x in maxlen]
 
                 # now print
-                print (".. table:: System parameters for run {}".format(self.run_id))
-                print ("    :widths: auto\n")
-                print ("    "+" ".join([_temp[i].format("=" * x) for i,x in enumerate(maxlen)]))
-                print ("    "+" ".join([_temp[i].format(x) for i,x in enumerate(rst_header)]))
-                print ("    "+" ".join([_temp[i].format("=" * x) for i,x in enumerate(maxlen)]))
+                print(".. table:: System parameters for run {}".format(self.run_id))
+                print("    :widths: auto\n")
+                print(
+                    "    "
+                    + " ".join([_temp[i].format("=" * x) for i, x in enumerate(maxlen)])
+                )
+                print(
+                    "    "
+                    + " ".join([_temp[i].format(x) for i, x in enumerate(rst_header)])
+                )
+                print(
+                    "    "
+                    + " ".join([_temp[i].format("=" * x) for i, x in enumerate(maxlen)])
+                )
                 for j in range(_nrows):
-                    print ("    "+" ".join([_temp[i].format(x) for i,x in enumerate(rst_rows[j])]))
-                print ("    "+" ".join([_temp[i].format("=" * x) for i,x in enumerate(maxlen)]))
+                    print(
+                        "    "
+                        + " ".join(
+                            [_temp[i].format(x) for i, x in enumerate(rst_rows[j])]
+                        )
+                    )
+                print(
+                    "    "
+                    + " ".join([_temp[i].format("=" * x) for i, x in enumerate(maxlen)])
+                )
 
-
-    def do_analysis(self, options=['autocor','posteriors'],
-                          part=None, truths=False, burnin=-1000,
-                          ilab=None, title=None, savefig=False, show=True,
-                          layout=None, figsize=None, fontsize=None):
+    def do_analysis(
+        self,
+        options=["autocor", "posteriors"],
+        part=None,
+        truths=False,
+        burnin=-1000,
+        ilab=None,
+        title=None,
+        savefig=False,
+        show=True,
+        layout=None,
+        figsize=None,
+        fontsize=None,
+    ):
         """
         This method is for running standard analysis and displaying the
         results.
@@ -2858,50 +3652,59 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         """
 
         if not self.valid:
-            logger.warning('beans object is not valid, check parameters and interpret results with caution!')
+            logger.warning(
+                "beans object is not valid, check parameters and interpret results with caution!"
+            )
 
         # constants:
-        c = const.c.to('cm s-1')
-        G = const.G.to('cm3 g-1 s-2')
+        c = const.c.to("cm s-1")
+        G = const.G.to("cm3 g-1 s-2")
 
         # possible you might want to set specific font sizes for different
         # layout options
         # would also like to ensure square figures for the corner plots,
         # but the settings below will apply to any figures you're
         # displaying with this call to do_analysis
-        if layout not in ('page', 'column', None):
+        if layout not in ("page", "column", None):
             logger.error("layout option '{}' unknown, ignored".format(layout))
         elif (layout is not None) & (figsize is not None):
-            logger.warning("'{}' layout option ignored with supplied figsize".format(layout))
-        if layout == 'column':
+            logger.warning(
+                "'{}' layout option ignored with supplied figsize".format(layout)
+            )
+        if layout == "column":
             figsize = figsize or FIGSIZE_COLUMN
         figsize = figsize or FIGSIZE_PAGE
 
         fontsize = fontsize or FONT_SIZE_DEFAULT
-        plt.rcParams.update({'font.size': fontsize})
-        CC_PLOT_CONFIG['label_font_size'] = int(fontsize+0.5)
-        CC_PLOT_CONFIG['tick_font_size'] = int(fontsize+0.5)
-        CC_PLOT_CONFIG['summary_font_size'] = int(fontsize+0.5)
+        plt.rcParams.update({"font.size": fontsize})
+        CC_PLOT_CONFIG["label_font_size"] = int(fontsize + 0.5)
+        CC_PLOT_CONFIG["tick_font_size"] = int(fontsize + 0.5)
+        CC_PLOT_CONFIG["summary_font_size"] = int(fontsize + 0.5)
 
         # set the default title (copied from plot_autocor)
 
         if title is not False:
-            title = 'beansp v{} run {}'.format(
-                self.version, self.run_id) if title is None else title
+            title = (
+                "beansp v{} run {}".format(self.version, self.run_id)
+                if title is None
+                else title
+            )
 
         # list of available analyses
 
-        analyses = {'autocor': 'autocorrelation times as a function of timestep',
-                    'chain': 'visualisation of the walker evolution',
-                    'posteriors': 'raw posteriors and the input values',
-                    'mrcorner': 'corner plot with M, R, g and 1+z',
-                    'fig6': 'corner plot with xi_b, xi_p, d, Q_b, Z',
-                    'fig8': 'xi_b vs. xi_p and models for comparison',
-                    'converge': 'check the convergence via posterior evolution',
-                    'comparison': 'observed and predicted burst times, fluences',
-                    'last': 'analyse last walker positions' }
+        analyses = {
+            "autocor": "autocorrelation times as a function of timestep",
+            "chain": "visualisation of the walker evolution",
+            "posteriors": "raw posteriors and the input values",
+            "mrcorner": "corner plot with M, R, g and 1+z",
+            "fig6": "corner plot with xi_b, xi_p, d, Q_b, Z",
+            "fig8": "xi_b vs. xi_p and models for comparison",
+            "converge": "check the convergence via posterior evolution",
+            "comparison": "observed and predicted burst times, fluences",
+            "last": "analyse last walker positions",
+        }
 
-        if options == 'all':
+        if options == "all":
             options = analyses.keys()
 
         if type(options) is str:
@@ -2910,50 +3713,57 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
             options = [options]
 
         if (type(savefig) is str) & (len(options) > 1):
-            logger.error('if specifying filename, choose only one analysis option to avoid ambiguity')
+            logger.error(
+                "if specifying filename, choose only one analysis option to avoid ambiguity"
+            )
             return
 
         # check the chosen option is one of those implemented
 
         for option in options:
             if option not in analyses.keys():
-                logger.error ('{} is not an available analysis option; choose from'.format(option))
+                logger.error(
+                    "{} is not an available analysis option; choose from".format(option)
+                )
                 for key in analyses.keys():
-                    print ('  {}: {}'.format(key, analyses[key]))
+                    print("  {}: {}".format(key, analyses[key]))
                 return
 
         # blobs are not yet implemented for samplers other than emcee
 
-        if ('comparison' in options) & (self.sampler != 'emcee'):
-            logger.error ('blobs are not yet available for bilby runs')
+        if ("comparison" in options) & (self.sampler != "emcee"):
+            logger.error("blobs are not yet available for bilby runs")
             return
 
         # chains are not available for dynesty
 
-        if ('chain' in options) & (self.sampler == 'dynesty'):
-            logger.error ('chains are not available for dynesty runs')
+        if ("chain" in options) & (self.sampler == "dynesty"):
+            logger.error("chains are not available for dynesty runs")
             return
 
-        if not hasattr(self, 'reader'):
-
+        if not hasattr(self, "reader"):
             # if you haven't already done so, read in the walker data
 
-            logger.info ("Reading in samples...")# to calculate autocorrelation time...")
+            logger.info(
+                "Reading in samples..."
+            )  # to calculate autocorrelation time...")
 
             # load in sampler:
-            if self.sampler == 'emcee':
-                self.reader = emcee.backends.HDFBackend(filename=self.run_id+".h5")
+            if self.sampler == "emcee":
+                self.reader = emcee.backends.HDFBackend(filename=self.run_id + ".h5")
                 self.result = self.reader.get_chain(flat=False)
             else:
                 # bilby outputs
-                self.reader = bilby.result.read_in_result(outdir=self.outdir, label=self.run_id)
-                if self.sampler == 'bilby':
-                    self.result = self.reader.walkers.transpose(1,0,2)
-                elif self.sampler == 'dynesty':
+                self.reader = bilby.result.read_in_result(
+                    outdir=self.outdir, label=self.run_id
+                )
+                if self.sampler == "bilby":
+                    self.result = self.reader.walkers.transpose(1, 0, 2)
+                elif self.sampler == "dynesty":
                     self.result = None
-                    self.samples = self.reader.posterior.iloc[:,:self.ndim].to_numpy()
+                    self.samples = self.reader.posterior.iloc[:, : self.ndim].to_numpy()
                 else:
-                    logger.error ('sampler {} not yet implemented'.format(self.sampler))
+                    logger.error("sampler {} not yet implemented".format(self.sampler))
                     return
 
             # temporary for bilby output, might work
@@ -2965,50 +3775,64 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
             # Read in the full chain to get the number of steps completed
             if self.result is not None:
                 self.nsteps_completed = np.shape(self.result)[0]
-                logger.info ("... done. Got {} steps completed".format(self.nsteps_completed))
+                logger.info(
+                    "... done. Got {} steps completed".format(self.nsteps_completed)
+                )
             else:
                 self.nsteps_completed = 0
-                logger.info ("... done.")
+                logger.info("... done.")
 
             self.samples_burnin = None
             self.models_burnin = None
-            self.truths = False # default don't show any truths
+            self.truths = False  # default don't show any truths
 
         # convert -ve burnin here
 
         if burnin < 0:
             if -burnin > self.nsteps_completed:
-                logger.warning ('steps to retain {} is > total ({}), ignoring'.format(-burnin, self.nsteps_completed))
-            burnin = max([0, self.nsteps_completed+burnin])
+                logger.warning(
+                    "steps to retain {} is > total ({}), ignoring".format(
+                        -burnin, self.nsteps_completed
+                    )
+                )
+            burnin = max([0, self.nsteps_completed + burnin])
 
         # want to make sure we're using at least about 1000 samples for
         # our statistics
 
         # if burnin >= self.nsteps_completed*0.9:
-        if (self.sampler == 'emcee') & ((self.nwalkers * (self.nsteps_completed - burnin) < 1000) | \
-            (self.nsteps_completed <= burnin)):
-            logger.warning('discarding burnin {} will leave too few steps ({} total), ignoring'.format(
-                burnin, self.nsteps_completed))
+        if (self.sampler == "emcee") & (
+            (self.nwalkers * (self.nsteps_completed - burnin) < 1000)
+            | (self.nsteps_completed <= burnin)
+        ):
+            logger.warning(
+                "discarding burnin {} will leave too few steps ({} total), ignoring".format(
+                    burnin, self.nsteps_completed
+                )
+            )
             burnin = 0
 
-        if (burnin != self.samples_burnin) | \
-            ((burnin != self.models_burnin)&(self.models_burnin is not None)):
-
+        if (burnin != self.samples_burnin) | (
+            (burnin != self.models_burnin) & (self.models_burnin is not None)
+        ):
             # moved burnin to be a parameter, so we can pass that from do_run
             # and also keep track of what we've used, so that we don't
             # need to read in the samples and create the ChainConsumer
             # object every time
 
             if self.from_archive:
-                logger.error("can't modify burnin for archived run, continuing with {} samples".format(np.shape(self.samples)[0]))
+                logger.error(
+                    "can't modify burnin for archived run, continuing with {} samples".format(
+                        np.shape(self.samples)[0]
+                    )
+                )
             else:
-
                 # print ("Reading in flattened samples to show posteriors...")
                 # samples = self.reader.get_chain(flat=True, discard=burnin)
                 if self.result is not None:
-                    samples = self.result[burnin:,:,:]
-                    self.last = samples[-1,:,:]
-                    self.samples = samples.reshape((-1,self.ndim))
+                    samples = self.result[burnin:, :, :]
+                    self.last = samples[-1, :, :]
+                    self.samples = samples.reshape((-1, self.ndim))
                 self.samples_burnin = burnin
 
                 # enable the various posterior plots below
@@ -3018,155 +3842,206 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # now we just keep the plot labels as cc_parameters, and refer back to
                 # PARAM_LATEX
 
-                self.cc_parameters = list(PARAM_LATEX.keys())[:self.ndim]
+                self.cc_parameters = list(PARAM_LATEX.keys())[: self.ndim]
 
                 # we also need to add any additional parameters
                 # this estimate of cos i comes from inverting eq. 5 of Fujimoto et al. (1988)
 
-                cosi = 0.5/(2*(self.samples[:,5]/self.samples[:,4])-1)
+                cosi = 0.5 / (2 * (self.samples[:, 5] / self.samples[:, 4]) - 1)
                 _samples = np.column_stack((self.samples, cosi))
-                self.cc_parameters += ['cosi']
+                self.cc_parameters += ["cosi"]
 
                 if self.ndim >= 7:
-                    mass = self.samples[:,6]
+                    mass = self.samples[:, 6]
                     # masspred = get_param_uncert(mass)
                 if self.ndim >= 8:
-                    radius = self.samples[:,7]
+                    radius = self.samples[:, 7]
                     # radiuspred = get_param_uncert(radius)
 
                     # calculate redshift and gravity from mass and radius:
                     # keep the parameters that we're going to calculate limits on
                     # below, dimensionless
 
-                    R = np.array(radius)*1e5*u.cm #cgs
-                    M = np.array(mass)*const.M_sun.to('g') #cgs
+                    R = np.array(radius) * 1e5 * u.cm  # cgs
+                    M = np.array(mass) * const.M_sun.to("g")  # cgs
 
                     # ChainConsumer's plot method can't handle Quantity objects,
                     # so we need to convert gravity and redshift back to numpy
                     # arrays here
-                    redshift = np.power((1 - (2*G*M/(R*c**2))), -0.5).value
-                    gravity = (M*redshift*G/R**2 / (u.cm/u.s**2)).value #cgs
+                    redshift = np.power((1 - (2 * G * M / (R * c**2))), -0.5).value
+                    gravity = (M * redshift * G / R**2 / (u.cm / u.s**2)).value  # cgs
 
-                    _samples =np.column_stack((self.samples, cosi, gravity, redshift))
-                    self.cc_parameters += ['g', '1+z']
+                    _samples = np.column_stack((self.samples, cosi, gravity, redshift))
+                    self.cc_parameters += ["g", "1+z"]
 
                 # now create the chainconsumer object
                 # swap keys for values below to test out LaTeX approach
 
-                _df = pd.DataFrame(_samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters])
-                _chain = Chain(samples=_df,
-                    name='beansp v{} run {} last {}/{}'.format(
-                    self.version, self.run_id, self.nsteps_completed-self.samples_burnin, self.nsteps_completed))
+                _df = pd.DataFrame(
+                    _samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters]
+                )
+                _chain = Chain(
+                    samples=_df,
+                    name="beansp v{} run {} last {}/{}".format(
+                        self.version,
+                        self.run_id,
+                        self.nsteps_completed - self.samples_burnin,
+                        self.nsteps_completed,
+                    ),
+                )
 
                 self.cc = ChainConsumer().add_chain(_chain)
-                self.cc.set_override(ChainConfig( **CC_CONFIG ))
-                self.cc.set_plot_config(PlotConfig( **CC_PLOT_CONFIG ))
+                self.cc.set_override(ChainConfig(**CC_CONFIG))
+                self.cc.set_plot_config(PlotConfig(**CC_PLOT_CONFIG))
 
-                self.samples = _samples # keep the samples up to date
-                self.cc_nchain = 1 # initially
+                self.samples = _samples  # keep the samples up to date
+                self.cc_nchain = 1  # initially
 
                 # common truths/title settings for all corner plots
                 # TODO need to trigger an update when new truths added (not
                 # just a different burnin)
 
         if truths != self.truths:
-
             if truths is None:
                 truths = list(self.theta)
-            if (truths != False):
-                if (len(truths) < self.ndim):
-                    logger.error('length of truths array < number of parameters, ignoring')
-                elif (len(truths) >= self.ndim):
+            if truths != False:
+                if len(truths) < self.ndim:
+                    logger.error(
+                        "length of truths array < number of parameters, ignoring"
+                    )
+                elif len(truths) >= self.ndim:
                     if len(truths) > self.ndim:
-                        logger.error('length of truths array > number of parameters, extras will be ignored')
+                        logger.error(
+                            "length of truths array > number of parameters, extras will be ignored"
+                        )
 
-                    self.cc.add_truth(Truth(location={
-                        PARAM_LATEX[self.cc_parameters[i]]: truths[i] for i in range(self.ndim)}))
+                    self.cc.add_truth(
+                        Truth(
+                            location={
+                                PARAM_LATEX[self.cc_parameters[i]]: truths[i]
+                                for i in range(self.ndim)
+                            }
+                        )
+                    )
             self.truths = truths
 
         # ---------------------------------------------------------------------#
-        if 'last' in options:
-
+        if "last" in options:
             # show likelihood contributions for last step
-	    # TODO could also use the reader.get_last_sample method, at
-	    # least for p_tot, but this won't give you the likelihood
+            # TODO could also use the reader.get_last_sample method, at
+            # least for p_tot, but this won't give you the likelihood
             # contributions. It does include as the 4th element the prior
             # and model realisations (blobs) though
 
-            logger.info('calculating probabilities for last walker step...')
+            logger.info("calculating probabilities for last walker step...")
 
-            probs = pd.DataFrame(columns = ['p_tot','prior','p_time','p_fluen','p_alpha','p_pflux'],
-                index = np.arange(self.nwalkers) )
-            p_fluen, p_alpha, p_pflux =  0.0, 0.0, 0.0
+            probs = pd.DataFrame(
+                columns=["p_tot", "prior", "p_time", "p_fluen", "p_alpha", "p_pflux"],
+                index=np.arange(self.nwalkers),
+            )
+            p_fluen, p_alpha, p_pflux = 0.0, 0.0, 0.0
             _summed = False
-            ato = int(self.train) # array "train" offset
+            ato = int(self.train)  # array "train" offset
             for _i in np.arange(np.shape(self.last)[0]):
-
-                ptot, model = self.lnlike(self.last[_i,:], None, self.y, self.yerr, components=True)
+                ptot, model = self.lnlike(
+                    self.last[_i, :], None, self.y, self.yerr, components=True
+                )
 
                 if model is None:
                     # The model will not always be valid
-                    p_time, p_fluen, p_alpha, p_pflux = 0., 0., 0., 0.
+                    p_time, p_fluen, p_alpha, p_pflux = 0.0, 0.0, 0.0, 0.0
                 else:
                     # make sure we've summed everything; while we're
                     # checking _summed is an array, but otherwise a boolean
                     if not _summed:
-                        _summed = np.full(len(model['cpts']), False)
+                        _summed = np.full(len(model["cpts"]), False)
                     # we already multiply by -0.5 in the likelihood
                     # expression
                     _icpts = self.numburstsobs
-                    p_time = np.sum(model['cpts'][:_icpts])
+                    p_time = np.sum(model["cpts"][:_icpts])
                     if not np.all(_summed):
                         _summed[:_icpts] = True
                     if self.cmpr_fluen:
-                        p_fluen = np.sum(model['cpts'][_icpts:_icpts+self.numburstsobs])
+                        p_fluen = np.sum(
+                            model["cpts"][_icpts : _icpts + self.numburstsobs]
+                        )
                         if not np.all(_summed):
-                            _summed[_icpts:_icpts+self.numburstsobs], _icpts = True, _icpts+self.numburstsobs
+                            _summed[_icpts : _icpts + self.numburstsobs], _icpts = (
+                                True,
+                                _icpts + self.numburstsobs,
+                            )
                     if self.cmpr_alpha:
-                        p_alpha = np.sum(model['cpts'][_icpts:_icpts+self.numburstsobs-ato])
+                        p_alpha = np.sum(
+                            model["cpts"][_icpts : _icpts + self.numburstsobs - ato]
+                        )
                         if not np.all(_summed):
-                            _summed[_icpts:_icpts+self.numburstsobs-ato], _icpts = True, _icpts+self.numburstsobs-ato
+                            (
+                                _summed[_icpts : _icpts + self.numburstsobs - ato],
+                                _icpts,
+                            ) = True, _icpts + self.numburstsobs - ato
                     if self.cmpr_pflux:
-                        p_pflux = np.sum(model['cpts'][_icpts:_icpts+self.numburstsobs])
+                        p_pflux = np.sum(
+                            model["cpts"][_icpts : _icpts + self.numburstsobs]
+                        )
                         if not np.all(_summed):
-                            _summed[_icpts:_icpts+self.numburstsobs], _icpts = True, _icpts+self.numburstsobs
+                            _summed[_icpts : _icpts + self.numburstsobs], _icpts = (
+                                True,
+                                _icpts + self.numburstsobs,
+                            )
 
                     # now set the check flag
                     _summed = np.all(_summed)
-                    if not(_summed):
-                        logger.warning('missing likelihood compoonents in breakdown')
+                    if not (_summed):
+                        logger.warning("missing likelihood compoonents in breakdown")
                         return
 
-                pprior = self.lnprior(self.last[_i,:])
+                pprior = self.lnprior(self.last[_i, :])
                 probs.loc[_i] = [ptot, pprior, p_time, p_fluen, p_alpha, p_pflux]
 
             self.probs = probs
-            logger.info('... done. Likelihoods and breakdown stored in probs attribute')
+            logger.info("... done. Likelihoods and breakdown stored in probs attribute")
 
         # ---------------------------------------------------------------------#
         # PLOTS
         # ---------------------------------------------------------------------#
 
-        if 'autocor' in options:
-
+        if "autocor" in options:
             # plot autocorrelation times
 
-            self.plot_autocorr(reader=self.reader, title=title, figsize=figsize,
-                savefile=savefig if type(savefig) is str else '{}_autocorrelationtimes.pdf'.format(self.run_id) if savefig else None)
+            self.plot_autocorr(
+                reader=self.reader,
+                title=title,
+                figsize=figsize,
+                savefile=savefig
+                if type(savefig) is str
+                else "{}_autocorrelationtimes.pdf".format(self.run_id)
+                if savefig
+                else None,
+            )
 
-        #sampler = emcee.EnsembleSampler(self.nwalkers, self.ndim, self.lnprob, args=(self.x, self.y, self.yerr), backend=reader)
+        # sampler = emcee.EnsembleSampler(self.nwalkers, self.ndim, self.lnprob, args=(self.x, self.y, self.yerr), backend=reader)
 
         # ---------------------------------------------------------------------#
-        if 'chain' in options:
-
-            if (self.from_archive) & (not hasattr(self, 'result')):
-                logger.error("can't plot chains for archived Beans object, missing full sample history")
+        if "chain" in options:
+            if (self.from_archive) & (not hasattr(self, "result")):
+                logger.error(
+                    "can't plot chains for archived Beans object, missing full sample history"
+                )
             else:
-
                 # plot the chains:
 
-                logger.info ("plotting the chains...")
-                labels = ["$X$","$Z$","$Q_b$","$d$", "$\\xi_b$", "$\\xi_p$", "$M$", "$R$","$f_t$"]
+                logger.info("plotting the chains...")
+                labels = [
+                    "$X$",
+                    "$Z$",
+                    "$Q_b$",
+                    "$d$",
+                    "$\\xi_b$",
+                    "$\\xi_p$",
+                    "$M$",
+                    "$R$",
+                    "$f_t$",
+                ]
                 # plt.clf()
                 fig, axes = plt.subplots(self.ndim, 1, sharex=True, figsize=figsize)
 
@@ -3174,100 +4049,113 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                     # Previously the transposed sampler object below meant
                     # that we were plotting with walker number on the x-axis,
                     # instead of step. Now fixed
-                    axes[i].plot(self.result[:,:,i], color="k", alpha=0.4)
+                    axes[i].plot(self.result[:, :, i], color="k", alpha=0.4)
                     axes[i].yaxis.set_major_locator(MaxNLocator(5))
                     axes[i].set_ylabel(labels[i])
 
-                axes[self.ndim-1].set_xlabel("step number")
+                axes[self.ndim - 1].set_xlabel("step number")
                 if title is not False:
-                    axes[0].set_title(title, loc='right')
+                    axes[0].set_title(title, loc="right")
                 plt.tight_layout(h_pad=0.0)
 
                 if savefig:
-                    savefile = savefig if type(savefig) is str else '{}_chain-plot.pdf'.format(self.run_id)
-                    logger.info ('saving chain plot to {}'.format(savefile))
+                    savefile = (
+                        savefig
+                        if type(savefig) is str
+                        else "{}_chain-plot.pdf".format(self.run_id)
+                    )
+                    logger.info("saving chain plot to {}".format(savefile))
                     plt.savefig(savefile)
                 else:
-                    logger.info ('skipping chain plot save')
+                    logger.info("skipping chain plot save")
 
                 if show:
                     plt.show()
                 else:
-                    logger.warning('skipping plot display')
-                logger.info ("... done")
+                    logger.warning("skipping plot display")
+                logger.info("... done")
 
         # for the remaining plots, we add the burnin omission information
         # to the title
 
         if title is not False:
-            title += ' last {}/{}'.format(
-                self.nsteps_completed-self.samples_burnin,
-                self.nsteps_completed)
+            title += " last {}/{}".format(
+                self.nsteps_completed - self.samples_burnin, self.nsteps_completed
+            )
 
         # ---------------------------------------------------------------------#
 
-        if 'posteriors' in options:
-
+        if "posteriors" in options:
             # make plot of posterior distributions of your parameters:
             # (using the already-created ChainConsumer object)
 
             # figsize='page' seemingly does something weird
             # swap keys for values below to test out LaTeX approach
-            fig = self.cc.plotter.plot(columns=[PARAM_LATEX[x] for x in self.cc_parameters[:self.ndim]],
-                figsize=(max(figsize), max(figsize)) )
-                # these params not available (here) with new ChainConsumer
-                # truth=truths, legend=title, display=False)
+            fig = self.cc.plotter.plot(
+                columns=[PARAM_LATEX[x] for x in self.cc_parameters[: self.ndim]],
+                figsize=(max(figsize), max(figsize)),
+            )
+            # these params not available (here) with new ChainConsumer
+            # truth=truths, legend=title, display=False)
 
             if (self.cc_nchain == 1) & (title is not False):
-                fig.suptitle(title, x=0.98, ha='right')
+                fig.suptitle(title, x=0.98, ha="right")
 
             if savefig:
                 # save the figure
-                savefile = savefig if type(savefig) is str else '{}_posteriors.pdf'.format(self.run_id)
-                logger.info ('saving posteriors plot to {}'.format(savefile))
-                plt.savefig(savefile, bbox_inches='tight')
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_posteriors.pdf".format(self.run_id)
+                )
+                logger.info("saving posteriors plot to {}".format(savefile))
+                plt.savefig(savefile, bbox_inches="tight")
             else:
-                logger.info ('skipping posteriors plot save')
+                logger.info("skipping posteriors plot save")
 
             if show:
                 fig.show()
             else:
-                logger.warning('skipping plot display')
+                logger.warning("skipping plot display")
 
         # ---------------------------------------------------------------------#
-        if ('mrcorner' in options) & (self.ndim < 8):
-            logger.error ('can''t show M-R posteriors as one or both of M & R are fixed')
-        elif 'mrcorner' in options:
-
+        if ("mrcorner" in options) & (self.ndim < 8):
+            logger.error("cant show M-R posteriors as one or both of M & R are fixed")
+        elif "mrcorner" in options:
             # mrgr = np.column_stack((mass, radius, gravity, redshift))
 
             # plot with chainconsumer:
             # cc = ChainConsumer()
             # cc.add_chain(mrgr, parameters=["M", "R", "g", "1+z"])
 
-            fig = self.cc.plotter.plot(columns=[PARAM_LATEX[x] for x in ["M", "R", "g", "1+z"]],
-                figsize=(max(figsize), max(figsize)) )
-                # truth=truths, legend=title, display=False)
+            fig = self.cc.plotter.plot(
+                columns=[PARAM_LATEX[x] for x in ["M", "R", "g", "1+z"]],
+                figsize=(max(figsize), max(figsize)),
+            )
+            # truth=truths, legend=title, display=False)
 
             if (self.cc_nchain == 1) & (title is not False):
-                fig.suptitle(title, x=0.98, ha='right')
+                fig.suptitle(title, x=0.98, ha="right")
 
             if savefig:
                 # save the figure
-                savefile = savefig if type(savefig) is str else '{}_massradius.pdf'.format(self.run_id)
-                logger.info ('saving mass-radius posteriors plot to {}'.format(savefile))
-                plt.savefig(savefile, bbox_inches='tight')
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_massradius.pdf".format(self.run_id)
+                )
+                logger.info("saving mass-radius posteriors plot to {}".format(savefile))
+                plt.savefig(savefile, bbox_inches="tight")
             else:
-                logger.info ('skipping mass-radius posteriors plot save')
+                logger.info("skipping mass-radius posteriors plot save")
 
             if show:
                 fig.show()
             else:
-                logger.warning('skipping plot display')
+                logger.warning("skipping plot display")
 
         # ---------------------------------------------------------------------#
-        if 'fig6' in options:
-
+        if "fig6" in options:
             # fig6data = np.column_stack((xip, xib, distance, base, Z, X))
             # fig6data = np.column_stack((X, Z, base, distance, xib, xip))
 
@@ -3278,82 +4166,105 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
             # cc.add_chain(fig6data, parameters=["X", "$Z$", "$Q_b$ (MeV)",
             #     "$d$ (kpc)", "$\\xi_b$", "$\\xi_p$"])\
             fig = self.cc.plotter.plot(
-                columns=[PARAM_LATEX[x] for x in ['X','Z','Q_b','d','xi_b','xi_p']],
-                figsize=(max(figsize), max(figsize)) )
-                # truth=truths, legend=title, display=False)
+                columns=[
+                    PARAM_LATEX[x] for x in ["X", "Z", "Q_b", "d", "xi_b", "xi_p"]
+                ],
+                figsize=(max(figsize), max(figsize)),
+            )
+            # truth=truths, legend=title, display=False)
 
             if (self.cc_nchain == 1) & (title is not False):
-                fig.suptitle(title, x=0.98, ha='right')
+                fig.suptitle(title, x=0.98, ha="right")
 
             if savefig:
                 # save the figure
-                savefile = savefig if type(savefig) is str else '{}_fig6.pdf'.format(self.run_id)
-                logger.info ('saving restricted posteriors plot to {}'.format(savefile))
-                plt.savefig(savefile, bbox_inches='tight')
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_fig6.pdf".format(self.run_id)
+                )
+                logger.info("saving restricted posteriors plot to {}".format(savefile))
+                plt.savefig(savefile, bbox_inches="tight")
             else:
-                logger.info ('skipping restricted posteriors plot save')
+                logger.info("skipping restricted posteriors plot save")
 
             if show:
                 fig.show()
             else:
-                logger.warning('skipping plot display')
+                logger.warning("skipping plot display")
 
         # ---------------------------------------------------------------------#
-        if ('converge' in options):
-
+        if "converge" in options:
             # do the summary plot, comparing the two halves of the burnin
             # TODO convert the statements below to the new syntax for ChainConsumer
 
             _cc = ChainConsumer()
-            _n = int(np.shape(self.samples)[0]/2)
-            _cc.add_chain(self.samples[:_n,:self.ndim],
-                parameters=[PARAM_LATEX[x] for x in self.cc_parameters[:self.ndim]],
-                name='{}-{}'.format(self.samples_burnin,
-                self.samples_burnin+int(_n/self.nwalkers)))
-            _cc.add_chain(self.samples[_n:,:self.ndim],
-                parameters=[PARAM_LATEX[x] for x in self.cc_parameters[:self.ndim]],
-                name='{}-{}'.format(self.samples_burnin+int(_n/self.nwalkers),
-                self.nsteps_completed))
+            _n = int(np.shape(self.samples)[0] / 2)
+            _cc.add_chain(
+                self.samples[:_n, : self.ndim],
+                parameters=[PARAM_LATEX[x] for x in self.cc_parameters[: self.ndim]],
+                name="{}-{}".format(
+                    self.samples_burnin, self.samples_burnin + int(_n / self.nwalkers)
+                ),
+            )
+            _cc.add_chain(
+                self.samples[_n:, : self.ndim],
+                parameters=[PARAM_LATEX[x] for x in self.cc_parameters[: self.ndim]],
+                name="{}-{}".format(
+                    self.samples_burnin + int(_n / self.nwalkers), self.nsteps_completed
+                ),
+            )
 
             if savefig:
-                savefile = savefig if type(savefig) is str else '{}_converge.pdf'.format(self.run_id)
-                logger.info ('saving convergence check plot to {}'.format(savefile))
-                _cc.plotter.plot_summary(
-                    filename=savefile, figsize=figsize)
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_converge.pdf".format(self.run_id)
+                )
+                logger.info("saving convergence check plot to {}".format(savefile))
+                _cc.plotter.plot_summary(filename=savefile, figsize=figsize)
             else:
                 fig = _cc.plotter.plot_summary(figsize=figsize)
-                logger.info ('skipping convergence check plot save')
+                logger.info("skipping convergence check plot save")
 
             if show:
                 fig.show()
             else:
-                logger.warning('skipping plot display')
+                logger.warning("skipping plot display")
 
         # ---------------------------------------------------------------------#
-        if ('comparison' in options) & ((self.models_burnin != burnin) | (part is not None)):
-
+        if ("comparison" in options) & (
+            (self.models_burnin != burnin) | (part is not None)
+        ):
             if self.from_archive:
-                logger.error("can't modify model predictions for archived run, continuing with {} samples".format(np.shape(self.samples)[0]))
+                logger.error(
+                    "can't modify model predictions for archived run, continuing with {} samples".format(
+                        np.shape(self.samples)[0]
+                    )
+                )
             else:
-
                 # and finally read in the model realisations
                 # This loop can take a LOOOOOONG time for long runs
 
-                logger.info ("reading in and processing blobs, ignoring first {}...".format(burnin))
+                logger.info(
+                    "reading in and processing blobs, ignoring first {}...".format(
+                        burnin
+                    )
+                )
                 blobs = self.reader.get_blobs(flat=True)
 
                 # Get predictions for each model run from the blobs structure:
 
                 time, e_b, alpha, mdot = [], [], [], []
                 # X = [] # just for testing; won't be included in future blobs
-                for i in range(burnin*self.nwalkers, len(blobs["model"])):
-                    _model = eval(blobs["model"][i].decode('ASCII', 'replace'))
-                    time.append(_model['time'])
-                    e_b.append(_model['e_b'])
-                    alpha.append(_model['alpha'])
-                    mdot.append(_model['mdot'])
+                for i in range(burnin * self.nwalkers, len(blobs["model"])):
+                    _model = eval(blobs["model"][i].decode("ASCII", "replace"))
+                    time.append(_model["time"])
+                    e_b.append(_model["e_b"])
+                    alpha.append(_model["alpha"])
+                    mdot.append(_model["mdot"])
                     # X.append(_model['x_0'][0])
-                logger.info ("... done")
+                logger.info("... done")
 
                 # here we split up the solutions based on the number of bursts
                 # in the model train, and populate the model_pred attribute,
@@ -3373,7 +4284,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 #     else 'loX-37' if ((_n == 37) & (self.samples[i,0] < 0.3))
                 #     else 'hiX' #if (self.samples[i,0] > 0.3)
                 #     for i, _n in enumerate(numbursts_pred)]
-                if (part is None): # & (len(set(numbursts_pred)) > 1):
+                if part is None:  # & (len(set(numbursts_pred)) > 1):
                     part = numbursts_pred
 
                 # to get the parameter middle values and uncertainty use the
@@ -3390,11 +4301,22 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # this fails with inhomogeneous arrays; need to do something
                 # a bit more complicated
                 # fpred = (np.array(e_b).T*self.fluen_fac/np.array(xib)/np.array(distance)**2).T
-                _fpred = [list(np.array(_e_b)*self.fluen_fac/self.samples[_i,4]/self.samples[_i,3]**2) for _i, _e_b in enumerate(e_b)]
+                _fpred = [
+                    list(
+                        np.array(_e_b)
+                        * self.fluen_fac
+                        / self.samples[_i, 4]
+                        / self.samples[_i, 3] ** 2
+                    )
+                    for _i, _e_b in enumerate(e_b)
+                ]
                 _fpred_stats = get_param_uncert_part(_fpred, partition=part)
 
                 # the factor of xi_b/xi_p was omitted prior to v2.68.0
-                _alpha_obs = [list(np.array(_alpha)*self.samples[_i,4]/self.samples[_i,5]) for _i, _alpha in enumerate(alpha)]
+                _alpha_obs = [
+                    list(np.array(_alpha) * self.samples[_i, 4] / self.samples[_i, 5])
+                    for _i, _alpha in enumerate(alpha)
+                ]
                 _alpha_stats = get_param_uncert_part(_alpha_obs, partition=part)
 
                 # store these parameters and flag it so we don't need to
@@ -3403,17 +4325,25 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # part_stats = None
                 # if part is not None:
                 #     part_stats = {x: len(np.where(np.array(part) == x)[0]) for x in set(part)}
-                part_stats = {x: len(np.where(np.array(part) == x)[0]) for x in times.keys()}
+                part_stats = {
+                    x: len(np.where(np.array(part) == x)[0]) for x in times.keys()
+                }
                 # fixed the nomenclature here to be clear these are
                 # observation-equivalent parameters
-                self.model_pred = { 'mdot': mdot,
-                    'times': time, 'time_stats': times,
-                    'numbursts': numbursts_pred, 'partition': part,
-                    'part_stats': part_stats,
+                self.model_pred = {
+                    "mdot": mdot,
+                    "times": time,
+                    "time_stats": times,
+                    "numbursts": numbursts_pred,
+                    "partition": part,
+                    "part_stats": part_stats,
                     # 'e_b': e_b, 'e_b_stats': ebs,
                     # 'alpha': alpha, 'alpha_stats': alphas }
-                    'fluen': _fpred, 'fluen_stats': _fpred_stats,
-                    'alpha_obs': _alpha_obs, 'alpha_obs_stats': _alpha_stats }
+                    "fluen": _fpred,
+                    "fluen_stats": _fpred_stats,
+                    "alpha_obs": _alpha_obs,
+                    "alpha_obs_stats": _alpha_stats,
+                }
                 self.models_burnin = burnin
 
                 # Here also we modify the ChainConsumer object if we have
@@ -3428,122 +4358,155 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                         _sel = np.array(part) == _n
                         _check = np.shape(self.samples[_sel])[0]
                         if _check > 1000:
-                            _df = pd.DataFrame(self.samples[_sel],
-                                columns=[PARAM_LATEX[x] for x in self.cc_parameters])
-                            _chain = Chain(samples=_df,
-                                name = _n if type(_n) == str else str(_n))
+                            _df = pd.DataFrame(
+                                self.samples[_sel],
+                                columns=[PARAM_LATEX[x] for x in self.cc_parameters],
+                            )
+                            _chain = Chain(
+                                samples=_df, name=_n if type(_n) == str else str(_n)
+                            )
                             self.cc.add_chain(_chain)
                             self.cc_nchain += 1
                         else:
-                          logger.info ('skipping walkers for n={}, too few samples ({})'.format(_n, _check))
+                            logger.info(
+                                "skipping walkers for n={}, too few samples ({})".format(
+                                    _n, _check
+                                )
+                            )
                     # make sure we ad the same configuration as for the single
                     # chain object
 
-                    self.cc.set_override(ChainConfig( **CC_CONFIG ))
+                    self.cc.set_override(ChainConfig(**CC_CONFIG))
                     if self.cc_nchain > 1:
-                        CC_PLOT_CONFIG['show_legend'] = True
-                    self.cc.set_plot_config(PlotConfig( **CC_PLOT_CONFIG ))
+                        CC_PLOT_CONFIG["show_legend"] = True
+                    self.cc.set_plot_config(PlotConfig(**CC_PLOT_CONFIG))
 
                     if truths:
                         # this may be a bit misleading if your different chains also have different "truths"
-                        self.cc.add_truth(Truth(location={
-                            PARAM_LATEX[self.cc_parameters[i]]: truths[i] for i in range(len(truths))}))
+                        self.cc.add_truth(
+                            Truth(
+                                location={
+                                    PARAM_LATEX[self.cc_parameters[i]]: truths[i]
+                                    for i in range(len(truths))
+                                }
+                            )
+                        )
 
-                    logger.info ('updated chain object with {} model classes'.format(self.cc_nchain))
+                    logger.info(
+                        "updated chain object with {} model classes".format(
+                            self.cc_nchain
+                        )
+                    )
 
         # ---------------------------------------------------------------------#
-        if 'fig8' in options:
-
+        if "fig8" in options:
             # here we plot the distribution of anisotropy parameters,
             # along with models from concord (if it's available)
 
             f = plt.figure(figsize=figsize, constrained_layout=True)
 
-            counts, ybins, xbins, image = plt.hist2d(self.samples[:,5],
-                self.samples[:,4], bins=50, norm=LogNorm(), cmap='OrRd')
+            counts, ybins, xbins, image = plt.hist2d(
+                self.samples[:, 5],
+                self.samples[:, 4],
+                bins=50,
+                norm=LogNorm(),
+                cmap="OrRd",
+            )
 
-            xi_p_model2 = np.arange(0.01, 10., 0.01)
+            xi_p_model2 = np.arange(0.01, 10.0, 0.01)
             xi_b_model2 = np.empty(len(xi_p_model2))
 
-            for i in range(0,len(xi_p_model2)):
-
-                xi_b_model2[i] = 1./((1./(2*xi_p_model2[i])) + 0.5)
+            for i in range(0, len(xi_p_model2)):
+                xi_b_model2[i] = 1.0 / ((1.0 / (2 * xi_p_model2[i])) + 0.5)
 
             # overplot the various models
 
-            plt.plot(xi_p_model2, xi_b_model2, color = 'black',ls='-', label = 'Fujimoto (1988)')
+            plt.plot(
+                xi_p_model2, xi_b_model2, color="black", ls="-", label="Fujimoto (1988)"
+            )
 
             if Beans.HAS_CONCORD:
                 # setup dict with list of models, legend labels and linestyles
-                he16_models = {'he16_a': (r'He \& Keek (2016) model A', '--'),
-                               'he16_b': (r'model B', '-.'),
-                               'he16_c': (r'model C', (0, (3, 5, 1, 5))),
-                               'he16_d': (r'model D', (0, (1, 5))) }
+                he16_models = {
+                    "he16_a": (r"He \& Keek (2016) model A", "--"),
+                    "he16_b": (r"model B", "-."),
+                    "he16_c": (r"model C", (0, (3, 5, 1, 5))),
+                    "he16_d": (r"model D", (0, (1, 5))),
+                }
 
                 for model in he16_models.keys():
-
                     _model = self.cd.diskmodel.load_he16(model)
 
-                    model_theta = _model['col1']
-                    model_xid = _model['col2']
-                    model_xir = _model['col3']
-                    model_xip1 = _model['col4']
+                    model_theta = _model["col1"]
+                    model_xid = _model["col2"]
+                    model_xir = _model["col3"]
+                    model_xip1 = _model["col4"]
                     model_xib1 = model_xid + model_xir
 
-                    model_xib = 1./model_xib1
-                    model_xip = 1./model_xip1
+                    model_xib = 1.0 / model_xib1
+                    model_xip = 1.0 / model_xip1
 
-                    #modela:
-                    plt.plot(model_xip, model_xib, color='darkblue',
-                        ls=he16_models[model][1], label=he16_models[model][0])
+                    # modela:
+                    plt.plot(
+                        model_xip,
+                        model_xib,
+                        color="darkblue",
+                        ls=he16_models[model][1],
+                        label=he16_models[model][0],
+                    )
 
                     if ilab is not None:
                         for _inc in ilab:
-                            _i = np.argmin(abs(model_theta-_inc))
-                            plt.annotate('{}'.format(_inc), (model_xip[_i], model_xib[_i]))
+                            _i = np.argmin(abs(model_theta - _inc))
+                            plt.annotate(
+                                "{}".format(_inc), (model_xip[_i], model_xib[_i])
+                            )
 
             else:
-                logger.warning ('''install concord if you want to overplot model curves
-              See https://github.com/outs1der/concord''')
+                logger.warning("""install concord if you want to overplot model curves
+              See https://github.com/outs1der/concord""")
 
-            plt.xlabel(r'$\xi_{\mathrm{p}}$')#,fontsize='xx-large')
-            plt.ylabel(r'$\xi_{\mathrm{b}}$')#,fontsize='xx-large')
+            plt.xlabel(r"$\xi_{\mathrm{p}}$")  # ,fontsize='xx-large')
+            plt.ylabel(r"$\xi_{\mathrm{b}}$")  # ,fontsize='xx-large')
 
             # plt.legend(loc='best',fontsize='large')
-            plt.legend(loc='lower right')#,fontsize='large')
+            plt.legend(loc="lower right")  # ,fontsize='large')
 
             # original axis limits too restrictive; xi_p (x-axis) can now be up to 10
             # plt.axis([0.,2.1,0.,2.1])
-            plt.axis([0.,max(np.append(self.samples[:,5], 2.1)),0.,2.0])
+            plt.axis([0.0, max(np.append(self.samples[:, 5], 2.1)), 0.0, 2.0])
 
             # TODO check these commands for consistency with the other plots
             # plt.xticks(fontsize=12)
             # plt.yticks(fontsize=12)
 
             if (self.cc_nchain == 1) & (title is not False):
-                plt.suptitle(title, x=0.98, ha='right')
+                plt.suptitle(title, x=0.98, ha="right")
 
             if savefig:
-                savefile = savefig if type(savefig) is str else '{}_xipvsxib_models_contourlines.pdf'.format(self.run_id)
-                logger.info ('saving xi_p vs xi_b plot to {}'.format(savefile))
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_xipvsxib_models_contourlines.pdf".format(self.run_id)
+                )
+                logger.info("saving xi_p vs xi_b plot to {}".format(savefile))
                 plt.savefig(savefile)
             else:
-                logger.info ('skipping xi_p vs xi_b plot save')
+                logger.info("skipping xi_p vs xi_b plot save")
 
             if show:
                 plt.show()
             else:
-                logger.warning('skipping plot display')
+                logger.warning("skipping plot display")
 
         # ---------------------------------------------------------------------#
-        if 'comparison' in options:
-
+        if "comparison" in options:
             # make plot of observed burst comparison with predicted bursts:
 
             # plt.scatter(self.bstart, self.fluen, color = 'black', marker = '.', label='Observed', s =200)
-            times = self.model_pred['time_stats']
-            ebs = self.model_pred['fluen_stats']
-            alphas = self.model_pred['alpha_obs_stats']
+            times = self.model_pred["time_stats"]
+            ebs = self.model_pred["fluen_stats"]
+            alphas = self.model_pred["alpha_obs_stats"]
 
             if self.train:
                 # 2-panel plot like in plot
@@ -3556,40 +4519,75 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # fig, axs = plt.subplot_mosaic([['main'],['main'],['resid']], sharex=True)
                 # ax1 = axs['main']
                 # new version with more informative names
-                _layout = [['time','time'],
-                           ['time', 'time'],
-                           ['resid','resid']]
-                _has_pflux, _has_alpha = (max(self.bpflux) > 0.), (max(self.alpha) > 0.)
+                _layout = [["time", "time"], ["time", "time"], ["resid", "resid"]]
+                _has_pflux, _has_alpha = (
+                    (max(self.bpflux) > 0.0),
+                    (max(self.alpha) > 0.0),
+                )
                 if _has_pflux or _has_alpha:
-                    _layout += [['alpha' if _has_alpha else '.', 'pflux' if _has_pflux else '.']] * 2
-                fig, axs = plt.subplot_mosaic(_layout, figsize=figsize,
-                    constrained_layout=True)
-                axs['resid'].sharex(axs['time'])
-                axs['time'].set(xticklabels=[])
-                ax1 = axs['time'] # label for the title etc.
+                    _layout += [
+                        ["alpha" if _has_alpha else ".", "pflux" if _has_pflux else "."]
+                    ] * 2
+                fig, axs = plt.subplot_mosaic(
+                    _layout, figsize=figsize, constrained_layout=True
+                )
+                axs["resid"].sharex(axs["time"])
+                axs["time"].set(xticklabels=[])
+                ax1 = axs["time"]  # label for the title etc.
                 # indicate by the background colour if the data is present but not used
-                if (_has_pflux):
+                if _has_pflux:
                     # want about 10 bins covering the whole range of peak fluxes
                     # _bin_width, _max_int = 5, 0.5
-                    _max_int, _bin_width, = 0.5, (int((max(self.bpflux+self.bpfluxe)
-                            - min((self.bpflux-self.bpfluxe)[np.concatenate((self.pre, self.non_pre))]))/10./5.)+1)*5
+                    (
+                        _max_int,
+                        _bin_width,
+                    ) = (
+                        0.5,
+                        (
+                            int(
+                                (
+                                    max(self.bpflux + self.bpfluxe)
+                                    - min(
+                                        (self.bpflux - self.bpfluxe)[
+                                            np.concatenate((self.pre, self.non_pre))
+                                        ]
+                                    )
+                                )
+                                / 10.0
+                                / 5.0
+                            )
+                            + 1
+                        )
+                        * 5,
+                    )
                     if not self.cmpr_pflux:
-                        axs['pflux'].set_facecolor('lightgrey')
+                        axs["pflux"].set_facecolor("lightgrey")
                 if (_has_alpha) & (not self.cmpr_alpha):
-                    axs['alpha'].set_facecolor('lightgrey')
+                    axs["alpha"].set_facecolor("lightgrey")
 
                 if self.gti_checking:
                     # plot satellite gtis, on both the time and residual panels
-                    for i in range(1,len(self.st)):
-                        axs['time'].axvspan(self.st[i],self.et[i],facecolor='0.5', alpha=0.2)
-                        axs['resid'].axvspan(self.st[i], self.et[i], facecolor='0.5', alpha=0.2)
-                    axs['time'].axvspan(self.st[0],self.et[0], facecolor='0.5',alpha=0.2,label='Satellite GTIs')
-                    axs['resid'].axvspan(self.st[0],self.et[0], facecolor='0.5',alpha=0.2)
+                    for i in range(1, len(self.st)):
+                        axs["time"].axvspan(
+                            self.st[i], self.et[i], facecolor="0.5", alpha=0.2
+                        )
+                        axs["resid"].axvspan(
+                            self.st[i], self.et[i], facecolor="0.5", alpha=0.2
+                        )
+                    axs["time"].axvspan(
+                        self.st[0],
+                        self.et[0],
+                        facecolor="0.5",
+                        alpha=0.2,
+                        label="Satellite GTIs",
+                    )
+                    axs["resid"].axvspan(
+                        self.st[0], self.et[0], facecolor="0.5", alpha=0.2
+                    )
 
                 # loop over all the different solutions
-                _label = 'matched'
+                _label = "matched"
                 for i, numburstssim in enumerate(times.keys()):
-
                     # populates both the main and residuals panel for each solution
                     # print (i, numburstssim, times, ebs)
                     timepred = [x[0] for x in times[numburstssim]]
@@ -3598,44 +4596,72 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                     ebpred = [x[0] for x in ebs[numburstssim]]
                     ebpred_errup = [x[1] for x in ebs[numburstssim]]
                     ebpred_errlow = [x[2] for x in ebs[numburstssim]]
-                    axs['time'].errorbar(timepred[itoff:], ebpred,
-                        yerr=[ebpred_errlow, ebpred_errup], linestyle='',
+                    axs["time"].errorbar(
+                        timepred[itoff:],
+                        ebpred,
+                        yerr=[ebpred_errlow, ebpred_errup],
+                        linestyle="",
                         # xerr=[timepred_errup[1:], timepred_errlow[1:]],
-                        marker='*', ms=STAR_SIZE, color='C{}'.format(i),
-                        label='predicted ({})'.format(numburstssim))
+                        marker="*",
+                        ms=STAR_SIZE,
+                        color="C{}".format(i),
+                        label="predicted ({})".format(numburstssim),
+                    )
 
                     if self.continuous:
                         # only relevant for train mode with generate_burst_train
-                        ref_tpred = np.argmin(np.abs(self.bstart[self.ref_ind]-timepred))
-                        imatch = burst_time_match(self.ref_ind, self.bstart,
-                            ref_tpred, np.array(timepred))
+                        ref_tpred = np.argmin(
+                            np.abs(self.bstart[self.ref_ind] - timepred)
+                        )
+                        imatch = burst_time_match(
+                            self.ref_ind, self.bstart, ref_tpred, np.array(timepred)
+                        )
                         # we don't have a fluence for the first burst, so just show the time
-                        axs['time'].axvline(timepred[0], color='C{}'.format(i), ls='--')
+                        axs["time"].axvline(timepred[0], color="C{}".format(i), ls="--")
                     else:
-                        imatch = burst_time_match(0, self.bstart,
-                            0, np.array(timepred))
+                        imatch = burst_time_match(0, self.bstart, 0, np.array(timepred))
 
                     # Here we define imatchm1, which is an exact copy of imatch for punkt_train results
                     # (i.e. where itoff = 0). This array should replace imatch below when indexing
                     # alpha and fluence arrays, so that the numbering is consistent between the two
                     # types of models
-                    imatchm1 = [x-itoff for x in imatch if x-itoff >= 0]
-                    axs['time'].plot(np.array(timepred[itoff:])[imatchm1],
-                        np.array(ebpred)[imatchm1], linestyle='',
-                        marker='*', ms=STAR_SIZE/2, color='tab:red',
-                        label=_label,zorder=99)
-                    _label = None # only give the label the first time
+                    imatchm1 = [x - itoff for x in imatch if x - itoff >= 0]
+                    axs["time"].plot(
+                        np.array(timepred[itoff:])[imatchm1],
+                        np.array(ebpred)[imatchm1],
+                        linestyle="",
+                        marker="*",
+                        ms=STAR_SIZE / 2,
+                        color="tab:red",
+                        label=_label,
+                        zorder=99,
+                    )
+                    _label = None  # only give the label the first time
 
-                    resid = -(self.bstart-np.array(timepred)[imatch])*24.
-                    axs['resid'].errorbar(self.bstart, resid,
-                        yerr=[np.array(timepred_errlow)[imatch]*24.,
-                        np.array(timepred_errup)[imatch]*24.],
-                        marker='*', ms=STAR_SIZE, linestyle='', color='C{}'.format(i))
+                    resid = -(self.bstart - np.array(timepred)[imatch]) * 24.0
+                    axs["resid"].errorbar(
+                        self.bstart,
+                        resid,
+                        yerr=[
+                            np.array(timepred_errlow)[imatch] * 24.0,
+                            np.array(timepred_errup)[imatch] * 24.0,
+                        ],
+                        marker="*",
+                        ms=STAR_SIZE,
+                        linestyle="",
+                        color="C{}".format(i),
+                    )
                     # print some information about this set of analyses
-                    logger.info ('RMS obs-model offset ({}, {:.2f}%) = {:.4f} hr'.format(
-                        numburstssim, 100.*self.model_pred['part_stats'][numburstssim]/len(self.samples),
-                        np.sqrt(np.mean(resid**2))))
-                    print (numburstssim, imatch)
+                    logger.info(
+                        "RMS obs-model offset ({}, {:.2f}%) = {:.4f} hr".format(
+                            numburstssim,
+                            100.0
+                            * self.model_pred["part_stats"][numburstssim]
+                            / len(self.samples),
+                            np.sqrt(np.mean(resid**2)),
+                        )
+                    )
+                    print(numburstssim, imatch)
 
                     if _has_alpha:
                         # populate the alphas panel
@@ -3645,12 +4671,25 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                         # some tricky indexing required here, for consistency with both the
                         # generate_burst_train and punkt_train results, which have different indexing
                         # for the alpha and fluence arrays
-                        axs['alpha'].errorbar(self.alpha[self.ifluen][1:],
-                                              np.array(alpred)[imatchm1][self.ifluen[itoff:]-itoff][1-itoff:],
+                        axs["alpha"].errorbar(
+                            self.alpha[self.ifluen][1:],
+                            np.array(alpred)[imatchm1][self.ifluen[itoff:] - itoff][
+                                1 - itoff :
+                            ],
                             xerr=self.alphae[self.ifluen][1:],
-                            yerr=[np.array(alpred_errlow)[imatchm1][self.ifluen[itoff:]-itoff][1-itoff:],
-                                  np.array(alpred_errup)[imatchm1][self.ifluen[itoff:]-itoff][1-itoff:]],
-                            marker='*', ms=STAR_SIZE, linestyle='', color='C{}'.format(i))
+                            yerr=[
+                                np.array(alpred_errlow)[imatchm1][
+                                    self.ifluen[itoff:] - itoff
+                                ][1 - itoff :],
+                                np.array(alpred_errup)[imatchm1][
+                                    self.ifluen[itoff:] - itoff
+                                ][1 - itoff :],
+                            ],
+                            marker="*",
+                            ms=STAR_SIZE,
+                            linestyle="",
+                            color="C{}".format(i),
+                        )
 
                     if _has_pflux:
                         # plot the peak flux values and compare against the Eddington fluxes
@@ -3659,12 +4698,31 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                         # with the measured peak fluxes
                         # show the model distribution of Eddington fluxes
                         _bnum = np.arange(len(self.bpflux)) + 1
-                        _F_Edd = self.L_Edd/self.samples[:,3][np.array(self.model_pred['partition']) == numburstssim]**2
-                        _hst, _bins = np.histogram(_F_Edd,
-                                                   bins=np.arange(int(min(_F_Edd)/_bin_width)*_bin_width, max(_F_Edd), _bin_width))
-                        plt.stackplot([0,max(_bnum)+1],[[_bins[0], _bins[0]]] + [[_bin_width, _bin_width]]*(len(_hst)-1),
-                                      # colors=['{:.2f}'.format(1-x/max(_hst)*_max_int) for x in _hst])
-                                      colors=[('C{}'.format(i), x/max(_hst)*_max_int) for x in _hst])
+                        _F_Edd = (
+                            self.L_Edd
+                            / self.samples[:, 3][
+                                np.array(self.model_pred["partition"]) == numburstssim
+                            ]
+                            ** 2
+                        )
+                        _hst, _bins = np.histogram(
+                            _F_Edd,
+                            bins=np.arange(
+                                int(min(_F_Edd) / _bin_width) * _bin_width,
+                                max(_F_Edd),
+                                _bin_width,
+                            ),
+                        )
+                        plt.stackplot(
+                            [0, max(_bnum) + 1],
+                            [[_bins[0], _bins[0]]]
+                            + [[_bin_width, _bin_width]] * (len(_hst) - 1),
+                            # colors=['{:.2f}'.format(1-x/max(_hst)*_max_int) for x in _hst])
+                            colors=[
+                                ("C{}".format(i), x / max(_hst) * _max_int)
+                                for x in _hst
+                            ],
+                        )
                         # this does something weird
                         # axs['pflux'].set_ylim(0, (int(max(_F_Edd)/_bin_width)+1)*_bin_width )
                         # axs['pflux'].errorbar(np.arange(len(self.bpflux)) + 1, self.bpflux,
@@ -3673,50 +4731,83 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # end loop over key(s)
 
                 # and finally plot the observations, so they come out on top
-                axs['time'].errorbar(self.bstart[self.ifluen], self.fluen[self.ifluen],
-                             yerr=self.fluene[self.ifluen], linestyle='',
-                             marker='.', ms=DOT_SIZE, color=OBS_COLOUR,
-                             label='observed')
+                axs["time"].errorbar(
+                    self.bstart[self.ifluen],
+                    self.fluen[self.ifluen],
+                    yerr=self.fluene[self.ifluen],
+                    linestyle="",
+                    marker=".",
+                    ms=DOT_SIZE,
+                    color=OBS_COLOUR,
+                    label="observed",
+                )
 
                 if _has_pflux:
                     # plot the peak flux values and compare against the Eddington fluxes
-                    if (len(self.pre) > 0):
+                    if len(self.pre) > 0:
                         # trying to match the marker='.', ms=13 from the main panel
-                        axs['pflux'].errorbar(_bnum[self.pre], self.bpflux[self.pre],
-                                              yerr=self.bpfluxe[self.pre], linestyle='', color=OBS_COLOUR,
-                                              marker='o', ms=CIRC_SIZE, label='PRE' )
-                    if (len(self.non_pre) > 0):
-                        axs['pflux'].errorbar(_bnum[self.non_pre], self.bpflux[self.non_pre],
-                                     yerr=self.bpfluxe[self.non_pre], linestyle='', color=OBS_COLOUR,
-                                              marker='o', fillstyle='none', ms=CIRC_SIZE, label='non-PRE')
-                    axs['pflux'].legend()
-                    axs['pflux'].set_ylabel("{}\n({})".format(PARAM_LATEX['fpeak'], UNIT_LATEX['fpeak']))
-                    axs['pflux'].set_xlabel("Burst number")
-                    axs['pflux'].set_xlim(min(_bnum)-0.5,max(_bnum)+0.5)
+                        axs["pflux"].errorbar(
+                            _bnum[self.pre],
+                            self.bpflux[self.pre],
+                            yerr=self.bpfluxe[self.pre],
+                            linestyle="",
+                            color=OBS_COLOUR,
+                            marker="o",
+                            ms=CIRC_SIZE,
+                            label="PRE",
+                        )
+                    if len(self.non_pre) > 0:
+                        axs["pflux"].errorbar(
+                            _bnum[self.non_pre],
+                            self.bpflux[self.non_pre],
+                            yerr=self.bpfluxe[self.non_pre],
+                            linestyle="",
+                            color=OBS_COLOUR,
+                            marker="o",
+                            fillstyle="none",
+                            ms=CIRC_SIZE,
+                            label="non-PRE",
+                        )
+                    axs["pflux"].legend()
+                    axs["pflux"].set_ylabel(
+                        "{}\n({})".format(PARAM_LATEX["fpeak"], UNIT_LATEX["fpeak"])
+                    )
+                    axs["pflux"].set_xlabel("Burst number")
+                    axs["pflux"].set_xlim(min(_bnum) - 0.5, max(_bnum) + 0.5)
 
                 # non-redundant option for missing fluence values
                 for i in range(self.numburstsobs):
                     if (i not in self.ifluen) & (i != self.ref_ind):
-                        axs['time'].axvline(self.bstart[i], color=OBS_COLOUR, ls='--')
+                        axs["time"].axvline(self.bstart[i], color=OBS_COLOUR, ls="--")
 
                 if self.continuous:
                     # only show reference burst for continuous runs
-                    axs['time'].axvline(self.bstart[self.ref_ind], c='k', ls='--')
+                    axs["time"].axvline(self.bstart[self.ref_ind], c="k", ls="--")
 
-                axs['time'].set_ylabel("{}\n({})".format(PARAM_LATEX['fluen'], UNIT_LATEX['fluen']))
+                axs["time"].set_ylabel(
+                    "{}\n({})".format(PARAM_LATEX["fluen"], UNIT_LATEX["fluen"])
+                )
 
-                axs['resid'].axhline(0.0, color=OBS_COLOUR, ls='--')
-                axs['resid'].set_ylabel('Time offset\n(hr)')
-                axs['resid'].set_xlabel("Time (days after MJD {})".format(self.tref))
+                axs["resid"].axhline(0.0, color=OBS_COLOUR, ls="--")
+                axs["resid"].set_ylabel("Time offset\n(hr)")
+                axs["resid"].set_xlabel("Time (days after MJD {})".format(self.tref))
 
                 if _has_alpha:
-                    _ident = min(self.alpha[1:][self.ifluen[1:] - 1] - self.alphae[1:][self.ifluen[1:] - 1]), \
-                        max(self.alpha[1:][self.ifluen[1:] - 1] + self.alphae[1:][self.ifluen[1:] - 1])
-                    axs['alpha'].plot(_ident, _ident, 'k--')
-                    axs['alpha'].set_xlabel(r'Observed $\alpha$')
-                    axs['alpha'].set_ylabel(r'Predicted $\alpha$')
+                    _ident = (
+                        min(
+                            self.alpha[1:][self.ifluen[1:] - 1]
+                            - self.alphae[1:][self.ifluen[1:] - 1]
+                        ),
+                        max(
+                            self.alpha[1:][self.ifluen[1:] - 1]
+                            + self.alphae[1:][self.ifluen[1:] - 1]
+                        ),
+                    )
+                    axs["alpha"].plot(_ident, _ident, "k--")
+                    axs["alpha"].set_xlabel(r"Observed $\alpha$")
+                    axs["alpha"].set_ylabel(r"Predicted $\alpha$")
 
-                axs['time'].legend(loc=2)
+                axs["time"].legend(loc=2)
 
             else:
                 # different style plot for the ensemble mode; the bstart
@@ -3724,24 +4815,36 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                 # to plot vs. recurrence time
 
                 # if self.cmpr_alpha:
-                if (max(self.alpha) > 0.) & (self.model_name != 'grid_interp'):
+                if (max(self.alpha) > 0.0) & (self.model_name != "grid_interp"):
                     # always show the alpha comparison, if we have some
                     # measurements, even if we're not using it in the
                     # likelihood, except for grid_interp, which doesn't provide alphas
-                    fig, axs = plt.subplot_mosaic("""
+                    fig, axs = plt.subplot_mosaic(
+                        """
                                                   AA
                                                   BC
                                                   """,
-                        figsize=figsize, constrained_layout=True)
-                    ax1 = axs['A']
+                        figsize=figsize,
+                        constrained_layout=True,
+                    )
+                    ax1 = axs["A"]
                 else:
                     fig, ax1 = plt.subplots()
 
                 # main fluence vs. time plot in the main panel
-                ax1.errorbar(self.tdel, self.fluen, xerr=self.tdele, yerr=self.fluene,
-                    color=OBS_COLOUR, linestyle='', marker='.', ms=DOT_SIZE, label='observed')
+                ax1.errorbar(
+                    self.tdel,
+                    self.fluen,
+                    xerr=self.tdele,
+                    yerr=self.fluene,
+                    color=OBS_COLOUR,
+                    linestyle="",
+                    marker=".",
+                    ms=DOT_SIZE,
+                    label="observed",
+                )
                 if not self.cmpr_fluen:
-                    axs['B'].set_facecolor('lightgrey')
+                    axs["B"].set_facecolor("lightgrey")
 
                 for i, tkey in enumerate(times.keys()):
                     timepred = [x[0] for x in times[tkey]]
@@ -3751,132 +4854,160 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
                     ebpred_errup = [x[1] for x in ebs[tkey]]
                     ebpred_errlow = [x[2] for x in ebs[tkey]]
 
-                    ax1.errorbar(timepred, ebpred,
+                    ax1.errorbar(
+                        timepred,
+                        ebpred,
                         yerr=[ebpred_errlow, ebpred_errup],
-                        xerr=[timepred_errup, timepred_errlow], linestyle='',
+                        xerr=[timepred_errup, timepred_errlow],
+                        linestyle="",
                         # color=bursts_colour
-                        marker='*', ms=STAR_SIZE, color='C{}'.format(i),
-                        label='predicted ({})'.format(tkey))
+                        marker="*",
+                        ms=STAR_SIZE,
+                        color="C{}".format(i),
+                        label="predicted ({})".format(tkey),
+                    )
 
-                    if max(self.alpha) > 0.:
+                    if max(self.alpha) > 0.0:
                         # do the secondary plots, while we have the data
                         if not self.cmpr_alpha:
-                            axs['C'].set_facecolor('lightgrey')
+                            axs["C"].set_facecolor("lightgrey")
 
-                        axs['B'].errorbar(self.fluen, ebpred,
-                            xerr=self.fluene, yerr=[ebpred_errlow, ebpred_errup],
-                        marker='*', ms=STAR_SIZE, linestyle='', color='C{}'.format(i))
+                        axs["B"].errorbar(
+                            self.fluen,
+                            ebpred,
+                            xerr=self.fluene,
+                            yerr=[ebpred_errlow, ebpred_errup],
+                            marker="*",
+                            ms=STAR_SIZE,
+                            linestyle="",
+                            color="C{}".format(i),
+                        )
 
                         alpred = [x[0] for x in alphas[tkey]]
                         alpred_errup = [x[1] for x in alphas[tkey]]
                         alpred_errlow = [x[2] for x in alphas[tkey]]
-                        axs['C'].errorbar(self.alpha, alpred,
-                            xerr=self.alphae, yerr=[alpred_errlow, alpred_errup],
-                        marker='*', ms=STAR_SIZE, linestyle='', color='C{}'.format(i))
+                        axs["C"].errorbar(
+                            self.alpha,
+                            alpred,
+                            xerr=self.alphae,
+                            yerr=[alpred_errlow, alpred_errup],
+                            marker="*",
+                            ms=STAR_SIZE,
+                            linestyle="",
+                            color="C{}".format(i),
+                        )
 
                     # print some information about this set of analyses
                     # times are already in hours (in contrast to the train
                     # mode)
 
-                    resid = -(self.tdel-np.array(timepred)) #*24.
-                    logger.info ('RMS obs-model offset ({}, {:.2f}%) = {:.4f} hr'.format(
-                        tkey, 100.*self.model_pred['part_stats'][tkey]/len(self.samples),
-                        np.sqrt(np.mean(resid**2))))
+                    resid = -(self.tdel - np.array(timepred))  # *24.
+                    logger.info(
+                        "RMS obs-model offset ({}, {:.2f}%) = {:.4f} hr".format(
+                            tkey,
+                            100.0
+                            * self.model_pred["part_stats"][tkey]
+                            / len(self.samples),
+                            np.sqrt(np.mean(resid**2)),
+                        )
+                    )
                     # print (numburstssim, imatch)
-
 
                 ax1.set_xlabel("Recurrence time (hr)")
 
-                ax1.set_ylabel("{}\n({})".format(PARAM_LATEX['fluen'], UNIT_LATEX['fluen']))
+                ax1.set_ylabel(
+                    "{}\n({})".format(PARAM_LATEX["fluen"], UNIT_LATEX["fluen"])
+                )
                 ax1.legend(loc=2)
 
-                if max(self.alpha) > 0.:
+                if max(self.alpha) > 0.0:
                     # finish off the extra panels if we're also plotting alpha
-                    axs['B'].set_xlabel('Observed fluence')
-                    axs['B'].set_ylabel('Predicted fluence')
-                    _ident = min(self.fluen-self.fluene), max(self.fluen+self.fluene)
-                    axs['B'].plot(_ident, _ident, 'k--')
-                    axs['C'].set_xlabel(r'Observed $\alpha$')
-                    axs['C'].set_ylabel(r'Predicted $\alpha$')
-                    _ident = min(self.alpha-self.alphae), max(self.alpha+self.alphae)
-                    axs['C'].plot(_ident, _ident, 'k--')
-
+                    axs["B"].set_xlabel("Observed fluence")
+                    axs["B"].set_ylabel("Predicted fluence")
+                    _ident = (
+                        min(self.fluen - self.fluene),
+                        max(self.fluen + self.fluene),
+                    )
+                    axs["B"].plot(_ident, _ident, "k--")
+                    axs["C"].set_xlabel(r"Observed $\alpha$")
+                    axs["C"].set_ylabel(r"Predicted $\alpha$")
+                    _ident = (
+                        min(self.alpha - self.alphae),
+                        max(self.alpha + self.alphae),
+                    )
+                    axs["C"].plot(_ident, _ident, "k--")
 
             if title:
-                ax1.set_title(title, loc='right')
+                ax1.set_title(title, loc="right")
                 # fig.tight_layout()  # otherwise the main panel x-label is clipped
 
             if savefig:
-                savefile = savefig if type(savefig) is str else '{}_predictedburstscomparison.pdf'.format(self.run_id)
-                logger.info ('saving burst comparison plot to {}'.format(savefile))
+                savefile = (
+                    savefig
+                    if type(savefig) is str
+                    else "{}_predictedburstscomparison.pdf".format(self.run_id)
+                )
+                logger.info("saving burst comparison plot to {}".format(savefile))
                 fig.savefig(savefile)
             else:
-                logger.info ('skipping burst comparison plot save')
+                logger.info("skipping burst comparison plot save")
 
             if show:
                 fig.show()
             else:
-                logger.warning('skipping plot display')
-
+                logger.warning("skipping plot display")
 
     def autocor(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('autocor'...
-        '''
+        """
 
-        self.do_analysis('autocor', **kwargs)
-
+        self.do_analysis("autocor", **kwargs)
 
     def chain(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('chain'...
-        '''
+        """
 
-        self.do_analysis('chain', **kwargs)
-
+        self.do_analysis("chain", **kwargs)
 
     def posteriors(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('posteriors'...
-        '''
+        """
 
-        self.do_analysis('posteriors', **kwargs)
-
+        self.do_analysis("posteriors", **kwargs)
 
     def mrcorner(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('mrcorner'...
-        '''
+        """
 
-        self.do_analysis('mrcorner', **kwargs)
-
+        self.do_analysis("mrcorner", **kwargs)
 
     def fig6(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('fig6'...
-        '''
+        """
 
-        self.do_analysis('fig6', **kwargs)
-
+        self.do_analysis("fig6", **kwargs)
 
     def fig8(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('fig8'...
-        '''
+        """
 
-        self.do_analysis('fig8', **kwargs)
-
+        self.do_analysis("fig8", **kwargs)
 
     def comparison(self, **kwargs):
-        '''
+        """
         Shortcut for do_analysis('comparison'...
-        '''
+        """
 
-        self.do_analysis('comparison', **kwargs)
+        self.do_analysis("comparison", **kwargs)
 
-
-    def compare(self, alt, burnin=None, label='result 2'):
-        '''
+    def compare(self, alt, burnin=None, label="result 2"):
+        """
         This method will update the cc attribute to include data from a
         different Beans object, or a different set of analyses, to be able
         to plot both posteriors simultaneously
@@ -3886,19 +5017,25 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         :param label: label to give the second set of results
 
         :returns: nothing, but updates the cc attribute
-        '''
+        """
 
         # first re-define the main cc object
         self.cc = ChainConsumer()
         # augment with some additional parameters, e.g. as used in the
         # 1826 work
         # TODO probably should check if these have already been added
-        self.cc_parameters += ['dxi_b', 'xi_p/xi_b']
-        _samples = np.column_stack((self.samples,
-            self.samples[:,3]*self.samples[:,4],
-            self.samples[:,5]/self.samples[:,4]))
+        self.cc_parameters += ["dxi_b", "xi_p/xi_b"]
+        _samples = np.column_stack(
+            (
+                self.samples,
+                self.samples[:, 3] * self.samples[:, 4],
+                self.samples[:, 5] / self.samples[:, 4],
+            )
+        )
 
-        _df = pd.DataFrame(_samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters])
+        _df = pd.DataFrame(
+            _samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters]
+        )
         _chain = Chain(samples=_df, name=self.run_id)
 
         self.cc = ChainConsumer().add_chain(_chain)
@@ -3909,60 +5046,79 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
             # don't really need to worry about common parameters here,
             # just use whatever is in the other bean
 
-            if not hasattr(alt, 'samples'):
-                logger.error ('comparison object has no samples, run do_analysis first')
+            if not hasattr(alt, "samples"):
+                logger.error("comparison object has no samples, run do_analysis first")
                 return
 
-            _df = pd.DataFrame(alt.samples, columns=[PARAM_LATEX[x] for x in alt.cc_parameters])
+            _df = pd.DataFrame(
+                alt.samples, columns=[PARAM_LATEX[x] for x in alt.cc_parameters]
+            )
             _chain = Chain(samples=_df, name=label)
 
             self.cc.add_chain(_chain)
 
         elif type(alt) == str:
             # read in the parameters from a file
-            if alt[-6:] == 'npy.gz':
+            if alt[-6:] == "npy.gz":
                 # this option will read in parameters from the files
                 # distributed with Johnston et al. 2020 (MNRAS 494, 4576);
                 # see https://data.mendeley.com/datasets/nmb24z6jrp/2
-                f = gzip.GzipFile(alt, 'r')
+                f = gzip.GzipFile(alt, "r")
                 chain = np.load(f)
-                logger.info ('read in array with {} walkers, {} steps and {} parameters from\n  {}'.format(*np.shape(chain), alt))
+                logger.info(
+                    "read in array with {} walkers, {} steps and {} parameters from\n  {}".format(
+                        *np.shape(chain), alt
+                    )
+                )
                 # shape is (nwalkers, nsteps, ndim)
-                assert np.shape(chain)[2] == 12 # won't work for the other files
+                assert np.shape(chain)[2] == 12  # won't work for the other files
                 # TODO need to make this burnin consistent with the main code, i.e. allowing negative values
                 if burnin is not None:
                     chain_flat = chain[:, burnin:, :].reshape((-1, 12))
                 else:
                     chain_flat = chain[:, :, :].reshape((-1, 12))
-                _df = pd.DataFrame(chain_flat,
+                _df = pd.DataFrame(
+                    chain_flat,
                     # have to make sure the names of common parameters
                     # here match what's set in do_analysis
-                    columns=[r'$\dot{m}_1$',r'$\dot{m}_2$',r'$\dot{m}_3$',
-                        r'$Q_{b,1}$ (MeV)', r'$Q_{b,2}$ (MeV)',
-                        r'$Q_{b,3}$ (MeV)',
-                        PARAM_LATEX['X'], PARAM_LATEX['Z'],
-                        r'\ensuremath{g\ (\mathrm{cm\,s}^{-2}})',
-                        r'\ensuremath{M\ (M_\odot)}',
-                        PARAM_LATEX['dxi_b'],
-                        PARAM_LATEX['xi_p/xi_b']])
+                    columns=[
+                        r"$\dot{m}_1$",
+                        r"$\dot{m}_2$",
+                        r"$\dot{m}_3$",
+                        r"$Q_{b,1}$ (MeV)",
+                        r"$Q_{b,2}$ (MeV)",
+                        r"$Q_{b,3}$ (MeV)",
+                        PARAM_LATEX["X"],
+                        PARAM_LATEX["Z"],
+                        r"\ensuremath{g\ (\mathrm{cm\,s}^{-2}})",
+                        r"\ensuremath{M\ (M_\odot)}",
+                        PARAM_LATEX["dxi_b"],
+                        PARAM_LATEX["xi_p/xi_b"],
+                    ],
+                )
                 _chain = Chain(samples=_df, name=label)
                 self.cc.add_chain(_chain)
             else:
                 breakpoint()
         else:
-            logger.error('can only compare with another Beans object or chains read in from a file')
+            logger.error(
+                "can only compare with another Beans object or chains read in from a file"
+            )
 
         # and finally set all the plot options (have to do this last)
-        self.cc.set_override(ChainConfig( **CC_CONFIG ))
-        self.cc.set_plot_config(PlotConfig( **CC_PLOT_CONFIG ))
+        self.cc.set_override(ChainConfig(**CC_CONFIG))
+        self.cc.set_plot_config(PlotConfig(**CC_PLOT_CONFIG))
 
         self.cc_nchain = 2
 
-        logger.info('added posteriors for run "{}" to the ChainConsumer object; re-run do_analysis to show the posterior comparison'.format(label))
-
+        logger.info(
+            'added posteriors for run "{}" to the ChainConsumer object; re-run do_analysis to show the posterior comparison'.format(
+                label
+            )
+        )
 
     def prune(self, key=None, nwalkers=None, scale=0.0, add_param=None, savefile=None):
-        '''
+        """
         This method will "prune" the walkers to keep only one set of
         solutions. It is necessary that :meth:`Beans.do_analysis` has
         already been called, with the `comparison` option, to identify the
@@ -3978,78 +5134,96 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         :param savefile: name of pickle file to save to
 
         :returns: array of walker positions, dimensions (nwalkers, ndim)
-        '''
+        """
 
-        if not hasattr(self, 'reader'):
-            logger.error('no run results loaded, call do_analysis first')
+        if not hasattr(self, "reader"):
+            logger.error("no run results loaded, call do_analysis first")
             return None
 
         if add_param is not None:
             # here we can optionally add parameters that were previously
             # fixed
-            if (type(add_param) != int):
-                logger.error('please supply an integer number of additional parameters to add to the array')
+            if type(add_param) != int:
+                logger.error(
+                    "please supply an integer number of additional parameters to add to the array"
+                )
                 return None
-            elif (add_param < 0) | (self.ndim+add_param < NDIM_MIN+2) \
-                | (self.ndim+add_param > NDIM_MAX):
-                logger.error('invalid number of additional parameters')
+            elif (
+                (add_param < 0)
+                | (self.ndim + add_param < NDIM_MIN + 2)
+                | (self.ndim + add_param > NDIM_MAX)
+            ):
+                logger.error("invalid number of additional parameters")
                 return None
             elif scale <= 0.0:
-                logger.error('need to provide a scale>0 to distribute additional values')
+                logger.error(
+                    "need to provide a scale>0 to distribute additional values"
+                )
                 return None
 
-        if not hasattr(self, 'model_pred'):
-            logger.error ('no model predictions available, run the comparison first')
+        if not hasattr(self, "model_pred"):
+            logger.error("no model predictions available, run the comparison first")
             return None
 
-        elif (key is not None) and (not (key in set(self.model_pred['partition']))):
-            logger.error ("key not present in model prediction set: {}".format(set(self.model_pred['partition'])))
+        elif (key is not None) and (not (key in set(self.model_pred["partition"]))):
+            logger.error(
+                "key not present in model prediction set: {}".format(
+                    set(self.model_pred["partition"])
+                )
+            )
             return None
 
         old_pos, d1, d2, d3 = self.reader.get_last_sample()
 
         if key is None:
             # if no key is supplied, could just save all the positions
-            logger.info('retaining all walkers from last position')
+            logger.info("retaining all walkers from last position")
             # print ("** ERROR ** no key supplied, don't know which set to keep")
             bad = np.full(self.nwalkers, False)
 
         else:
-            bad = np.array(self.model_pred['partition'])[-self.nwalkers:] != key
-            logger.info('retaining {} of {} walkers with key={} from last position'.format(sum(~bad), self.nwalkers, key))
+            bad = np.array(self.model_pred["partition"])[-self.nwalkers :] != key
+            logger.info(
+                "retaining {} of {} walkers with key={} from last position".format(
+                    sum(~bad), self.nwalkers, key
+                )
+            )
 
         nwalkers = nwalkers or self.nwalkers
         new_pos = np.zeros((nwalkers, np.shape(old_pos)[1]))
-        new_pos[:self.nwalkers,:] = old_pos
-        bad = np.concatenate((bad, np.full(nwalkers-self.nwalkers, True)))
+        new_pos[: self.nwalkers, :] = old_pos
+        bad = np.concatenate((bad, np.full(nwalkers - self.nwalkers, True)))
 
         if np.any(bad):
             # now redistribute the "bad" walkers
-            logger.info ('redistributing {} walkers...'.format(sum(bad)))
+            logger.info("redistributing {} walkers...".format(sum(bad)))
 
-            for i in (np.where(bad)[0]):
-                new_pos[i] = new_pos[np.random.choice(np.where(~bad)[0])] + scale*np.random.randn(self.ndim)
+            for i in np.where(bad)[0]:
+                new_pos[i] = new_pos[
+                    np.random.choice(np.where(~bad)[0])
+                ] + scale * np.random.randn(self.ndim)
 
         if add_param is not None:
             if (add_param >= 2) & (self.ndim == 6):
                 # add mass, radius
-                logger.info('adding mass, radius to output array')
-                new_pos = np.c_[new_pos,
-                    self.M_NS+scale*np.random.randn(nwalkers),
-                    self.R_NS+10*scale*np.random.randn(nwalkers) ]
-            if ((add_param == 3) & (self.ndim == 6)) | \
-               ((add_param == 1) & (self.ndim == 8)):
+                logger.info("adding mass, radius to output array")
+                new_pos = np.c_[
+                    new_pos,
+                    self.M_NS + scale * np.random.randn(nwalkers),
+                    self.R_NS + 10 * scale * np.random.randn(nwalkers),
+                ]
+            if ((add_param == 3) & (self.ndim == 6)) | (
+                (add_param == 1) & (self.ndim == 8)
+            ):
                 # add f_t
-                logger.info('adding systematic error on time to output array')
-                new_pos = np.c_[new_pos,
-                    1.+1e-5*abs(np.random.randn(nwalkers))]
+                logger.info("adding systematic error on time to output array")
+                new_pos = np.c_[new_pos, 1.0 + 1e-5 * abs(np.random.randn(nwalkers))]
 
         if savefile is not None:
-            print ('Saving positions to {}'.format(savefile))
-            pickle.dump(new_pos, open(savefile, 'wb'))
+            print("Saving positions to {}".format(savefile))
+            pickle.dump(new_pos, open(savefile, "wb"))
 
         return new_pos
-
 
     def archive(self, savefile=None, samples=True, clobber=False):
         """
@@ -4057,7 +5231,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         can then delete the .h5 file to save disk space
 
         For the moment, this keeps the reader attribute, which I think
-	stores the entire set of samples and blobs, so is maybe not the
+        stores the entire set of samples and blobs, so is maybe not the
         smallest it could be; could remove it prior to saving with delattr,
         although this doesn't seem to help
 
@@ -4066,49 +5240,56 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)'''.format(
         :param clobber: set to True to overwrite an existing file
         """
 
-        savefile = savefile or self.run_id+'.p'
-        if not hasattr(self, 'samples'):
-            self.do_analysis(['posteriors'], show=False)
-        if not hasattr(self, 'model_pred'):
-            self.do_analysis(['comparison'], show=False)
+        savefile = savefile or self.run_id + ".p"
+        if not hasattr(self, "samples"):
+            self.do_analysis(["posteriors"], show=False)
+        if not hasattr(self, "model_pred"):
+            self.do_analysis(["comparison"], show=False)
 
         if os.path.exists(savefile) & (not clobber):
-            logger.error ('will overwrite existing archive file {}, set clobber=True to replace'.format(savefile))
+            logger.error(
+                "will overwrite existing archive file {}, set clobber=True to replace".format(
+                    savefile
+                )
+            )
             return
 
-        if not os.path.exists(self.run_id+'_chain-plot.pdf'):
+        if not os.path.exists(self.run_id + "_chain-plot.pdf"):
             # save the chain plot before we delete the result array
-            self.do_analysis(['chain'],savefig=True,show=False)
-        delattr(self, 'result')
+            self.do_analysis(["chain"], savefig=True, show=False)
+        delattr(self, "result")
 
-        logger.info('writing Beans object to {}'.format(savefile))
+        logger.info("writing Beans object to {}".format(savefile))
         self.from_archive = True
-        pickle.dump(self, open(savefile, 'wb'))
+        pickle.dump(self, open(savefile, "wb"))
         _pfile_size = os.path.getsize(savefile)
 
-        _h5file = self.run_id+'.h5'
+        _h5file = self.run_id + ".h5"
         if os.path.exists(_h5file):
             _h5file_size = os.path.getsize(_h5file)
-            value = input('enter Y[RETURN] to delete .h5 file: ')
-            if (value == 'y') | (value == 'Y'):
+            value = input("enter Y[RETURN] to delete .h5 file: ")
+            if (value == "y") | (value == "Y"):
                 _h5file_size = os.path.getsize(_h5file)
                 os.remove(_h5file)
-                logger.info('{} -> {}, {:.1f} Mb saved'.format(_h5file, savefile, (_h5file_size-_pfile_size)/1e6))
+                logger.info(
+                    "{} -> {}, {:.1f} Mb saved".format(
+                        _h5file, savefile, (_h5file_size - _pfile_size) / 1e6
+                    )
+                )
         else:
-            logger.warning('{} file not found, cannot remove'.format(_h5file))
+            logger.warning("{} file not found, cannot remove".format(_h5file))
 
         if samples:
             # try to generate a sensible name for the samples file
             dummy, file_ext = os.path.splitext(savefile)
-            samples_savefile = savefile.replace(file_ext, '_samples'+file_ext)
-            logger.info('writing samples and labels to {}'.format(samples_savefile))
-            pickle.dump((B.cc_parameters, B.samples), open(samples_savefile, 'wb'))
-            logger.info('archive complete')
+            samples_savefile = savefile.replace(file_ext, "_samples" + file_ext)
+            logger.info("writing samples and labels to {}".format(samples_savefile))
+            pickle.dump((B.cc_parameters, B.samples), open(samples_savefile, "wb"))
+            logger.info("archive complete")
 
             return savefile, samples_savefile
 
-
-        logger.info('archive complete')
+        logger.info("archive complete")
 
         return savefile
 
