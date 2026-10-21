@@ -9,7 +9,7 @@ Build and installation from this github repository
 
    .. code-block:: console
     
-      git clone https://github.com/adellej/beans
+      git clone https://github.com/LDCKirkby/Lbeans
       cd beans
    
 
