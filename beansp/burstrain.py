@@ -1,4 +1,4 @@
-""" This module defines the functions that generate the burst train """
+"""This module defines the functions that generate the burst train"""
 
 import numpy as np
 import random
@@ -10,8 +10,22 @@ import matplotlib.pyplot as plt
 
 # ------------------------------------------------------------------------- #
 
-def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
-    mdot_res = 5e-7, direction=1, debug=False ):
+
+def next_burst(
+    bean,
+    base,
+    x_0,
+    z,
+    t1,
+    dist,
+    xi_p,
+    cfac,
+    mass,
+    radius,
+    mdot_res=5e-7,
+    direction=1,
+    debug=False,
+):
     """
     Routine to find the next burst in the series and return its properties
     Adapted from sim_burst.pro
@@ -35,10 +49,10 @@ def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
 
     tobs = bean.tobs
 
-    debug_plot=False # for now don't do the debug plots
+    debug_plot = False  # for now don't do the debug plots
 
     fn = "next_burst"
-    assert direction in (1,-1)
+    assert direction in (1, -1)
 
     minmdot = 0.0
     maxmdot = 1.0
@@ -61,51 +75,88 @@ def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
     # mdot0 = (0.67 / 8.8) * bean.pflux[itobs[0]] * r1
     mdot0 = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius, bean.pflux[itobs[-1]])
     if debug:
-        print("{}: z={}, X_0={}, mdot_0={}, itobs={}".format(
-            fn, z, x_0, mdot0, itobs[-1] ))
+        print(
+            "{}: z={}, X_0={}, mdot_0={}, itobs={}".format(fn, z, x_0, mdot0, itobs[-1])
+        )
 
     # Calculate the burst properties for the trial mdot value
-    trial = bean.model(base, z, x_0, mdot0, mass, radius,
-        corr=bean.corr, interpolator=bean.gi)
+    trial = bean.model(
+        base, z, x_0, mdot0, mass, radius, bol_c, corr=bean.corr, interpolator=bean.gi
+    )
 
     if debug:
-        print ('{}: initial guess mdot0={} @ t1={}, tdel={}, direction={}'.format(fn,mdot0,t1,trial.tdel,direction))
+        print(
+            "{}: initial guess mdot0={} @ t1={}, tdel={}, direction={}".format(
+                fn, mdot0, t1, trial.tdel, direction
+            )
+        )
 
     # Now update the mdot with the value averaged over the trial interval
     # not sure why trial.tdel has suddenly become a vector
     if direction == 1:
-        mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius,
-            bean.mean_flux(t1, t1 + trial.tdel[0] / 24.0, bean) )
+        mdot = bean.flux_to_mdot(
+            x_0,
+            dist,
+            xi_p,
+            mass,
+            radius,
+            bean.mean_flux(t1, t1 + trial.tdel[0] / 24.0, bean),
+        )
     else:
-        mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius,
-            bean.mean_flux(t1 - trial.tdel[0] / 24.0, t1, bean) )
+        mdot = bean.flux_to_mdot(
+            x_0,
+            dist,
+            xi_p,
+            mass,
+            radius,
+            bean.mean_flux(t1 - trial.tdel[0] / 24.0, t1, bean),
+        )
 
     # Now retain the entire history of this iteration, so we can check for loops
     mdot_hist = [mdot0]
-    tdel_hist = [trial.tdel[0]/24.]
+    tdel_hist = [trial.tdel[0] / 24.0]
 
     nreturn = 0
     nreturn_total = 0
-    while (abs(mdot - mdot_hist[-1]) > mdot_res) \
-        and (((t1 + trial.tdel / 24.0 < 2.*max(tobs)) & (direction == 1)) \
-            or ((t1 - trial.tdel / 24.0 > min(tobs)-(max(tobs)-min(tobs))) & (direction == -1))) \
-        and (mdot > minmdot and mdot < maxmdot):
-
-        trial = bean.model(base, z, x_0, mdot, mass, radius,
-            corr=bean.corr, interpolator=bean.gi)
+    while (
+        (abs(mdot - mdot_hist[-1]) > mdot_res)
+        and (
+            ((t1 + trial.tdel / 24.0 < 2.0 * max(tobs)) & (direction == 1))
+            or (
+                (t1 - trial.tdel / 24.0 > min(tobs) - (max(tobs) - min(tobs)))
+                & (direction == -1)
+            )
+        )
+        and (mdot > minmdot and mdot < maxmdot)
+    ):
+        trial = bean.model(
+            base, z, x_0, mdot, mass, radius, corr=bean.corr, interpolator=bean.gi
+        )
         nreturn = nreturn + 1
         nreturn_total = nreturn_total + 1
 
         mdot_hist.append(mdot)
-        tdel_hist.append(trial.tdel[0]/24.)
+        tdel_hist.append(trial.tdel[0] / 24.0)
 
         if direction == 1:
-            mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius,
-                bean.mean_flux(t1, t1 + (trial.tdel[0] / 24.0), bean) )
+            mdot = bean.flux_to_mdot(
+                x_0,
+                dist,
+                xi_p,
+                mass,
+                radius,
+                bean.mean_flux(t1, t1 + (trial.tdel[0] / 24.0), bean),
+            )
 
         else:
-            mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius,
-                bean.mean_flux(t1 - (trial.tdel[0] / 24.0), t1, bean) )
+            mdot = bean.flux_to_mdot(
+                x_0,
+                dist,
+                xi_p,
+                mass,
+                radius,
+                bean.mean_flux(t1 - (trial.tdel[0] / 24.0), t1, bean),
+            )
 
         # Break out of the loop here, if necessary
         if nreturn > 10:
@@ -117,36 +168,47 @@ def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
 
         if nreturn_total > 30:
             e = random.random()
-            mdot = mdot_hist[-1] * (1.0 - e)+ mdot * e
-
+            mdot = mdot_hist[-1] * (1.0 - e) + mdot * e
 
     # save the final versions to the history arrays
     mdot_hist.append(mdot)
-    tdel_hist.append(trial.tdel[0]/24.)
+    tdel_hist.append(trial.tdel[0] / 24.0)
     if debug:
-        print('{}: nreturn={}, nreturn_total={}, mdot_hist={}'.format(
-            fn, nreturn, nreturn_total, mdot_hist))
+        print(
+            "{}: nreturn={}, nreturn_total={}, mdot_hist={}".format(
+                fn, nreturn, nreturn_total, mdot_hist
+            )
+        )
 
         if debug_plot:
             # now produce a diagnostic plot with the debug flag
             # plt.plot(t1+np.array(tdel_hist), mdot_hist, '.', label='tdel history')
             for tdel in tdel_hist:
-                plt.axvline(t1+tdel, color='k', ls='--')
+                plt.axvline(t1 + tdel, color="k", ls="--")
             # also calculate a bunch of values to compare with
             t_arr = np.arange(t1, max(tobs), step=0.1)
             m_arr = [0]
             t_arr2 = [t1]
             for t in t_arr[1:]:
-                _mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius,
-                    bean.mean_flux(t1, t, bean) )
-                _tmp = bean.model(base, z, x_0, _mdot, mass, radius,
-                    corr=bean.corr, interpolator=bean.gi)
-                t_arr2.append(t1+_tmp.tdel[0]/24.)
+                _mdot = bean.flux_to_mdot(
+                    x_0, dist, xi_p, mass, radius, bean.mean_flux(t1, t, bean)
+                )
+                _tmp = bean.model(
+                    base,
+                    z,
+                    x_0,
+                    _mdot,
+                    mass,
+                    radius,
+                    corr=bean.corr,
+                    interpolator=bean.gi,
+                )
+                t_arr2.append(t1 + _tmp.tdel[0] / 24.0)
                 m_arr.append(_mdot)
-            plt.plot(t_arr, np.array(t_arr2), '-', label='tdel')
-            plt.plot(t_arr, t_arr, '-', label='1:1')
-            plt.xlim((0,1.1*max(t1+np.array(tdel_hist))))
-            plt.ylim((0,1.1*max(t1+np.array(tdel_hist))))
+            plt.plot(t_arr, np.array(t_arr2), "-", label="tdel")
+            plt.plot(t_arr, t_arr, "-", label="1:1")
+            plt.xlim((0, 1.1 * max(t1 + np.array(tdel_hist))))
+            plt.ylim((0, 1.1 * max(t1 + np.array(tdel_hist))))
             # plt.plot(np.array(t_arr2), np.array(m_arr), '.')
             plt.legend()
             plt.show()
@@ -156,10 +218,16 @@ def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
         return None
 
         # create array
-    #print(f'{fn}: mdot={mdot}, tdel={trial.tdel}')
+    # print(f'{fn}: mdot={mdot}, tdel={trial.tdel}')
     result = np.recarray(
-        (1,), dtype=[("t2", np.float64), ("e_b", np.float64),
-        ("alpha", np.float64), ("mdot", np.float64)])
+        (1,),
+        dtype=[
+            ("t2", np.float64),
+            ("e_b", np.float64),
+            ("alpha", np.float64),
+            ("mdot", np.float64),
+        ],
+    )
 
     # assign elements
     result.t2 = t1 + direction * trial.tdel / 24.0
@@ -176,8 +244,20 @@ def next_burst( bean, base, x_0, z, t1, dist, xi_p, cfac, mass, radius,
 
 # -------------------------------------------------------------------------#
 
-def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
-                indep=True, full_model=False, debug=False):
+
+def punkt_train(
+    bean,
+    base,
+    x_0,
+    z,
+    dist,
+    xi_p,
+    mass,
+    radius,
+    indep=True,
+    full_model=False,
+    debug=False,
+):
     """
     Replacement for generate_burst_train. This version will connect burst
     sequences only out to a maximum gap of maxgap bursts. If there are more
@@ -222,11 +302,11 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
         e_b   [ 0  1  2  3  4  5  6  7 ... n ]
     """
 
-    fn = 'punkt_train'
-    cfac = 1.0 # no longer used
+    fn = "punkt_train"
+    cfac = 1.0  # no longer used
 
     if debug:
-        print (fn, base, x_0, z, dist, xi_p, mass, radius)
+        print(fn, base, x_0, z, dist, xi_p, mass, radius)
 
     # array of observed bursts is bean.bstart
 
@@ -234,14 +314,25 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
     stime, sgap, salpha, se_b, smdot, imatch = [bean.bstart[0]], [], [], [], [], []
 
     while iburst < bean.numburstsobs:
-
         gap = False
 
         # search phase 1; at the start of a new sub-train
 
         _last = stime[-1] if not indep else bean.bstart[iburst]
-        result_b = next_burst(bean, base, x_0, z, _last,
-                              dist, xi_p, cfac, mass, radius, direction=-1, debug=debug)
+        result_b = next_burst(
+            bean,
+            base,
+            x_0,
+            z,
+            _last,
+            dist,
+            xi_p,
+            cfac,
+            mass,
+            radius,
+            direction=-1,
+            debug=debug,
+        )
         # returns a rec_array with elements t2, e_b, alpha, mdot
 
         if result_b is None:
@@ -264,10 +355,9 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
 
         buffer = []
         while (gap == False) & (iburst < bean.numburstsobs):
-
             # this is the loop to find the next burst in a contiguous segment
             if debug:
-                print('\n---> matching burst #{}'.format(iburst + 1))
+                print("\n---> matching burst #{}".format(iburst + 1))
 
             _last = stime[-1]
             if indep:
@@ -277,8 +367,20 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
 
             if len(buffer) == 0:
                 # only run this step if we're left with an empty buffer after the previous
-                result_f = next_burst(bean, base, x_0, z, _last,
-                                      dist, xi_p, cfac, mass, radius, direction=1, debug=debug)
+                result_f = next_burst(
+                    bean,
+                    base,
+                    x_0,
+                    z,
+                    _last,
+                    dist,
+                    xi_p,
+                    cfac,
+                    mass,
+                    radius,
+                    direction=1,
+                    debug=debug,
+                )
                 if result_f is None:
                     # this can happen if we've gone out beyond the end of
                     # the flux history, presumably
@@ -288,7 +390,7 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
                     break
                 buffer.append(result_f)
                 if debug:
-                    print(f'\n1st step: buffer = {buffer}')
+                    print(f"\n1st step: buffer = {buffer}")
             else:
                 result_f = buffer[0]
                 # buffer = []
@@ -296,12 +398,25 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
             if debug:
                 print(result_f, result_f.t2, type(buffer), type(result_f.t2))
 
-            while ((result_f.t2[0] < bean.bstart[min([iburst + 1, bean.numburstsobs - 1])])
-                   & (len(buffer) <= bean.maxgap)):
+            while (
+                result_f.t2[0] < bean.bstart[min([iburst + 1, bean.numburstsobs - 1])]
+            ) & (len(buffer) <= bean.maxgap):
                 # loop until the current simulated burst time is later than the next observed time
                 # (or we've exceeded the missed burst count)
-                result_f = next_burst(bean, base, x_0, z, result_f.t2[0],
-                                      dist, xi_p, cfac, mass, radius, direction=1, debug=debug)
+                result_f = next_burst(
+                    bean,
+                    base,
+                    x_0,
+                    z,
+                    result_f.t2[0],
+                    dist,
+                    xi_p,
+                    cfac,
+                    mass,
+                    radius,
+                    direction=1,
+                    debug=debug,
+                )
 
                 if result_f is None:
                     # this can happen if we've gone out beyond the end of the flux history,
@@ -310,7 +425,7 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
 
                 buffer.append(result_f)
                 if debug:
-                    print(f'next step: buffer = {buffer}')
+                    print(f"next step: buffer = {buffer}")
 
             if len(buffer) == 0:
                 # I think we're done
@@ -330,16 +445,19 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
                 se_b.append(result_f.e_b[0])
                 smdot.append(result_f.mdot[0])
                 if debug:
-                    print(f'solo buffer #{iburst + 1}, adding time {result_f.t2[0]}')
+                    print(f"solo buffer #{iburst + 1}, adding time {result_f.t2[0]}")
             else:
                 if debug:
                     print(len(buffer), iburst, bean.numburstsobs)
                 sep_last = buffer[-1].t2 - buffer[-2].t2
-                diff_2last = np.abs(np.array([buffer[-1].t2[0], buffer[-2].t2[0]]) - bean.bstart[iburst + 1])
+                diff_2last = np.abs(
+                    np.array([buffer[-1].t2[0], buffer[-2].t2[0]])
+                    - bean.bstart[iburst + 1]
+                )
                 # print(sep_last, diff_2last)
                 if min(diff_2last) < sep_last:
                     if debug:
-                        print('+ve search: got match!')
+                        print("+ve search: got match!")
                     # if multiple bursts have been simulated, we pick which of the last 2 is closest
                     ibest = len(buffer) - np.argmin(diff_2last)
                     # print (ibest, buffer, buffer[:ibest])
@@ -358,7 +476,9 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
                     gap = True
                     sgap.append(True)
                     if debug:
-                        print(f'set gap={gap}! iburst={iburst} diff_2last={diff_2last} sep_last={sep_last}')
+                        print(
+                            f"set gap={gap}! iburst={iburst} diff_2last={diff_2last} sep_last={sep_last}"
+                        )
                     stime.append(bean.bstart[iburst + 1])
 
             # and either way we're switching to the next burst in the observed train
@@ -397,10 +517,13 @@ def punkt_train(bean, base, x_0, z, dist, xi_p, mass, radius,
 
     return result
 
+
 # -------------------------------------------------------------------------#
 
-def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
-    full_model=False, debug=False):
+
+def generate_burst_train(
+    bean, base, x_0, z, dist, xi_p, mass, radius, full_model=False, debug=False
+):
     """
     This routine generates a simulated burst train based on the model
     input parameters, and the mdot history inferred from the persistent
@@ -446,7 +569,7 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
 
     cfac = 1.0  # default to take the output of settle directly
     # cfac = 0.65 # temporary to try to match the objective of Goodwin et
-                  #   al. (2019)
+    #   al. (2019)
 
     # Now to go ahead and try to simulate the bursts train with the resulting
     # best set of parameters
@@ -468,16 +591,15 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
     flag = 1  # Initially OK
 
     stime, iref = [sbt], 0  # initialise list to store simulated times
-    salpha, se_b, smdot = [], [], [] # ditto for other lists
+    salpha, se_b, smdot = [], [], []  # ditto for other lists
     earliest = sbt  # (running) time of the earliest burst in the train
-    latest = sbt    # (running) time of the latest burst in the train
+    latest = sbt  # (running) time of the latest burst in the train
 
     for i in range(0, bean.numburstssim):
-
-        assert earliest == stime[0] # I think these variables are redundant
+        assert earliest == stime[0]  # I think these variables are redundant
         assert latest == stime[-1]
         if debug:
-            print ("{}: simulating burst {} of {}".format(fn, i, bean.numburstssim))
+            print("{}: simulating burst {} of {}".format(fn, i, bean.numburstssim))
 
         # Here we adopted recurrence time corrections for SAX
         # J1808.4--3658 ,since the accretion rate is not constant over the
@@ -508,8 +630,20 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
 
         if backward:
             # Find the time for the *previous* burst in the train
-            result_b = next_burst( bean, base, x_0, z, earliest,
-                dist, xi_p, cfac, mass, radius, direction=-1, debug=debug)
+            result_b = next_burst(
+                bean,
+                base,
+                x_0,
+                z,
+                earliest,
+                dist,
+                xi_p,
+                cfac,
+                mass,
+                radius,
+                direction=-1,
+                debug=debug,
+            )
 
             if result_b is not None:
                 # we have a result from the next_burst call going backward, so add its properties to the arrays
@@ -527,8 +661,20 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
 
         if forward:
             # Also find the time for the *next* burst in the train
-            result_f = next_burst( bean, base, x_0, z, latest,
-                dist, xi_p, cfac, mass, radius, direction=1, debug=debug)
+            result_f = next_burst(
+                bean,
+                base,
+                x_0,
+                z,
+                latest,
+                dist,
+                xi_p,
+                cfac,
+                mass,
+                radius,
+                direction=1,
+                debug=debug,
+            )
 
             if result_f is not None:
                 # we have a result from the next_burst call going forward, so add its properties to the arrays
@@ -538,7 +684,6 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
                 smdot.append(result_f.mdot[0])
                 latest = result_f.t2[0]
             else:
-
                 if debug:
                     print("{}: abandoning backward search, step {}".format(fn, i))
                 forward = False
@@ -551,7 +696,6 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
             break
 
     if (mdot_max == -1) & (len(stime) > 1):
-
         # only run this if len(stime) > 1, because it is initialised as a
         # list with a single value (sbt)
         mdot_max = max(smdot)
@@ -569,9 +713,9 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
         result["mdot_max"] = [mdot_max]
 
         result["mass"] = [mass]
-        result["radius"] =  [radius]
+        result["radius"] = [radius]
 
-        result["forward"] = forward     # to keep track of the outcome of each direction
+        result["forward"] = forward  # to keep track of the outcome of each direction
         result["backward"] = backward
 
     # now the actual predictions
@@ -583,15 +727,15 @@ def generate_burst_train( bean, base, x_0, z, dist, xi_p, mass, radius,
         result["iref"] = iref
         result["alpha"] = np.array(salpha)
         result["e_b"] = np.array(se_b)
-        #print(f"In burstrain fluence is {se_b}")
+        # print(f"In burstrain fluence is {se_b}")
 
     if debug:
-        print ("{}: train complete, result={}".format(fn, result))
+        print("{}: train complete, result={}".format(fn, result))
 
     return result
 
 
-def burstensemble(bean, base, x_0, z, dist, xi_p, mass, radius, full_model=False ):
+def burstensemble(bean, base, x_0, z, dist, xi_p, mass, radius, full_model=False):
     """
     This routine generates as many burst predictions as there are burst
     measurements.
@@ -622,15 +766,16 @@ def burstensemble(bean, base, x_0, z, dist, xi_p, mass, radius, full_model=False
 
     mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius, bean.pflux)
 
-    if bean.model_name == 'grid_interp':
-        if np.any((mdot > bean.grid_mdot_max) |
-            (mdot < bean.grid_mdot_min)):
+    if bean.model_name == "grid_interp":
+        if np.any((mdot > bean.grid_mdot_max) | (mdot < bean.grid_mdot_min)):
             return None
 
+    # Simulate a number of bursts equal to the number of observed bursts
     for i in range(0, bean.numburstsobs):
-
-        tmp = bean.model(base, z, x_0, mdot[i], mass, radius,
-            corr=bean.corr, interpolator=bean.gi)
+        # By default bean.model calls settle()
+        tmp = bean.model(
+            base, z, x_0, mdot[i], mass, radius, corr=bean.corr, interpolator=bean.gi
+        )
 
         # accumulate the predictions into the arrays here
 

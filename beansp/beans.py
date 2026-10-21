@@ -114,7 +114,8 @@ BILBY_OUTPUT = "bilby_out"
 # [optional]
 # 7 = M_NS neutron star mass [M_sun] (settle)
 # 8 = R_NS neutron star radius [km] (settle)
-# 9 = f_t systematic fractional variation in burst times
+# 9 = bc bolometric correction factor (diskmodel)
+# 10 = f_t systematic fractional variation in burst times
 
 # utility dicts etc. for parameter labels
 PARAM_LATEX = {
@@ -127,6 +128,7 @@ PARAM_LATEX = {
     "M": r"\ensuremath{M_{\rm NS}}",
     "R": r"\ensuremath{R_{\rm NS}}",
     "f_t": r"\ensuremath{f_t}",
+    "b_c": r"\ensuremath{b_c}",
     # extras
     "cosi": r"\ensuremath{\cos i}",
     "g": r"\ensuremath{g}",
@@ -160,7 +162,7 @@ UNIT_LATEX = {
 }
 assert PARAM_LATEX.keys() == UNIT_LATEX.keys()
 
-NDIM_MIN, NDIM_MAX = 6, 9
+NDIM_MIN, NDIM_MAX = 6, 10
 
 # switch to remember what I'm using in lnprob
 
@@ -354,7 +356,7 @@ def prior_func(theta_in, latex=False):
     times of 10*BSTART_ERR = 100 min
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+      *xi_p*, and (optionally) *mass*, *radius*, *b_c* & *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -375,7 +377,7 @@ def prior_func(theta_in, latex=False):
         ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    mass, radius, bol_c, f_t = extra + [M_NS, R_NS, 1.0, b_c][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -390,6 +392,7 @@ def prior_func(theta_in, latex=False):
         and (1 <= f_t < 10)
         and (1.15 < mass < 2.5)
         and (9 < radius < 17)
+        and (1.0 <= bol_c <= 5.0)
     ):
         return 0.0
     else:
@@ -449,7 +452,7 @@ def prior_kepler(theta_in, latex=False):
 
 def prior_1820_30(theta_in):
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [1.4, 10.5, 1.0][len(extra) :]
+    mass, radius, bol_c, f_t = extra + [1.4, 10.5, 1.0, 1.0][len(extra) :]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -465,6 +468,7 @@ def prior_1820_30(theta_in):
         and (1 <= f_t < 10)
         and (1.15 < mass < 2.5)
         and (6 < radius < 17)
+        and (1.0 <= bol_c <= 5.0)
     ):
         mu_x, sigma_x = 0.05, 0.05
         mu_z, sigma_z = 0.02, 0.01
@@ -474,6 +478,7 @@ def prior_1820_30(theta_in):
         mu_xi_p, sigma_xi_p = 2.0, 0.1
         mu_mass, sigma_mass = 1.58, 0.3
         mu_radius, sigma_radius = 9.1, 1.8
+        mu_bol_c, sigma_bol_c = 1.0, 0.5
 
         prob_X = -0.5 * (X - mu_x) ** 2 / sigma_x**2
         prob_Z = -0.5 * (Z - mu_z) ** 2 / sigma_z**2
@@ -483,6 +488,7 @@ def prior_1820_30(theta_in):
         prob_xi_p = -0.5 * (xi_p - mu_xi_p) ** 2 / sigma_xi_p**2
         prob_mass = -0.5 * (mass - mu_mass) ** 2 / sigma_mass**2
         prob_radius = -0.5 * (radius - mu_radius) ** 2 / sigma_radius**2
+        prob_bol_c = -0.5 * (bol_c - mu_bol_c) ** 2 / sigma_bol_c**2
         return (
             0.0
             + prob_X
@@ -493,6 +499,7 @@ def prior_1820_30(theta_in):
             + prob_xi_p
             + prob_mass
             + prob_radius
+            + prob_bol_c
         )
 
     else:
@@ -661,7 +668,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     relevant model outputs and calculates the likelihood.
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p* and (optionally) *mass* & *radius*,
+      *xi_p* and (optionally) *mass*, *radius* and *b_c*
     :param x: the "independent" variable, passed to lnlike
     :param y: the "dependent" variable (i.e. measurements), passed to lnlike
     :param yerr: error estimates on y
@@ -672,7 +679,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # define theta_in = model parameters, which we define priors for
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius = extra + [self.M_NS, self.R_NS][len(extra) :]
+    mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bc][len(extra) :]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -736,7 +743,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     you need to swap this function out for :meth:`Beans.lnlike` in :meth:`Beans.lnprob`
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+      *xi_p*, and (optionally) *mass*, *radius*, *f_t* & *b_c*
     :param x: the "independent" variable, passed to lnlike
     :param y: the "dependent" variable (i.e. measurements), passed to lnlike
     :param yerr: erorr estimates on y
@@ -747,7 +754,9 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # define theta_in = model parameters, which we define priors for
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra) :]
+    mass, radius, bol_c, f_t = (
+        extra + [bean.M_NS, bean.R_NS, bean.b_c, 1.0][len(extra) :]
+    )
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -1113,7 +1122,7 @@ class Beans:
         interp="linear",
         smooth=0.02,
         model=settle,
-        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8),
+        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8, 1.0),
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1154,7 +1163,7 @@ class Beans:
         :param model: burst model to use, one of settle or grid_interp
         :param theta: initial centroid values for walker model parameters, with
           *X*, *Z*, *Q_b*, *d*, *xi_b*, *xi_p*, and (optionally) *mass*,
-          *radius*, & *f_t*
+          *radius*, *b_c* & *f_t*
         :param fluen: set to True (default) to include the fluences in the
           data for comparison, or False to omit
         :param alpha: set to True to include the alphas in the
@@ -1264,7 +1273,10 @@ class Beans:
         self.burstname = burstname
         self.gtiname = gtiname
         self.ref_ind = ref_ind
-        self.bc = bc
+        if 8 < len(theta) < 10:
+            self.bc = theta[8]  # Bolometric correction is 9th value in theta
+        else:
+            self.bc = bc  # Bolometric correction is 9th value in theta, default 1.0
         self.continuous = continuous
         # the original "train" model generates a continuous train of
         # bursts covering the entire history
@@ -1355,7 +1367,9 @@ class Beans:
 
         self.ndim = len(self.theta)
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
-            logger.error("number of dimensions of input parameter vector should be 6-9")
+            logger.error(
+                "number of dimensions of input parameter vector should be 6-10"
+            )
             return
         self.num_systematic = self.ndim - (NDIM_MAX - 1)
         if (self.num_systematic > 0) & (not LNPROB_USES_LNLIKE_SYS):
@@ -1589,12 +1603,14 @@ Initial parameters:
         results
 
         :param theta: the model parameter tuple, with *X*, *Z*, *Q_b*, *d*,
-          *xi_b*, *xi_p*, *mass*, *radius*, and (optionally) *f_t*
+          *xi_b*, *xi_p*, *mass*, *radius*, and (optionally) *bol_c* & *f_t*
         :param indent: number of characters to indent the string from the left
         """
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        mass, radius, bol_c, f_t = (
+            extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
+        )
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
 #Z = {:.5f} \\ CNO mass fraction
@@ -1609,6 +1625,9 @@ Initial parameters:
             result += " (fixed)"
         result = result + "\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
         if len(theta) <= 7:
+            result += " (fixed)"
+        result = result + "\n#bol_c = {:.2f} \\ bolometric correction".format(bol_c)
+        if len(theta) <= 8:
             result += " (fixed)"
         if self.num_systematic == 1:
             return (
@@ -1869,6 +1888,7 @@ Initial parameters:
                 * dist**2
                 * xi_p
                 * opz**2
+                * self.bc
                 / (radius**2 * (opz - 1))
                 / _mdot_Edd
             )
@@ -1892,7 +1912,7 @@ Initial parameters:
         here, so you can add your own combinations to customise the code
 
         :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-          *xi_p*, *mass*, *radius*, and (optionally) *f_t*
+          *xi_p*, *mass*, *radius*, *bol_c* and (optionally) *f_t*
         :param x: the "independent" variable, passed to :meth:`Beans.lnlike`
         :param y: the "dependent" variable (i.e. measurements), passed to
           :meth:`Beans.lnlike`
@@ -1955,7 +1975,9 @@ Initial parameters:
             ls = ""
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        mass, radius, bol_c, f_t = (
+            extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
+        )
 
         itoff = 1  # time offset for models produced with generate_burst_train
         if (model is None) & show_model:
@@ -2291,7 +2313,9 @@ Initial parameters:
             _comm = "# "
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        mass, radius, bol_c, f_t = (
+            extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
+        )
 
         opz = 1.0 / (np.sqrt(1.0 - self.gmrc2 * mass / radius))
         print(
@@ -2433,7 +2457,9 @@ Initial parameters:
         assert len(distrange) == 2
 
         X_0, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        mass, radius, bol_c, f_t = (
+            extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
+        )
 
         # Loop over the distance values
 
@@ -3458,11 +3484,20 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                     )
 
                 if self.ndim >= 9:
-                    ftpred = get_param_uncert(self.samples[sel, 8])
+                    bol_cpred = get_param_uncert(self.samples[sel, 8])
                     latex_rows[8] += " & {}".format(
+                        strmeas(bol_cpred[0], bol_cpred[2], bol_cpred[1])
+                    )
+                    rst_rows[8].append(
+                        _rma(strmeas(bol_cpred[0], bol_cpred[2], bol_cpred[1]))
+                    )
+
+                if self.ndim >= 10:
+                    ftpred = get_param_uncert(self.samples[sel, 9])
+                    latex_rows[9] += " & {}".format(
                         strmeas(ftpred[0], ftpred[2], ftpred[1])
                     )
-                    rst_rows[8].append(_rma(strmeas(ftpred[0], ftpred[2], ftpred[1])))
+                    rst_rows[9].append(_rma(strmeas(ftpred[0], ftpred[2], ftpred[1])))
 
                 if len(parts) > 1:
                     header += """------------------------------------------------------------------------------
@@ -3521,6 +3556,26 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         fmt="%9.6f",
                         header=header,
                     )
+                elif self.ndim == 9:
+                    np.savetxt(
+                        f,
+                        (
+                            Xpred,
+                            Zpred,
+                            basepred,
+                            dpred,
+                            xippred,
+                            xibpred,
+                            masspred,
+                            radiuspred,
+                            cosipred,
+                            gravitypred,
+                            redshiftpred,
+                            bol_cpred,
+                        ),
+                        fmt="%9.6f",
+                        header=header,
+                    )
                 else:
                     np.savetxt(
                         f,
@@ -3536,6 +3591,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                             cosipred,
                             gravitypred,
                             redshiftpred,
+                            bol_cpred,
                             ftpred,
                         ),
                         fmt="%9.6f",

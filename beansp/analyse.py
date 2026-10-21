@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import matplotlib.pyplot as plt import numpy as np
 import emcee
 import corner
 import random
@@ -40,7 +39,7 @@ def get_param_uncert_obs(param_array, percentile=[16,50,84]):
     Get uncertainties on predicted parameters. This routine accepts a
     list-of-lists with (for example) the start times of bursts for each
     walker and each timestep:
-      [ [ t1, t2, t3, t4... tn ], 
+      [ [ t1, t2, t3, t4... tn ],
         [ t1, t2, t3, t4... tn ],
             .
             .

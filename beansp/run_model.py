@@ -4,6 +4,7 @@ import numpy as np
 # load local module
 from .burstrain import *
 
+
 def burst_time_match(iref1, time1, iref2, time2):
     """
     Function to generate an array of indices of elements in time2 that are
@@ -25,32 +26,34 @@ def burst_time_match(iref1, time1, iref2, time2):
         elements of array time1, with the first guess optionally given
         """
 
-        for _i in np.arange(iref,0,-1)-1:
+        for _i in np.arange(iref, 0, -1) - 1:
             # print (_i, iref, time1[_i], time2[:ix[0]], np.argmin(np.abs(time1[_i]-time2[:ix[0]])))
-            if (_i == iref-1) & (first is not None): # & (first < ix[0]):
+            if (_i == iref - 1) & (first is not None):  # & (first < ix[0]):
                 ix.insert(0, first)
             elif ix[0] <= 0:
                 break
             else:
-                ix.insert(0, np.argmin(np.abs(time1[_i]-time2[:ix[0]])))
+                ix.insert(0, np.argmin(np.abs(time1[_i] - time2[: ix[0]])))
 
         return ix
 
     def match_right(ix, iref, time1, time2, first=None):
         """
-	Routine to determine nearest values in array time2 for the
-	ix[-1]'th to last elements of array time1, with the first guess
-        optionally given
+        Routine to determine nearest values in array time2 for the
+        ix[-1]'th to last elements of array time1, with the first guess
+               optionally given
         """
 
-        for _i in np.arange(iref,len(time1)-1)+1:
+        for _i in np.arange(iref, len(time1) - 1) + 1:
             # print (_i, time1[_i], time2[ix[-1]+1:], ix[-1]+1, len(time2))#np.argmin(np.abs(time1[_i]-time2[ix[-1]+1:])))
-            if (_i == iref+1) & (first is not None):
+            if (_i == iref + 1) & (first is not None):
                 ix.append(first)
-            elif ix[-1]+1 == len(time2):
+            elif ix[-1] + 1 == len(time2):
                 break
             else:
-                ix.append( np.argmin(np.abs(time1[_i]-time2[ix[-1]+1:]))+ix[-1]+1 )
+                ix.append(
+                    np.argmin(np.abs(time1[_i] - time2[ix[-1] + 1 :])) + ix[-1] + 1
+                )
 
         return ix
 
@@ -60,7 +63,7 @@ def burst_time_match(iref1, time1, iref2, time2):
     # should be able to fix this by defining (a non-integer) tref
     # appropriately in the .ini file
 
-    assert np.isclose(time1[iref1],time2[iref2],rtol=1e-4)
+    assert np.isclose(time1[iref1], time2[iref2], rtol=1e-4)
 
     # special here for IGR J17511-3057, forcing the match solution
     # this for continuing the base20 run
@@ -75,7 +78,7 @@ def burst_time_match(iref1, time1, iref2, time2):
 
     # make sure we have enough bursts to match, on either side of the
     # reference
-    if ((iref2 < iref1) | (len(time2)-iref2-1 < len(time1)-iref1-1)):
+    if (iref2 < iref1) | (len(time2) - iref2 - 1 < len(time1) - iref1 - 1):
         return None
 
     ix = [iref2]
@@ -95,27 +98,39 @@ def burst_time_match(iref1, time1, iref2, time2):
     # print (ix, np.sum(np.abs(time1-time2[ix])))
 
     _i = 0
-    while _i < iref1-1:
+    while _i < iref1 - 1:
         # print (_i, ix[_i+1]-ix[_i], ix[_i+2]-ix[_i+1])
-        if (ix[_i+1]-ix[_i] == 1) & (ix[_i+2]-ix[_i+1] > 1):
-            ix_try = match_left(ix[_i+2:], _i+2, time1, time2, first=ix[_i+1]+1)
+        if (ix[_i + 1] - ix[_i] == 1) & (ix[_i + 2] - ix[_i + 1] > 1):
+            ix_try = match_left(
+                ix[_i + 2 :], _i + 2, time1, time2, first=ix[_i + 1] + 1
+            )
             # print (ix_try, np.sum(np.abs(time1-time2[ix_try])))
-            if np.sum(np.abs(time1-time2[ix_try])) < np.sum(np.abs(time1-time2[ix])):
+            if np.sum(np.abs(time1 - time2[ix_try])) < np.sum(
+                np.abs(time1 - time2[ix])
+            ):
                 ix = ix_try
-                _i = -1 # so as to start from the start again, after _i is incremented below
+                _i = (
+                    -1
+                )  # so as to start from the start again, after _i is incremented below
         _i += 1
 
     # print ('after leftward refinement: ',ix)
 
-    _i = len(ix)-1
-    while _i > iref1+1:
+    _i = len(ix) - 1
+    while _i > iref1 + 1:
         # print (_i, ix[_i]-ix[_i-1], ix[_i-1]-ix[_i-2], ix[:_i-1])
-        if (ix[_i]-ix[_i-1] == 1) & (ix[_i-1]-ix[_i-2] > 1):
-            ix_try = match_right(ix[:_i-1], _i-2, time1, time2, first=ix[_i-1]-1)
+        if (ix[_i] - ix[_i - 1] == 1) & (ix[_i - 1] - ix[_i - 2] > 1):
+            ix_try = match_right(
+                ix[: _i - 1], _i - 2, time1, time2, first=ix[_i - 1] - 1
+            )
             # print (ix_try, np.sum(np.abs(time1-time2[ix_try])))
-            if np.sum(np.abs(time1-time2[ix_try])) < np.sum(np.abs(time1-time2[ix])):
+            if np.sum(np.abs(time1 - time2[ix_try])) < np.sum(
+                np.abs(time1 - time2[ix])
+            ):
                 ix = ix_try
-                _i = len(ix) # so as to start from the end again, after _i is decremented below
+                _i = len(
+                    ix
+                )  # so as to start from the end again, after _i is decremented below
         _i -= 1
 
     # print ('after rightward refinement: ',ix)
@@ -132,7 +147,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
     be compared to the observations (with appropriate scaling)
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+      *xi_p*, and (optionally) *mass*, *radius*, *bol_c* & *f_t*
     :param bean: Beans object, from which the required parameters are drawn:
       y, tref, bstart, pflux, pfluxe, tobs, numburstssim, numburstsobs,
       ref_ind, gti_checking,train, gti_start=None, gti_end=None, as well as
@@ -149,10 +164,12 @@ def runmodel(theta_in, bean, match=True, debug=False):
     """
 
     if debug:
-        print('Calling runmodel')
+        print("Calling runmodel")
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra+[bean.M_NS, bean.R_NS, 1.0][len(extra):]
+    mass, radius, bol_c, f_t = (
+        extra + [bean.M_NS, bean.R_NS, bean.bc, 1.0][len(extra) :]
+    )
 
     # by default we assume the model is valid, i.e. has sufficient bursts
     # to match the observations, AND doesn't violate the GTI conditions
@@ -161,38 +178,43 @@ def runmodel(theta_in, bean, match=True, debug=False):
     valid = bean.numburstsobs > 0
 
     if bean.train:
-
         # Now call the function. From the code:
         # This routine generates a simulated burst train. The output is a
         # dict with keys corresponding to the model parameters and
         # predicted values.
         # We now pass on the debug flag to help with exploratory work
 
-        result = bean.train_model( bean,  Q_b, X, Z, dist, xi_p, mass, radius, debug=debug)
+        result = bean.train_model(
+            bean, Q_b, X, Z, dist, xi_p, mass, radius, debug=debug
+        )
 
         # we need to reject unsuitable models here. The simplest (although
         # insufficiently strict) criterion is to at least simulate as many
         # bursts as are observed.
 
-        if 'imatch' in result.keys():
+        if "imatch" in result.keys():
             # for punkt_train we need to make sure the bursts match up
-            tpred = np.array(result['time'])[result['imatch']]
-            if np.all(result['gap']):
+            tpred = np.array(result["time"])[result["imatch"]]
+            if np.all(result["gap"]):
                 if debug:
-                    print ('runmodel: all gaps')
+                    print("runmodel: all gaps")
                 return None, False, result
-            if result['imatch'][0] > 0:
+            if result["imatch"][0] > 0:
                 # this is the case when the reverse run on the initial
                 # observed burst fails, can't recover
                 if debug:
-                    print ('runmodel: backwards search omitted first observed burst')
+                    print("runmodel: backwards search omitted first observed burst")
                 return None, False, result
         else:
             tpred = result["time"]
         npred = len(tpred)
         if (npred < bean.numburstsobs) & (bean.numburstsobs > 0):
             if debug:
-                print ('runmodel: insufficient number of bursts simulated ({} of {}'.format(npred, bean.numburstsobs))
+                print(
+                    "runmodel: insufficient number of bursts simulated ({} of {}".format(
+                        npred, bean.numburstsobs
+                    )
+                )
             return None, False, result
 
         # bug testing sample model values
@@ -201,12 +223,12 @@ def runmodel(theta_in, bean, match=True, debug=False):
     else:
         # If we're not generating a burst train, just run the ensemble
 
-        result = burstensemble( bean, Q_b, X, Z, dist, xi_p, mass, radius)
+        result = burstensemble(bean, Q_b, X, Z, dist, xi_p, mass, radius)
 
     if result is None:
         return None, False, result
 
-    valid = (valid | (len(result['time']) > 1))
+    valid = valid | (len(result["time"]) > 1)
 
     # Here we convert the model-predicted values to observational
     # quantities, for comparison with the observations. Previously
@@ -217,44 +239,44 @@ def runmodel(theta_in, bean, match=True, debug=False):
     # Added in the Eddington flux (and error) so we can do the upper
     # limits on distance from the burst peak fluxes
 
-    result['fluen'] = result['e_b'] * (bean.fluen_fac/xi_b/dist**2).value
+    result["fluen"] = result["e_b"] * (bean.fluen_fac / xi_b / dist**2).value
 
-    result['alpha_obs'] = result['alpha'] * xi_b/xi_p
+    result["alpha_obs"] = result["alpha"] * xi_b / xi_p
 
-    result['F_Edd'] = bean.L_Edd/dist**2, bean.L_Edd_err/dist**2
+    result["F_Edd"] = bean.L_Edd / dist**2, bean.L_Edd_err / dist**2
 
     # And finally form the model array for comparison with the data
 
     model = None
     if not bean.train:
         # For the burstensemble version, this is simple
-        model = np.concatenate((result['time'], result['fluen'],
-            result['alpha_obs']))
+        model = np.concatenate((result["time"], result["fluen"], result["alpha_obs"]))
 
     elif match & bean.continuous & (bean.y is not None) & (npred > 0):
-
         # Assemble the array for comparison with the data, for output from
         # generate_burst_train
         # First need to match the burst times; this is surprisingly
         # difficult to do robustly.
 
-        imatch = burst_time_match(bean.ref_ind, bean.bstart, result['iref'], tpred)
+        imatch = burst_time_match(bean.ref_ind, bean.bstart, result["iref"], tpred)
 
         if imatch is None:
             return None, False, result
 
-        result['imatch'] = imatch
+        result["imatch"] = imatch
 
         # print (imatch)
         if len(imatch) != bean.numburstsobs:
-            print ('** ERROR ** likely insufficient number of bursts simulated ({} < {})'.format(
-                len(imatch), bean.numburstsobs))
+            print(
+                "** ERROR ** likely insufficient number of bursts simulated ({} < {})".format(
+                    len(imatch), bean.numburstsobs
+                )
+            )
 
             return model, False, result
 
         else:
-
-            assert len(set(imatch)) == bean.numburstsobs # don't double up on bursts
+            assert len(set(imatch)) == bean.numburstsobs  # don't double up on bursts
 
             # We only compare the times of the bursts for the events excluding
             # the reference burst, from which the train is calculated
@@ -275,18 +297,26 @@ def runmodel(theta_in, bean, match=True, debug=False):
             # Now assemble the whole array for comparison with the measurements
             # Includes the selection of non-zero fluences (set in get_obs)
 
-            model =  np.concatenate((result['time'][itime],
-                result['fluen'][ie_b][bean.ifluen],
-                result['alpha_obs'][ialpha][bean.ifluen[1:]-1]))
+            model = np.concatenate(
+                (
+                    result["time"][itime],
+                    result["fluen"][ie_b][bean.ifluen],
+                    result["alpha_obs"][ialpha][bean.ifluen[1:] - 1],
+                )
+            )
 
-    elif (not bean.continuous):
+    elif not bean.continuous:
         # if we already have an imatch element, i.e. from punkt_train, we
         # have a simpler process to assemble the model
 
-        imatch = result['imatch']
-        model = np.concatenate((result['time'][imatch],
-            result['fluen'][imatch][bean.ifluen],
-            result['alpha_obs'][imatch][bean.ifluen[1:] - 1]))
+        imatch = result["imatch"]
+        model = np.concatenate(
+            (
+                result["time"][imatch],
+                result["fluen"][imatch][bean.ifluen],
+                result["alpha_obs"][imatch][bean.ifluen[1:] - 1],
+            )
+        )
 
     # Check here if the model instance is valid, i.e. the bursts that are NOT
     # matched with the observed ones must fall in gaps
@@ -297,7 +327,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
     if match & (model is not None) & bean.gti_checking:
         # if "st" not in globals():
         if (bean.st is None) or (bean.et is None):
-            print ('** WARNING ** can''t access GTI information')
+            print("** WARNING ** cant access GTI information")
             return model, valid, result
 
         # this is *very* inefficient, but might be the simplest option,
@@ -306,9 +336,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
             if index not in imatch:
                 # ok, not one of the known bursts. Is it an excluded time?#
                 for i in range(len(bean.st)):
-
                     if (rt >= bean.st[i]) and (rt <= bean.et[i] - 10.0 / 86400.0):
-
                         # print (rt, i, bean.st[i], bean.et[i])
                         return model, False, result
 
@@ -324,7 +352,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
     #       valid = True
 
     if debug:
-        print(f'model = {model}')
+        print(f"model = {model}")
 
     return model, valid, result
 

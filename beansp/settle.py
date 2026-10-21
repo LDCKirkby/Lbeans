@@ -20,7 +20,7 @@ def settle(base, z, x_0, mdot, mass, radius, corr=None, **kwargs):
     :returns: 3-element array with recurrence time [hr], burst energy
       [1e39 erg], and alpha, all in the observer frame
     """
-
+    # TODO add variable bolometric correction (bc) value
     # initialize settle interface
     settl = se.Settle()
 
