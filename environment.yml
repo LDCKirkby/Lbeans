@@ -8,7 +8,7 @@
 #
 # see also the list of dependencies in setup.py
 #-----------------------------------------
-name: beans
+name: Lbeans
 dependencies:
   - python>=3.13
 # h5py==v2.10.0 or above. 
