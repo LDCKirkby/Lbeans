@@ -764,7 +764,9 @@ def burstensemble(bean, base, x_0, z, dist, xi_p, mass, radius, full_model=False
     smdot = []
     se_b = []
 
-    mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius, bean.pflux)
+    # Apply bolometric correction to the persistent flux to get the bolometric flux
+    pflux_bc = bean.pflux * bean.bol_c
+    mdot = bean.flux_to_mdot(x_0, dist, xi_p, mass, radius, pflux_bc)
 
     if bean.model_name == "grid_interp":
         if np.any((mdot > bean.grid_mdot_max) | (mdot < bean.grid_mdot_min)):
