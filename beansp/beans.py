@@ -150,6 +150,7 @@ UNIT_LATEX = {
     "xi_p": r"",
     "M": r"$M_\odot$",
     "R": r"km",
+    "b_c": r"",
     "f_t": r"",
     "cosi": r"",
     "g": r"$10^{14}\ {\rm cm\,s^{-2}}$",
