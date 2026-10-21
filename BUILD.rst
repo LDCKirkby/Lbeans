@@ -10,7 +10,7 @@ Build and installation from this github repository
    .. code-block:: console
     
       git clone https://github.com/LDCKirkby/Lbeans
-      cd beans
+      cd Lbeans
    
 
 #. [optional] Create and activate a clean conda environment
@@ -21,9 +21,9 @@ Build and installation from this github repository
 
    .. code-block:: console
     
-      conda remove -n beans --all
+      conda remove -n Lbeans --all
       conda env create -f environment.yml
-      conda activate beans
+      conda activate Lbeans
 
 #. Install/upgrade pip, build and local install
 
