@@ -3933,8 +3933,6 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
 
                 if self.ndim >= 9:
                     bol_c = self.samples[:, 8]
-                    _samples = np.column_stack((_samples, bol_c))
-                    self.cc_parameters += ["bol_c"]
 
                 # now create the chainconsumer object
                 # swap keys for values below to test out LaTeX approach
