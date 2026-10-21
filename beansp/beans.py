@@ -127,7 +127,7 @@ PARAM_LATEX = {
     "xi_p": r"\ensuremath{\xi_p}",
     "M": r"\ensuremath{M_{\rm NS}}",
     "R": r"\ensuremath{R_{\rm NS}}",
-    "b_c": r"\ensuremath{b_c}",
+    "bol_c": r"\ensuremath{bol_c}",
     "f_t": r"\ensuremath{f_t}",
     # extras
     "cosi": r"\ensuremath{\cos i}",
@@ -150,7 +150,7 @@ UNIT_LATEX = {
     "xi_p": r"",
     "M": r"$M_\odot$",
     "R": r"km",
-    "b_c": r"",
+    "bol_c": r"",
     "f_t": r"",
     "cosi": r"",
     "g": r"$10^{14}\ {\rm cm\,s^{-2}}$",
