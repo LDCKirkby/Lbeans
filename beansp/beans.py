@@ -127,8 +127,8 @@ PARAM_LATEX = {
     "xi_p": r"\ensuremath{\xi_p}",
     "M": r"\ensuremath{M_{\rm NS}}",
     "R": r"\ensuremath{R_{\rm NS}}",
-    "f_t": r"\ensuremath{f_t}",
     "b_c": r"\ensuremath{b_c}",
+    "f_t": r"\ensuremath{f_t}",
     # extras
     "cosi": r"\ensuremath{\cos i}",
     "g": r"\ensuremath{g}",
@@ -3931,9 +3931,13 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                     _samples = np.column_stack((self.samples, cosi, gravity, redshift))
                     self.cc_parameters += ["g", "1+z"]
 
+                if self.ndim >= 9:
+                    bol_c = self.samples[:, 8]
+                    _samples = np.column_stack((_samples, bol_c))
+                    self.cc_parameters += ["bol_c"]
+
                 # now create the chainconsumer object
                 # swap keys for values below to test out LaTeX approach
-
                 _df = pd.DataFrame(
                     _samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters]
                 )
@@ -4097,6 +4101,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                     "$\\xi_p$",
                     "$M$",
                     "$R$",
+                    "$bol_c$",
                     "$f_t$",
                 ]
                 # plt.clf()
