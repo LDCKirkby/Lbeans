@@ -1,9 +1,10 @@
-""" Reads data in from ascii files and puts in right format for emcee """
+"""Reads data in from ascii files and puts in right format for emcee"""
 
 from astropy.io import ascii
 import numpy as np
 from os.path import exists
 import sys
+
 
 def get_obs(bean, logger, alpha, fluen, pflux):
     """
@@ -36,16 +37,16 @@ def get_obs(bean, logger, alpha, fluen, pflux):
     | start time of obs
     | stop time of obs (both in MJD)
 
-    bc is the bolometric correction to convert the persistent fluxes (e.g.
+    bol_c is the bolometric correction to convert the persistent fluxes (e.g.
     from the 3-25keV range used for MINBAR) into bolometric estimates.
 
     In the earlier version of this routine we passed the parameters
-    ref_ind, bc, obsname, burstname, gtiname, and returned x, y, yerr,
+    ref_ind, bol_c, obsname, burstname, gtiname, and returned x, y, yerr,
     tref, bstart, pflux, pfluxe, tobs, fluen, fluen_err, and optionally
     st, et; but now we just get the required parameters from the Beans
     object (bean), and set the attributes directly
 
-    :param bean: Beans object from which ref_ind, bc, obsname,
+    :param bean: Beans object from which ref_ind, bol_c, obsname,
       burstname & gtiname will be used to find the input data
     :param logger: logger object to display information, errors etc.
     :param alpha: set to True to include the alphas in the
@@ -71,45 +72,52 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             logger.error("burst data file {} not found".format(bean.burstname))
             return False
 
-        burstdata = ascii.read(bean.burstname, format='tab', header_start=None, data_start=0)
+        burstdata = ascii.read(
+            bean.burstname, format="tab", header_start=None, data_start=0
+        )
         _n_cols = len(burstdata.columns)
-        assert (_n_cols >=5) or ((bean.obsname is None) & (_n_cols >=9))
+        assert (_n_cols >= 5) or ((bean.obsname is None) & (_n_cols >= 9))
 
         # Get the burst time, fluence, peak flux and alpha arrays:
 
-        bean.bstart = np.array(burstdata['col1'])
-        bean.tdel = (bean.bstart[1:]-bean.bstart[:-1])*24.
+        bean.bstart = np.array(burstdata["col1"])
+        bean.tdel = (bean.bstart[1:] - bean.bstart[:-1]) * 24.0
         bean.numburstsobs = len(bean.bstart)
         bean.cmpr_fluen = fluen
-        bean.fluen = np.array(burstdata['col2'])
-        bean.fluene = np.array(burstdata['col3'])
-        bean.ifluen = bean.fluen > 0.
+        bean.fluen = np.array(burstdata["col2"])
+        bean.fluene = np.array(burstdata["col3"])
+        bean.ifluen = bean.fluen > 0.0
         bean.cmpr_alpha = alpha
         bean.cmpr_pflux = pflux
         # new capability with optional peak fluxes
         bean.non_pre, bean.pre = [], []
         if (_n_cols >= 7) & (bean.obsname is not None):
-            bean.bpflux = np.array(burstdata['col4'])
-            bean.bpfluxe = np.array(burstdata['col5'])
-            bean.pre_flag = np.array(burstdata['col6'])
+            bean.bpflux = np.array(burstdata["col4"])
+            bean.bpfluxe = np.array(burstdata["col5"])
+            bean.pre_flag = np.array(burstdata["col6"])
             # when originally implemented these two arrays were only set if cmpr_pflux also was set
             # could implement the MINBAR definitions for the PRE flag here
             bean.non_pre = np.where((bean.pre_flag == 1) & (bean.bpflux > 0.0))[0]
             bean.pre = np.where((bean.pre_flag == 2) & (bean.bpflux > 0.0))[0]
-            bean.alpha = np.array(burstdata['col7'])
-            bean.alphae = np.array(burstdata['col8'])
+            bean.alpha = np.array(burstdata["col7"])
+            bean.alphae = np.array(burstdata["col8"])
         else:
-            bean.bpflux, bean.bpfluxe = np.zeros(bean.numburstsobs), np.zeros(bean.numburstsobs)
+            bean.bpflux, bean.bpfluxe = (
+                np.zeros(bean.numburstsobs),
+                np.zeros(bean.numburstsobs),
+            )
             bean.cmpr_pflux = False
-            bean.alpha = np.array(burstdata['col4'])
-            bean.alphae = np.array(burstdata['col5'])
+            bean.alpha = np.array(burstdata["col4"])
+            bean.alphae = np.array(burstdata["col5"])
         if np.any(~bean.ifluen):
-            if np.any(bean.alpha[~bean.ifluen] > 0.):
-                logger.warning('nonzero alphas despite missing fluences will be ignored in fit')
+            if np.any(bean.alpha[~bean.ifluen] > 0.0):
+                logger.warning(
+                    "nonzero alphas despite missing fluences will be ignored in fit"
+                )
         bean.ifluen = np.where(bean.ifluen)[0]
 
     else:
-        logger.warning('skipping read of burst data, assuming no bursts observed')
+        logger.warning("skipping read of burst data, assuming no bursts observed")
         bean.numburstsobs = 0
         # if there's no burst data, define the start time as the first observation instead
 
@@ -121,35 +129,36 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             logger.error("observation file {} not found".format(bean.obsname))
             return False
 
-        obsdata = ascii.read(bean.obsname)# format='tab', header_start=None, data_start=0)
-        ta_1 = obsdata['col1']
-        ta_2 = obsdata['col2']
+        obsdata = ascii.read(
+            bean.obsname
+        )  # format='tab', header_start=None, data_start=0)
+        ta_1 = obsdata["col1"]
+        ta_2 = obsdata["col2"]
 
         ssa_1 = ta_1
         ssa_2 = ta_2
 
-        tobs = 0.5*(ta_1 + ta_2) # get the average of the start and stop times
+        tobs = 0.5 * (ta_1 + ta_2)  # get the average of the start and stop times
         tobs = np.array(tobs)
-        tobs_err = 0.5*(ta_2-ta_1) #calculate an error
+        tobs_err = 0.5 * (ta_2 - ta_1)  # calculate an error
         tobs_err = np.array(tobs_err)
-        pflux = np.array(obsdata['col3'])
-        pfluxe = np.array(obsdata['col4'])
+        pflux = np.array(obsdata["col3"])
+        pfluxe = np.array(obsdata["col4"])
 
         # Check the arrays are sorted here
         _i = np.argsort(tobs)
         if not np.all(_i == np.arange(len(tobs))):
-            logger.warning('input observation data is not sorted, fixing')
+            logger.warning("input observation data is not sorted, fixing")
             tobs = tobs[_i]
             pflux = pflux[_i]
             pfluxe = pfluxe[_i]
 
         # Bolometric correction:
 
-        bean.pflux = pflux * bean.bc
-        bean.pfluxe = pfluxe * bean.bc
+        bean.pflux = pflux * bean.bol_c
+        bean.pfluxe = pfluxe * bean.bol_c
 
         if bean.burstname is not None:
-
             # Define reference time as day of first burst/epoch, or day of
             # first observation, unless it's already been defined (e.g. read
             # in from the config file)
@@ -158,9 +167,8 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             # to specify the value in the config file
             # bstart0 = bstart[0]
 
-            if not hasattr(bean, 'tref'):
-                bean.tref = np.min([np.floor(bean.bstart[0]),
-                    np.floor(np.min(ta_1))])
+            if not hasattr(bean, "tref"):
+                bean.tref = np.min([np.floor(bean.bstart[0]), np.floor(np.min(ta_1))])
 
             # We're using the start time in the MCMC so have to assign an error
             # This parameter is not returned to the init func, except
@@ -170,8 +178,8 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             # bstart = bstart - bstart0
             bean.bstart = bean.bstart - bean.tref
 
-	    # Set the y and yerr arrays (previously obs, obs_err), which
-	    # are what the MCMC code uses for comparison
+            # Set the y and yerr arrays (previously obs, obs_err), which
+            # are what the MCMC code uses for comparison
             # always exclude the first alpha because we do not know
             # the recurrence time of the first burst to calculate this
 
@@ -179,10 +187,16 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             bean.yerr = bstart_err
             if bean.cmpr_fluen:
                 bean.y = np.concatenate((bean.y, bean.fluen[bean.ifluen]), axis=0)
-                bean.yerr = np.concatenate((bean.yerr, bean.fluene[bean.ifluen]), axis=0)
+                bean.yerr = np.concatenate(
+                    (bean.yerr, bean.fluene[bean.ifluen]), axis=0
+                )
             if bean.cmpr_alpha:
-                bean.y = np.concatenate((bean.y, bean.alpha[1:][bean.ifluen[1:]-1]), axis=0)
-                bean.yerr = np.concatenate((bean.yerr, bean.alphae[1:][bean.ifluen[1:]-1]), axis=0)
+                bean.y = np.concatenate(
+                    (bean.y, bean.alpha[1:][bean.ifluen[1:] - 1]), axis=0
+                )
+                bean.yerr = np.concatenate(
+                    (bean.yerr, bean.alphae[1:][bean.ifluen[1:] - 1]), axis=0
+                )
 
             # originally we deleted the reference time, but because it will not contribute to the likelihood
             # (it's copied to the model array) we can leave it in
@@ -192,42 +206,57 @@ def get_obs(bean, logger, alpha, fluen, pflux):
             bean.ly = len(bean.y)
             assert bean.ly == len(bean.yerr)
 
-            print("""
+            print(
+                """
 Burst data read from {}:
   {} bursts ({} fluences, {} peak fluxes & {} alphas) between
-  MJD {}-{}""".format(bean.burstname,
-len(bean.bstart), sum(bean.fluen > 0.), sum(bean.bpflux > 0), sum(bean.alpha > 0),
-min(bean.bstart)+bean.tref, max(bean.bstart)+bean.tref))
+  MJD {}-{}""".format(
+                    bean.burstname,
+                    len(bean.bstart),
+                    sum(bean.fluen > 0.0),
+                    sum(bean.bpflux > 0),
+                    sum(bean.alpha > 0),
+                    min(bean.bstart) + bean.tref,
+                    max(bean.bstart) + bean.tref,
+                )
+            )
 
         else:
             # if there's no burst data, define the tref in a different way
             # (time of peak of outburst)
-            if not hasattr(bean, 'tref'):
+            if not hasattr(bean, "tref"):
                 bean.tref = tobs[np.argmax(bean.pflux)]
             # bstart0 = tobs[np.argmax(pflux)]
 
             bean.bstart, bean.fluen, bean.y, bean.yerr = None, None, None, None
             # bstart0 = min(tobs)
 
-        print("""
+        print(
+            """
 Observation data read from {}:
   {} persistent flux measurements covering
-  MJD {}-{}, {:.2f}% duty cycle\n""".format(bean.obsname, len(tobs),
-           min(ta_1), max(ta_2), np.sum((ta_2-ta_1))/(max(ta_2)-min(ta_1))*100))
+  MJD {}-{}, {:.2f}% duty cycle\n""".format(
+                bean.obsname,
+                len(tobs),
+                min(ta_1),
+                max(ta_2),
+                np.sum((ta_2 - ta_1)) / (max(ta_2) - min(ta_1)) * 100,
+            )
+        )
 
     else:
         # If there's no observation data that indicates an "ensemble" mode run
-	# Here we define some additional/alternate parameters for the
-	# "ensemble" mode run
+        # Here we define some additional/alternate parameters for the
+        # "ensemble" mode run
         # Note that no bolometric correction is applied to the persistent
         # fluxes, they're assumed bolometric
 
-        tobs = burstdata['col1']
+        tobs = burstdata["col1"]
         tobs_err = np.ones(len(tobs)) * 0.5
-        bean.pflux = np.array(burstdata['col6'])
-        bean.pfluxe = np.array(burstdata['col7'])
-        bean.tdel = np.array(burstdata['col8'])
-        bean.tdele = np.array(burstdata['col9'])
+        bean.pflux = np.array(burstdata["col6"])
+        bean.pfluxe = np.array(burstdata["col7"])
+        bean.tdel = np.array(burstdata["col8"])
+        bean.tdele = np.array(burstdata["col9"])
 
         bean.numburstssim = len(tobs)
 
@@ -235,18 +264,25 @@ Observation data read from {}:
 
         bean.cmpr_pflux = False
 
-        print ("""
+        print(
+            """
 Burst ensemble data read from {}:
   {} burst recurrence times ({} fluences & {} alphas) between
-  MJD {}-{}\n""".format(bean.burstname,
-len(bean.tdel), sum(bean.fluen > 0.), sum(bean.alpha > 0),
-min(tobs), max(tobs)))
+  MJD {}-{}\n""".format(
+                bean.burstname,
+                len(bean.tdel),
+                sum(bean.fluen > 0.0),
+                sum(bean.alpha > 0),
+                min(tobs),
+                max(tobs),
+            )
+        )
 
-        if not hasattr(bean, 'tref'):
-            bean.tref = 0.
+        if not hasattr(bean, "tref"):
+            bean.tref = 0.0
 
-	# Set the y and yerr arrays (previously obs and obs_err), which
-	# are what the MCMC code uses for comparison
+        # Set the y and yerr arrays (previously obs and obs_err), which
+        # are what the MCMC code uses for comparison
 
         if bean.cmpr_fluen:
             bean.y = np.concatenate((bean.tdel, bean.fluen), axis=0)
@@ -267,7 +303,6 @@ min(tobs), max(tobs)))
 
     gti_checking = bean.gtiname is not None
     if gti_checking:
-
         # Read in the gtis (required arrays are st (start time) and et (end time) of times telescope IS observing (indexes need to match)
         # gtis should be in MJD
         if not exists(bean.gtiname):
@@ -277,8 +312,8 @@ min(tobs), max(tobs)))
         gtidata = np.loadtxt(bean.gtiname)
 
         # Now extract and scale gti data:
-        bean.st = np.array(gtidata[:,0])-bean.tref
-        bean.et = np.array(gtidata[:,1])-bean.tref
+        bean.st = np.array(gtidata[:, 0]) - bean.tref
+        bean.et = np.array(gtidata[:, 1]) - bean.tref
         # st = st-bstart0
         # et = et-bstart0
 
@@ -286,10 +321,12 @@ min(tobs), max(tobs)))
 
     elif bean.train:
         # only relevant to bursttrain mode
-        logger.info("you have not supplied a GTI file, so no GTI checking will be performed.")
+        logger.info(
+            "you have not supplied a GTI file, so no GTI checking will be performed."
+        )
 
         bean.st, bean.et = None, None
 
-    logger.info ("... done.")
+    logger.info("... done.")
 
-    return True # bstart0, bstart, fluen, fluene, obs, obs_err, pflux, pfluxe, tobs
+    return True  # bstart0, bstart, fluen, fluene, obs, obs_err, pflux, pfluxe, tobs

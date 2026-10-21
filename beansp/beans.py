@@ -679,7 +679,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # define theta_in = model parameters, which we define priors for
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bc][len(extra) :]
+    mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bol_c][len(extra) :]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -1274,9 +1274,9 @@ class Beans:
         self.gtiname = gtiname
         self.ref_ind = ref_ind
         if 8 < len(theta) < 10:
-            self.bc = theta[8]  # Bolometric correction is 9th value in theta
+            self.bol_c = theta[8]  # Bolometric correction is 9th value in theta
         else:
-            self.bc = bc  # Bolometric correction is 9th value in theta, default 1.0
+            self.bol_c = bc  # Bolometric correction is 9th value in theta, default 1.0
         self.continuous = continuous
         # the original "train" model generates a continuous train of
         # bursts covering the entire history
@@ -1559,7 +1559,7 @@ Initial parameters:
             "" if self.valid else "\n** WARNING ** object is not valid, check params\n",
             self.run_id,
             "Observation data file: {}\n  bolometric correction: {}\n".format(
-                self.obsname, self.bc
+                self.obsname, self.bol_c
             )
             if self.train
             else "",
@@ -1707,7 +1707,7 @@ Initial parameters:
                 # These parameters only used for "train" mode
                 Config.set("data", "tref", str(self.tref))
                 Config.set("data", "ref_ind", str(self.ref_ind))
-                Config.set("data", "bc", str(self.bc))
+                Config.set("data", "bc", str(self.bol_c))
                 Config.set("data", "interp", str(self.interp))
                 if self.interp == "spline":
                     Config.set("data", "smooth", str(self.smooth))
@@ -1888,7 +1888,7 @@ Initial parameters:
                 * dist**2
                 * xi_p
                 * opz**2
-                * self.bc
+                * self.bol_c
                 / (radius**2 * (opz - 1))
                 / _mdot_Edd
             )
@@ -2328,10 +2328,10 @@ Initial parameters:
             "{}Persistent fluxes from {}{}".format(
                 _comm,
                 self.obsname if self.obsname is not None else self.burstname,
-                ", interp={}{}, bc={}".format(
+                ", interp={}{}, bol_c={}".format(
                     self.interp,
                     ("" if self.smooth is None else ", smooth={}".format(self.smooth)),
-                    self.bc,
+                    self.bol_c,
                 )
                 if self.train
                 else "",

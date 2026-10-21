@@ -168,7 +168,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, bol_c, f_t = (
-        extra + [bean.M_NS, bean.R_NS, bean.bc, 1.0][len(extra) :]
+        extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
     )
 
     # by default we assume the model is valid, i.e. has sufficient bursts
