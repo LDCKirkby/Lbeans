@@ -756,7 +756,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, bol_c, f_t = (
-        extra + [bean.M_NS, bean.R_NS, bean.b_c, 1.0][len(extra) :]
+        extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
     )
 
     # call model (function runmodel, in run_model.py) to generate the burst
