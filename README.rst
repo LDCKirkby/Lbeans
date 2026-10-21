@@ -20,7 +20,7 @@ Bayesian Estimation of Accreting Neutron Star parameters
 
 * Free software: MIT license
 * Documentation: https://beans-7.readthedocs.io/en/latest/
-* Repo: https://github.com/adellej/beans
+* Repo: https://github.com/LDCKirkby/Lbeans
 
 
 Features
@@ -37,8 +37,7 @@ beansp makes use of Dan Foreman-Mackey's Python implementation of MCMC, emcee, a
 
 Credits
 -------
-
-Software written by Adelle Goodwin and Duncan Galloway; for a full
+Fork of software written by Adelle Goodwin and Duncan Galloway; for a full
 description see Goodwin et al.
 (`MNRAS 490, 2228, 2019 <https://doi.org/10.1093/mnras/stz2638>`_ or
 preprint at `arXiv:1907.00996 <https://arxiv.org/pdf/1907.00996>`_).
@@ -50,26 +49,10 @@ The algorithm was first described in Galloway & Cumming
 original code written by Andrew Cumming and available at
 https://github.com/andrewcumming/settle
 
-Package installation and usage
-------------------------------
-BEANSp is on pyPI (https://pypi.org/project/beansp/) so installation is
-easy - either system-wide, or in virtual environment:
-
-.. code-block:: console
-   
-    pip install beansp
-  
-You can then import the main ``Beans`` module as follows:
-   
-.. code-block:: python
-   
-    from beansp import Beans 
-
-(Please refer to `this simple test script <https://github.com/adellej/beans/blob/master/tests/test_sft_beans.py>`_ as an example.)
 
 Build and installation from this github repository
 --------------------------------------------------
 
-Please refer to `build instructions <https://github.com/adellej/beans/blob/master/BUILD.rst>`_.
+Please refer to `build instructions <https://github.com/LDCKirkby/Lbeans/blob/master/BUILD.rst>`_.
 
 
