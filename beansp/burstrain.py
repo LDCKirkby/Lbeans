@@ -583,7 +583,7 @@ def generate_burst_train(
     else:
         # In the absence of any bursts, set the reference time to ref_ind
         # (can be any time within the outburst)
-        # TODO check if this is consistent with the usage for initial
+        # TODO: check if this is consistent with the usage for initial
         # value of earliest/latest below; not sure of the use case
         # sbt = 0.0
         sbt = bean.ref_ind

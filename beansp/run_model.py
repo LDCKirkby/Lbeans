@@ -166,10 +166,16 @@ def runmodel(theta_in, bean, match=True, debug=False):
     if debug:
         print("Calling runmodel")
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c, f_t = (
-        extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
-    )
+    # Theta_in needs to be a dictionary when passed to this function
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    bol_c = theta_in["bc"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    f_t = theta_in["f_t"]
 
     # by default we assume the model is valid, i.e. has sufficient bursts
     # to match the observations, AND doesn't violate the GTI conditions

@@ -103,7 +103,7 @@ L_EDD_ERR = 1.6e38 * u.erg / u.s
 BILBY_OUTPUT = "bilby_out"
 
 # some parameter limits etc
-# current parameter list has at most 9 fit parameters:
+# current parameter list has at most 10 fit parameters:
 #
 # 1 = X hydrogen mass fraction (settle)
 # 2 = Z CNO element mass fraction (settle)
@@ -114,7 +114,7 @@ BILBY_OUTPUT = "bilby_out"
 # [optional]
 # 7 = M_NS neutron star mass [M_sun] (settle)
 # 8 = R_NS neutron star radius [km] (settle)
-# 9 = bc bolometric correction factor (diskmodel)
+# 9 = bol_c bolometric correction factor (diskmodel)
 # 10 = f_t systematic fractional variation in burst times
 
 # utility dicts etc. for parameter labels
@@ -191,7 +191,7 @@ from .analyse import get_param_uncert_part, get_param_uncert
 # multiepoch_mcmc is required to use the grid_interp model
 has_multiepoch_mcmc = True
 try:
-    # TODO perhaps pull the path from an environment variable instead
+    # TODO: perhaps pull the path from an environment variable instead
     sys.path.append("/Users/duncan/python/multiepoch_mcmc")
     from multiepoch_mcmc import grid_interpolator
 
@@ -324,7 +324,6 @@ def strmeas(val, err, err_hi=None, mask_str="--"):
 
 
 # Some example prior functions, or you can write your own for input to the code.
-
 # Define priors for theta. mr prior function is located in mrprior.py
 
 
@@ -349,6 +348,7 @@ def lnZprior(z):
     )
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_func(theta_in, latex=False):
     """
     This function is the default prior and implements a simple box prior
@@ -400,6 +400,7 @@ def prior_func(theta_in, latex=False):
         return -np.inf
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_kepler(theta_in, latex=False):
     """
     This function applies a more restrictive prior suitable for use with
@@ -451,7 +452,9 @@ def prior_kepler(theta_in, latex=False):
         return -np.inf
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_1820_30(theta_in):
+
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, bol_c, f_t = extra + [1.4, 10.5, 1.0, 1.0][len(extra) :]
 
@@ -507,6 +510,7 @@ def prior_1820_30(theta_in):
         return -np.inf
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_mr(theta_in, latex=False):
     """
     This function implements a simple box prior for all the parameters
@@ -554,6 +558,7 @@ def prior_mr(theta_in, latex=False):
         return -np.inf
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_1808(theta_in, latex=False):
     """
     This function implements a simple box prior for all the parameters
@@ -605,6 +610,7 @@ def prior_1808(theta_in, latex=False):
         return -np.inf
 
 
+# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_grid(theta_in, latex=False):
     """
     This function is to accompany grid_interp and implements a simple
@@ -679,6 +685,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
 
     # define theta_in = model parameters, which we define priors for
 
+    # FIX: This doesn't set theta_in to anything, it just defines variables from it that aren't used?
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bol_c][len(extra) :]
 
@@ -688,6 +695,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, self.y)
+    # TODO: Either change theta_in to dict before runmodel call, or within runmodel
     model, valid, model2 = runmodel(theta_in, self, debug=False)
     if not valid:
         return -np.inf, model
@@ -754,6 +762,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
 
     # define theta_in = model parameters, which we define priors for
 
+    # FIX: this doesn't set theta_in to anything, just assigns variables that are unused?
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, bol_c, f_t = (
         extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
@@ -765,6 +774,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, bean.y)
+    # TODO: Either change theta_in to dict before runmodel call, or within runmodel
     model, valid, model2 = runmodel(theta_in, bean)
     if not valid:
         return -np.inf, model
@@ -836,6 +846,50 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
 
     # Now also return the model
     return np.sum(cpts), model2
+
+
+# current parameter list:
+#
+# 1 = X hydrogen mass fraction (settle)
+# 2 = Z CNO element mass fraction (settle)
+# 3 = Q_b base flux [MeV/nucleon] (settle)
+# 4 = dist [kpc]
+# 5 = xi_b burst emission anisotropy (diskmodel)
+# 6 = xi_p persistent emission anisotropy (diskmodel)
+# [optional]
+# 7 = bc bolometric correction factor (diskmodel)
+# 8 = M_NS neutron star mass [M_sun] (settle)
+# 9 = R_NS neutron star radius [km] (settle)
+# 10 = f_t systematic fractional variation in burst times
+
+
+def dict_to_tuple(self, theta_in):
+    # Converts the theta dictionary to a tuple
+    # Needed because emcee requires theta as a tuple
+    tuple_order = self.tuple_order
+    # Extracts the parameters from theta and inputs them in the desired order
+    theta_list = []
+
+    for param in tuple_order:
+        theta_list.append(theta_in[param])
+    theta_tuple = tuple(theta_list)
+
+    return theta_tuple
+
+
+def tuple_to_dict(self, theta_in):
+    # Converts the theta tuple to dictionary
+    # Needed to compare tuple theta to input theta dictionary
+    theta_keys = self.theta_keys
+    tuple_order = self.tuple_order
+    theta_dict = dict.fromkeys(theta_keys)
+
+    i = 0
+    for param in tuple_order:
+        theta_dict[param] = theta_in[i]
+        i += 1
+
+    return theta_dict
 
 
 def corr_goodwin19(burst, **kwargs):
@@ -1123,7 +1177,18 @@ class Beans:
         interp="linear",
         smooth=0.02,
         model=settle,
-        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8, 1.0),
+        theta={
+            "X": 0.41,
+            "Z": 0.0151,
+            "Q_b": 0.6,
+            "d": 3.2,
+            "xi_b": 1.0,
+            "xi_p": 1.6,
+            "bc": 1.0,
+            "M_NS": 1.5,
+            "R_NS": 11.8,
+            "f_t": 1.0,
+        },
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1274,10 +1339,7 @@ class Beans:
         self.burstname = burstname
         self.gtiname = gtiname
         self.ref_ind = ref_ind
-        if 8 < len(theta) < 10:
-            self.bol_c = theta[8]  # Bolometric correction is 9th value in theta
-        else:
-            self.bol_c = bc  # Bolometric correction is 9th value in theta, default 1.0
+
         self.continuous = continuous
         # the original "train" model generates a continuous train of
         # bursts covering the entire history
@@ -1288,6 +1350,23 @@ class Beans:
             self.maxgap = maxgap
 
         self.theta = theta
+        # Define values for dictionary <-> tuple conversion
+        self.dict_keys = theta.keys()
+        self.tuple_order = list(theta.keys())
+        # TODO: add default theta dictionary & have it as None in function call?
+
+        # if type(theta) is dict:
+        #    self.dict_keys = theta.keys()
+        #    self.tuple_order = list(theta.keys())
+        # elif type(theta) is list:
+        #    if 8 < len(theta) < 10:
+        #        self.bol_c = theta[8]  # Bolometric correction is 9th value in theta
+        #    else:
+        #        self.bol_c = (
+        #            bc  # Bolometric correction is 9th value in theta, default 1.0
+        #        )
+        # else:
+        #    logger.error("Theta not in accepted format\n")
 
         self.numburstssim = numburstssim
         self.lnprior = prior
@@ -1366,7 +1445,7 @@ class Beans:
         # we want to record whether we're including systematic errors
         # here; previously this was via the (boolean) has_systematic
 
-        self.ndim = len(self.theta)
+        self.ndim = len(self.tuple_order)
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
             logger.error(
                 "number of dimensions of input parameter vector should be 6-10"
@@ -1923,6 +2002,7 @@ Initial parameters:
           (from :meth:`Beans.lnlike`)
         """
 
+        # TODO: Propagate theta dictionary change
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
         # the model run it if not
@@ -2783,7 +2863,7 @@ Initial parameters:
             # This is the original MCMC implementation for beansp, which uses vanilla emcee
             #   https://github.com/dfm/emcee
             # run the chains and save the output as a h5 file
-            # TODO to simplify the subsequent analysis I think this object should be added to the Beans object
+            # TODO: to simplify the subsequent analysis I think this object should be added to the Beans object
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
@@ -3376,7 +3456,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
 
         # have to duplicate the calculation of redshift and gravity here, as
         # those quantities are not saved to the samples
-        # TODO I think this really should be 7 below, as the (optional) 7 & 8th parameters are mass and radius; but they
+        # TODO: I think this really should be 7 below, as the (optional) 7 & 8th parameters are mass and radius; but they
         #   are always both present, so probably no issue
         if self.ndim >= 8:
             M = np.array(self.samples[:, 6]) * const.M_sun.to("g")  # cgs
@@ -3957,7 +4037,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 self.cc_nchain = 1  # initially
 
                 # common truths/title settings for all corner plots
-                # TODO need to trigger an update when new truths added (not
+                # TODO: need to trigger an update when new truths added (not
                 # just a different burnin)
 
         if truths != self.truths:
@@ -3987,7 +4067,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         # ---------------------------------------------------------------------#
         if "last" in options:
             # show likelihood contributions for last step
-            # TODO could also use the reader.get_last_sample method, at
+            # TODO: could also use the reader.get_last_sample method, at
             # least for p_tot, but this won't give you the likelihood
             # contributions. It does include as the 4th element the prior
             # and model realisations (blobs) though
@@ -4256,7 +4336,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         # ---------------------------------------------------------------------#
         if "converge" in options:
             # do the summary plot, comparing the two halves of the burnin
-            # TODO convert the statements below to the new syntax for ChainConsumer
+            # TODO: convert the statements below to the new syntax for ChainConsumer
 
             _cc = ChainConsumer()
             _n = int(np.shape(self.samples)[0] / 2)
@@ -4332,7 +4412,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 # This approach is not perfect, as some solutions with different
                 # numbers of bursts have the same imatch, so are effectively
                 # equivalent;
-                # TODO should combine the matching section in the plot segment
+                # TODO: should combine the matching section in the plot segment
                 # with this analysis, along with checks to combine solutions
                 # with different burst numbers but the same imatch
 
@@ -4357,7 +4437,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 # predcted fluences and alphas, for comparison with the observations
                 # this calculation replicates what's in runmodel
 
-                # TODO avoid repeating conversion to observed quantities by storing them in the model
+                # TODO: avoid repeating conversion to observed quantities by storing them in the model
                 # this fails with inhomogeneous arrays; need to do something
                 # a bit more complicated
                 # fpred = (np.array(e_b).T*self.fluen_fac/np.array(xib)/np.array(distance)**2).T
@@ -4536,7 +4616,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
             # plt.axis([0.,2.1,0.,2.1])
             plt.axis([0.0, max(np.append(self.samples[:, 5], 2.1)), 0.0, 2.0])
 
-            # TODO check these commands for consistency with the other plots
+            # TODO: check these commands for consistency with the other plots
             # plt.xticks(fontsize=12)
             # plt.yticks(fontsize=12)
 
@@ -5083,7 +5163,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         self.cc = ChainConsumer()
         # augment with some additional parameters, e.g. as used in the
         # 1826 work
-        # TODO probably should check if these have already been added
+        # TODO: probably should check if these have already been added
         self.cc_parameters += ["dxi_b", "xi_p/xi_b"]
         _samples = np.column_stack(
             (
@@ -5132,7 +5212,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 )
                 # shape is (nwalkers, nsteps, ndim)
                 assert np.shape(chain)[2] == 12  # won't work for the other files
-                # TODO need to make this burnin consistent with the main code, i.e. allowing negative values
+                # TODO: need to make this burnin consistent with the main code, i.e. allowing negative values
                 if burnin is not None:
                     chain_flat = chain[:, burnin:, :].reshape((-1, 12))
                 else:

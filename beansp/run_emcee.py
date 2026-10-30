@@ -43,7 +43,7 @@ def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
     return list(pos)
 
 
-# TODO add bolometric correction to the runemcee function, so that it can be passed to lnprob and prior, and then to settle
+# TODO: add bolometric correction to the runemcee function, so that it can be passed to lnprob and prior, and then to settle
 def runemcee(
     nwalkers,
     nsteps,
@@ -82,7 +82,7 @@ def runemcee(
     :param stretch_a: the Goodman & Weare (2010) stretch move scale parameter
     """
 
-    ndim = len(theta)
+    ndim = len(theta.keys())
 
     conv_check_interval = 100
 
@@ -136,6 +136,8 @@ def runemcee(
 
     # implement multiprocessing following the simple example here:
     # https://emcee.readthedocs.io/en/stable/tutorials/parallel
+    # TODO: Check that emcee is recieving a tuple by the time it is doing its steps.
+    # Theta can still be a dict at this point if the conversion is happening within lnprob function
     with Pool(processes=threads) as pool:
         sampler = emcee.EnsembleSampler(
             nwalkers,
@@ -170,7 +172,7 @@ def runemcee(
             # set the intial position of the walkers
             # pos = [theta + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
             pos = set_initial_positions(theta, nwalkers, prior)
-            # TODO check that bc works in this
+            # TODO: Theta can be a dict here if it is converted to a tuple in the prior
 
         print(
             "# ---------------------------------------------------------------------------#"
