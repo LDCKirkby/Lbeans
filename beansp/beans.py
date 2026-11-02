@@ -356,8 +356,8 @@ def prior_func(theta_in, latex=False):
     times is limited to 10, which gives a maximum absolute error on the
     times of 10*BSTART_ERR = 100 min
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius*, *b_c* & *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius*, *b_c* & *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -377,8 +377,16 @@ def prior_func(theta_in, latex=False):
             "$U[1,10]$",
         ]
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c, f_t = extra + [M_NS, R_NS, 1.0, b_c][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -409,8 +417,8 @@ def prior_kepler(theta_in, latex=False):
 
     Otherwise identical to :func:`beans.prior_func`;
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius* & *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -429,9 +437,16 @@ def prior_kepler(theta_in, latex=False):
             "$U[9,17]$",
             "$U[1,10]$",
         ]
-
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -453,10 +468,19 @@ def prior_kepler(theta_in, latex=False):
 
 
 # TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
-def prior_1820_30(theta_in):
+def prior_1820_30(theta_in, latex=False):
+    theta_dict = tuple_to_dict(theta_in,theta_order,theta_keys)
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c, f_t = extra + [1.4, 10.5, 1.0, 1.0][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -517,8 +541,8 @@ def prior_mr(theta_in, latex=False):
     excluding mass and radius, which comes instead from
     :meth:`Beans.mr_prior` as also used for prior_1808.
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, *mass*, *radius*, and (optionally) *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius*, *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -538,8 +562,16 @@ def prior_mr(theta_in, latex=False):
             "$U[1,10]$",
         ]
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -569,8 +601,8 @@ def prior_1808(theta_in, latex=False):
     This prior is explicitly intended for use with SAX J1808.4-3658, and
     should only be used with extreme caution in other cases!
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, *mass*, *radius*, and (optionally) *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius*, *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -590,8 +622,16 @@ def prior_1808(theta_in, latex=False):
             "$U[1,10]$",
         ]
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -618,8 +658,8 @@ def prior_grid(theta_in, latex=False):
 
     Otherwise identical to :func:`beans.prior_func`;
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius* & *f_t*
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -642,8 +682,16 @@ def prior_grid(theta_in, latex=False):
     c = const.c.to("cm s-1")
     G = const.G.to("cm3 g-1 s-2")
 
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
 
     R = radius * 1e5 * u.cm  # cgs
     M = mass * const.M_sun.to("g")  # cgs
@@ -674,8 +722,8 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     burst train, or a set of runs for "ensemble" mode. Then extracts the
     relevant model outputs and calculates the likelihood.
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p* and (optionally) *mass*, *radius* and *b_c*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius* and *b_c*
     :param x: the "independent" variable, passed to lnlike
     :param y: the "dependent" variable (i.e. measurements), passed to lnlike
     :param yerr: error estimates on y
@@ -683,12 +731,16 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     :return: likelihood, model result array
     """
 
-    # define theta_in = model parameters, which we define priors for
-
-    # FIX: This doesn't set theta_in to anything, it just defines variables from it that aren't used?
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bol_c][len(extra) :]
-
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
     # the corresponding IDL function was defined as
@@ -751,7 +803,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     factor for the burst times. If you want to run with that
     you need to swap this function out for :meth:`Beans.lnlike` in :meth:`Beans.lnprob`
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
       *xi_p*, and (optionally) *mass*, *radius*, *f_t* & *b_c*
     :param x: the "independent" variable, passed to lnlike
     :param y: the "dependent" variable (i.e. measurements), passed to lnlike
@@ -760,14 +812,18 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     :return: likelihood, model result array
     """
 
+    X = theta_in["X"]
+    Z = theta_in["Z"]
+    Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
+    xi_b = theta_in["xi_b"]
+    xi_p = theta_in["xi_p"]
+    mass = theta_in["M_NS"]
+    radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
+    f_t = theta_in["f_t"]
+
     # define theta_in = model parameters, which we define priors for
-
-    # FIX: this doesn't set theta_in to anything, just assigns variables that are unused?
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, bol_c, f_t = (
-        extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
-    )
-
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
     # the corresponding IDL function was defined as
@@ -848,48 +904,30 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     return np.sum(cpts), model2
 
 
-# current parameter list:
-#
-# 1 = X hydrogen mass fraction (settle)
-# 2 = Z CNO element mass fraction (settle)
-# 3 = Q_b base flux [MeV/nucleon] (settle)
-# 4 = dist [kpc]
-# 5 = xi_b burst emission anisotropy (diskmodel)
-# 6 = xi_p persistent emission anisotropy (diskmodel)
-# [optional]
-# 7 = bc bolometric correction factor (diskmodel)
-# 8 = M_NS neutron star mass [M_sun] (settle)
-# 9 = R_NS neutron star radius [km] (settle)
-# 10 = f_t systematic fractional variation in burst times
-
-
-def dict_to_tuple(self, theta_in):
+def dict_to_tuple(dict_in, tuple_order):
     # Converts the theta dictionary to a tuple
     # Needed because emcee requires theta as a tuple
-    tuple_order = self.tuple_order
     # Extracts the parameters from theta and inputs them in the desired order
-    theta_list = []
+    dict_list = []
 
     for param in tuple_order:
-        theta_list.append(theta_in[param])
-    theta_tuple = tuple(theta_list)
+        dict_list.append(dict_in[param])
+    dict_tuple = tuple(dict_list)
 
-    return theta_tuple
+    return dict_tuple
 
 
-def tuple_to_dict(self, theta_in):
+def tuple_to_dict(tuple_in, tuple_order, dict_keys):
     # Converts the theta tuple to dictionary
     # Needed to compare tuple theta to input theta dictionary
-    theta_keys = self.theta_keys
-    tuple_order = self.tuple_order
-    theta_dict = dict.fromkeys(theta_keys)
+    tuple_dict = dict.fromkeys(dict_keys)
 
     i = 0
     for param in tuple_order:
-        theta_dict[param] = theta_in[i]
+        tuple_dict[param] = tuple_in[i]
         i += 1
 
-    return theta_dict
+    return tuple_dict
 
 
 def corr_goodwin19(burst, **kwargs):
@@ -1177,18 +1215,9 @@ class Beans:
         interp="linear",
         smooth=0.02,
         model=settle,
-        theta={
-            "X": 0.41,
-            "Z": 0.0151,
-            "Q_b": 0.6,
-            "d": 3.2,
-            "xi_b": 1.0,
-            "xi_p": 1.6,
-            "bc": 1.0,
-            "M_NS": 1.5,
-            "R_NS": 11.8,
-            "f_t": 1.0,
-        },
+        vary=None,
+        fixed=None,
+        #theta=None,
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1227,9 +1256,8 @@ class Beans:
           'linear', or 'spline'
         :param smooth: smoothing factor for spline interpolation
         :param model: burst model to use, one of settle or grid_interp
-        :param theta: initial centroid values for walker model parameters, with
-          *X*, *Z*, *Q_b*, *d*, *xi_b*, *xi_p*, and (optionally) *mass*,
-          *radius*, *b_c* & *f_t*
+        :param vary: initial centroid values for walker model parameters that will be stepped by sampler, with *X*, *Z*, *Q_b*, *d*, *xi_b*, *xi_p*, and (optionally) *mass*, *radius*, *bol_c*, & *f_t*
+        :param fixed: initial centroid values for walker model parameters that will be fixed during steps, with *X*, *Z*, *Q_b*, *d*, *xi_b*, *xi_p*, and (optionally) *mass*, *radius*, *bol_c*, & *f_t*, cannot have the same keys as vary
         :param fluen: set to True (default) to include the fluences in the
           data for comparison, or False to omit
         :param alpha: set to True to include the alphas in the
@@ -1349,24 +1377,45 @@ class Beans:
             self.train_model = punkt_train
             self.maxgap = maxgap
 
-        self.theta = theta
-        # Define values for dictionary <-> tuple conversion
-        self.dict_keys = theta.keys()
-        self.tuple_order = list(theta.keys())
-        # TODO: add default theta dictionary & have it as None in function call?
+        #Initialise the theta dictionary, which contains the initial model parameters
 
-        # if type(theta) is dict:
-        #    self.dict_keys = theta.keys()
-        #    self.tuple_order = list(theta.keys())
-        # elif type(theta) is list:
-        #    if 8 < len(theta) < 10:
-        #        self.bol_c = theta[8]  # Bolometric correction is 9th value in theta
-        #    else:
-        #        self.bol_c = (
-        #            bc  # Bolometric correction is 9th value in theta, default 1.0
-        #        )
-        # else:
-        #    logger.error("Theta not in accepted format\n")
+        #Uses default if not specified
+        if vary is None and fixed is None:
+            theta = {
+            "X": 0.41,
+            "Z": 0.0151,
+            "Q_b": 0.6,
+            "d": 3.2,
+            "xi_b": 1.0,
+            "xi_p": 1.6,
+            "bol_c": 1.0,
+            "M_NS": 1.5,
+            "R_NS": 11.8,
+            "f_t": 1.0,}
+        elif vary is not dict:
+            logger.error("vary not in accepted format\n")
+            return
+        elif fixed is not dict:
+            logger.error("fixed not in accepted format\n")
+            return
+
+        #Required parameters are checked, if any are missing, set to default values
+        for key in ["X", "Z", "Q_b", "d", "xi_b", "xi_p", "bol_c", "M_NS", "R_NS", "f_t"]:
+            if key not in vary.keys() or key not in fixed.keys():
+                logger.warning(f"Missing required parameter {key} in input dictionaries, using default value")
+                fixed[key] = {"X": 0.41, "Z": 0.0151, "Q_b": 0.6, "d": 3.2, "xi_b": 1.0, "xi_p": 1.6, "bol_c":1.0, "M_NS":1.5, "R_NS":11.8, "f_t":1.0}[key]
+
+        theta = {**vary, **fixed}  # Merge the two dictionaries, with fixed values overriding vary if there are duplicates
+
+        self.vary = vary
+        self.vary_keys = vary.keys()
+        self.vary.order = list(vary.keys())
+        self.fixed = fixed
+        self.fixed_keys = fixed.keys()
+        self.fixed_order = list(fixed.keys())
+        self.theta = theta
+        self.theta_keys = theta.keys()
+        self.theta_order = list(theta.keys())
 
         self.numburstssim = numburstssim
         self.lnprior = prior
@@ -1445,7 +1494,7 @@ class Beans:
         # we want to record whether we're including systematic errors
         # here; previously this was via the (boolean) has_systematic
 
-        self.ndim = len(self.tuple_order)
+        self.ndim = len(self.theta_order)
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
             logger.error(
                 "number of dimensions of input parameter vector should be 6-10"
@@ -1579,7 +1628,7 @@ class Beans:
             logger.error("need to include fluences as well as alphas")
             return
 
-        if self.lnprior(self.theta) == -np.inf:
+        if self.lnprior(dict_to_tuple(self.theta, self.theta_order) == -np.inf:
             logger.error("supplied parameter vector is excluded by the prior")
             return
 
@@ -1980,7 +2029,7 @@ Initial parameters:
     # Finally we combine the likelihood and prior into the overall lnprob function, called by emcee
 
     # define lnprob, which is the full log-probability function
-    def lnprob(self, theta_in, x, y, yerr):
+    def lnprob(self, vary, x, y, yerr):
         """
         The full log-probability function incorporating the priors (via
         the ``Beans.lnprior`` attribute), and model likelihood (via
@@ -1991,7 +2040,7 @@ Initial parameters:
         functions that can be modified, and the theta_in is not unpacked
         here, so you can add your own combinations to customise the code
 
-        :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+        :param vary: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
           *xi_p*, *mass*, *radius*, *bol_c* and (optionally) *f_t*
         :param x: the "independent" variable, passed to :meth:`Beans.lnlike`
         :param y: the "dependent" variable (i.e. measurements), passed to
@@ -2002,6 +2051,8 @@ Initial parameters:
           (from :meth:`Beans.lnlike`)
         """
 
+        vary_dict = tuple_to_dict(vary, self.vary_order, self.vary_keys):
+        theta_in = {**vary_dict, **self.fixed}
         # TODO: Propagate theta dictionary change
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
@@ -2867,7 +2918,9 @@ Initial parameters:
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
-                self.theta,
+                #self.theta,
+                self.vary,
+                self.fixed,
                 self.lnprob,
                 self.lnprior,
                 None,

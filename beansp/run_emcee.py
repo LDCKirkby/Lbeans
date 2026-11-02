@@ -7,21 +7,21 @@ import time
 import h5py
 
 
-def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
+def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     """
-    Distribute the initial positions for the walkers around the supplied theta value,
+    Distribute the initial positions for the walkers around the supplied vary value,
     making sure they're consistent with the prior
 
-    :param theta: desired centroid for walker parameters
+    :param vary: desired centroid for walker parameters
     :param nwalkers: number of initial positions to generate
     :param prior: prior function adopted
     :param scale: Gaussian spread of the values in each dimension
 
     :return: list of nwalkers positions
     """
-
-    ndim = len(theta)
-    pos = np.array([theta + scale * np.random.randn(ndim) for i in range(nwalkers)])
+    vary_list = list(vary.values())
+    ndim = len(vary_list)
+    pos = np.array([vart_list + scale * np.random.randn(ndim) for i in range(nwalkers)])
 
     valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
 
@@ -34,7 +34,7 @@ def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
     # print (len(np.where(~valid)[0]))
     while (len(np.where(~valid)[0])) > 0:
         pos[~valid] = [
-            theta + scale * np.random.randn(ndim)
+            vary_list + scale * np.random.randn(ndim)
             for i in range(len(np.where(~valid)[0]))
         ]
         valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
@@ -47,7 +47,7 @@ def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
 def runemcee(
     nwalkers,
     nsteps,
-    theta,
+    vary,
     lnprob,
     prior,
     x,
@@ -63,12 +63,11 @@ def runemcee(
     """
     Function to initilise and run emcee.
     Removed the redundant parameter ndim, which can be determined from the
-    theta parameter array
+    vary parameter dictionary
 
     :param nwalkers: number of walkers for the emcee run
     :param nsteps: number of MCMC steps to run
-    :param theta: parameter tuple, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+    :param vary: parameter dictionary of the parameters to vary, with their initial values
     :param lnprob: log-probability function to use with emcee
     :param prior: prior function to use with emcee, used to check the initial walker positions
     :param x: the "independent" variable, passed to lnlike
@@ -82,7 +81,7 @@ def runemcee(
     :param stretch_a: the Goodman & Weare (2010) stretch move scale parameter
     """
 
-    ndim = len(theta.keys())
+    ndim = len(vary.keys())
 
     conv_check_interval = 100
 
@@ -137,7 +136,6 @@ def runemcee(
     # implement multiprocessing following the simple example here:
     # https://emcee.readthedocs.io/en/stable/tutorials/parallel
     # TODO: Check that emcee is recieving a tuple by the time it is doing its steps.
-    # Theta can still be a dict at this point if the conversion is happening within lnprob function
     with Pool(processes=threads) as pool:
         sampler = emcee.EnsembleSampler(
             nwalkers,
@@ -171,8 +169,8 @@ def runemcee(
         else:
             # set the intial position of the walkers
             # pos = [theta + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
-            pos = set_initial_positions(theta, nwalkers, prior)
-            # TODO: Theta can be a dict here if it is converted to a tuple in the prior
+
+            pos = set_initial_positions(vary, nwalkers, prior)
 
         print(
             "# ---------------------------------------------------------------------------#"

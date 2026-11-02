@@ -146,8 +146,8 @@ def runmodel(theta_in, bean, match=True, debug=False):
     It then assembles the predictions from the model into a form that can
     be compared to the observations (with appropriate scaling)
 
-    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p*, and (optionally) *mass*, *radius*, *bol_c* & *f_t*
+    :param theta_in: parameter dictionary, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, *mass*, *radius*, *bol_c* & *f_t*
     :param bean: Beans object, from which the required parameters are drawn:
       y, tref, bstart, pflux, pfluxe, tobs, numburstssim, numburstsobs,
       ref_ind, gti_checking,train, gti_start=None, gti_end=None, as well as
@@ -170,11 +170,12 @@ def runmodel(theta_in, bean, match=True, debug=False):
     X = theta_in["X"]
     Z = theta_in["Z"]
     Q_b = theta_in["Q_b"]
+    dist = theta_in["dist"]
     xi_b = theta_in["xi_b"]
     xi_p = theta_in["xi_p"]
-    bol_c = theta_in["bc"]
     mass = theta_in["M_NS"]
     radius = theta_in["R_NS"]
+    bol_c = theta_in["bol_c"]
     f_t = theta_in["f_t"]
 
     # by default we assume the model is valid, i.e. has sufficient bursts
