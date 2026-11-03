@@ -2944,9 +2944,7 @@ Initial parameters:
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
-                # self.theta,
                 self.vary,
-                self.fixed,
                 self.lnprob,
                 self.lnprior,
                 None,
