@@ -1393,6 +1393,8 @@ class Beans:
             return
 
         # Required parameters are checked, if any are missing, set to default values
+        print(vary.keys())
+        print(fixed.keys())
         for key in [
             "X",
             "Z",
