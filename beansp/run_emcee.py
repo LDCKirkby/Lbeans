@@ -7,19 +7,6 @@ import time
 import h5py
 
 
-def tuple_dict(tuple_in, tuple_order, dict_keys):
-    # Converts the theta tuple to dictionary
-    # Needed to compare tuple theta to input theta dictionary
-    tuple_dict = dict.fromkeys(dict_keys)
-
-    i = 0
-    for param in tuple_order:
-        tuple_dict[param] = tuple_in[i]
-        i += 1
-
-    return tuple_dict
-
-
 def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     """
     Distribute the initial positions for the walkers around the supplied vary value,
@@ -190,7 +177,7 @@ def runemcee(
         print(
             "# ---------------------------------------------------------------------------#"
         )
-
+        print(pos)
         for sample in sampler.sample(
             pos, iterations=nsteps, progress=True, progress_kwargs={"desc": run_id}
         ):
