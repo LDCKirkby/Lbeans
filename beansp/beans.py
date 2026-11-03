@@ -1744,24 +1744,30 @@ Initial parameters:
             ", peak fluxes" if self.cmpr_pflux else "",
             self.threads,
             cpu_count(),
-            self.theta_table(self.theta, indent=2),
+            self.theta_table(vary=self.vary, theta=self.theta, indent=2),
         )
 
-    def theta_table(self, theta, indent=0):
+    def theta_table(self, vary, theta, indent=0):
         """
         Format the run parameter vector as a table
         Could include the errors for a neatly formatted way to present
         results
 
-        :param theta: the model parameter tuple, with *X*, *Z*, *Q_b*, *d*,
-          *xi_b*, *xi_p*, *mass*, *radius*, and (optionally) *bol_c* & *f_t*
+        :param vary: the model parameter dictionary of parameters that are varied by the sampler
+        :param theta: the model parameter dictionary of all parameters, with *X*, *Z*, *Q_b*, *d*,
+          *xi_b*, *xi_p*, *mass*, *radius*, *bol_c* & *f_t*
         :param indent: number of characters to indent the string from the left
         """
-
-        X, Z, Q_b, dist, xi_b, xi_p, *extra = theta
-        mass, radius, bol_c, f_t = (
-            extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
-        )
+        X = theta["X"]
+        Z = theta["Z"]
+        Q_b = theta["Q_b"]
+        dist = theta["d"]
+        xi_b = theta["xi_b"]
+        xi_p = theta["xi_p"]
+        mass = theta["M_NS"]
+        radius = theta["R_NS"]
+        bol_c = theta["bol_c"]
+        f_t = theta["f_t"]
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
 #Z = {:.5f} \\ CNO mass fraction
@@ -1772,14 +1778,8 @@ Initial parameters:
             X, Z, Q_b, dist, xi_b, xi_p
         )
         result = result + "\n#M_NS = {:.3f} M_sun \\ neutron star mass".format(mass)
-        if len(theta) <= 6:
-            result += " (fixed)"
         result = result + "\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
-        if len(theta) <= 7:
-            result += " (fixed)"
         result = result + "\n#bol_c = {:.2f} \\ bolometric correction".format(bol_c)
-        if len(theta) <= 8:
-            result += " (fixed)"
         if self.num_systematic == 1:
             return (
                 result
