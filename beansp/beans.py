@@ -1385,10 +1385,10 @@ class Beans:
                 "R_NS": 11.8,
                 "f_t": 1.0,
             }
-        elif vary is not dict:
+        elif type(vary) is not dict:
             logger.error("vary not in accepted format\n")
             return
-        elif fixed is not dict:
+        elif type(fixed) is not dict:
             logger.error("fixed not in accepted format\n")
             return
 
