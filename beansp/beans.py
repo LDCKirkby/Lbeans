@@ -1431,13 +1431,10 @@ class Beans:
         }  # Merge the two dictionaries, with fixed values overriding vary if there are duplicates
 
         self.vary = vary
-        self.vary_keys = vary.keys()
         self.vary_order = list(vary.keys())
         self.fixed = fixed
-        self.fixed_keys = fixed.keys()
         self.fixed_order = list(fixed.keys())
         self.theta = theta
-        self.theta_keys = theta.keys()
         self.theta_order = list(theta.keys())
         self.bol_c = theta["bol_c"]
 
@@ -2075,7 +2072,7 @@ Initial parameters:
           (from :meth:`Beans.lnlike`)
         """
 
-        vary_dict = tuple_to_dict(vary, self.vary_order, self.vary_keys)
+        vary_dict = tuple_to_dict(vary, self.vary_order, self.vary.keys())
         theta_in = {**vary_dict, **self.fixed}
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
