@@ -2850,7 +2850,12 @@ Initial parameters:
         print("lnlike:", self.lnlike(self, self.theta, None, self.y, self.yerr))
         if self.sampler == "emcee":
             print("lnprior:", self.lnprior(self.theta))
-            print("lnprob:", self.lnprob(self.vary, None, self.y, self.yerr))
+            print(
+                "lnprob:",
+                self.lnprob(
+                    dict_to_tuple(self.vary, self.vary_order), None, self.y, self.yerr
+                ),
+            )
         print(
             "# ---------------------------------------------------------------------------#"
         )
