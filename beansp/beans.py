@@ -466,7 +466,6 @@ def prior_kepler(theta_in, latex=False):
 
 
 def prior_1820_30(theta_in, latex=False):
-    theta_dict = tuple_to_dict(theta_in, theta_order, theta_keys)
 
     X = theta_in["X"]
     Z = theta_in["Z"]
