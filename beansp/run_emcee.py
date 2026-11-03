@@ -7,7 +7,7 @@ import time
 import h5py
 
 
-def set_initial_ptositions(vary, nwalkers, prior, scale=1e-4):
+def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     """
     Distribute the initial positions for the walkers around the supplied vary value,
     making sure they're consistent with the prior
