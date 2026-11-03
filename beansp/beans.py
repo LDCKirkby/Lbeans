@@ -466,7 +466,7 @@ def prior_kepler(theta_in, latex=False):
 
 
 def prior_1820_30(theta_in, latex=False):
-    theta_dict = tuple_to_dict(theta_in,theta_order,theta_keys)
+    theta_dict = tuple_to_dict(theta_in, theta_order, theta_keys)
 
     X = theta_in["X"]
     Z = theta_in["Z"]
@@ -1209,7 +1209,7 @@ class Beans:
         model=settle,
         vary=None,
         fixed=None,
-        #theta=None,
+        # theta=None,
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1369,21 +1369,22 @@ class Beans:
             self.train_model = punkt_train
             self.maxgap = maxgap
 
-        #Initialise the theta dictionary, which contains the initial model parameters
+        # Initialise the theta dictionary, which contains the initial model parameters
 
-        #Uses default if not specified
+        # Uses default if not specified
         if vary is None and fixed is None:
             theta = {
-            "X": 0.41,
-            "Z": 0.0151,
-            "Q_b": 0.6,
-            "d": 3.2,
-            "xi_b": 1.0,
-            "xi_p": 1.6,
-            "bol_c": 1.0,
-            "M_NS": 1.5,
-            "R_NS": 11.8,
-            "f_t": 1.0,}
+                "X": 0.41,
+                "Z": 0.0151,
+                "Q_b": 0.6,
+                "d": 3.2,
+                "xi_b": 1.0,
+                "xi_p": 1.6,
+                "bol_c": 1.0,
+                "M_NS": 1.5,
+                "R_NS": 11.8,
+                "f_t": 1.0,
+            }
         elif vary is not dict:
             logger.error("vary not in accepted format\n")
             return
@@ -1391,13 +1392,40 @@ class Beans:
             logger.error("fixed not in accepted format\n")
             return
 
-        #Required parameters are checked, if any are missing, set to default values
-        for key in ["X", "Z", "Q_b", "d", "xi_b", "xi_p", "bol_c", "M_NS", "R_NS", "f_t"]:
+        # Required parameters are checked, if any are missing, set to default values
+        for key in [
+            "X",
+            "Z",
+            "Q_b",
+            "d",
+            "xi_b",
+            "xi_p",
+            "bol_c",
+            "M_NS",
+            "R_NS",
+            "f_t",
+        ]:
             if key not in vary.keys() or key not in fixed.keys():
-                logger.warning(f"Missing required parameter {key} in input dictionaries, using default value")
-                fixed[key] = {"X": 0.41, "Z": 0.0151, "Q_b": 0.6, "d": 3.2, "xi_b": 1.0, "xi_p": 1.6, "bol_c":1.0, "M_NS":1.5, "R_NS":11.8, "f_t":1.0}[key]
+                logger.warning(
+                    f"Missing required parameter {key} in input dictionaries, using default value"
+                )
+                fixed[key] = {
+                    "X": 0.41,
+                    "Z": 0.0151,
+                    "Q_b": 0.6,
+                    "d": 3.2,
+                    "xi_b": 1.0,
+                    "xi_p": 1.6,
+                    "bol_c": 1.0,
+                    "M_NS": 1.5,
+                    "R_NS": 11.8,
+                    "f_t": 1.0,
+                }[key]
 
-        theta = {**vary, **fixed}  # Merge the two dictionaries, with fixed values overriding vary if there are duplicates
+        theta = {
+            **vary,
+            **fixed,
+        }  # Merge the two dictionaries, with fixed values overriding vary if there are duplicates
 
         self.vary = vary
         self.vary_keys = vary.keys()
@@ -2043,7 +2071,7 @@ Initial parameters:
           (from :meth:`Beans.lnlike`)
         """
 
-        vary_dict = tuple_to_dict(vary, self.vary_order, self.vary_keys):
+        vary_dict = tuple_to_dict(vary, self.vary_order, self.vary_keys)
         theta_in = {**vary_dict, **self.fixed}
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
@@ -2909,7 +2937,7 @@ Initial parameters:
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
-                #self.theta,
+                # self.theta,
                 self.vary,
                 self.fixed,
                 self.lnprob,
@@ -3071,7 +3099,7 @@ Initial parameters:
                 new[i] = autocorr_new(chain[:, :n])
 
             # Plot the comparisons
-          # plt.loglog(N, gw2010, "o-", label="G\&W 2010")
+            # plt.loglog(N, gw2010, "o-", label="G\&W 2010")
             plt.loglog(N, new, "o-", label=f"{list(PARAM_LATEX.values())[j]}")
             plt.loglog(N, gw2010, "o-", label=None, color="grey")
             ylim = plt.gca().get_ylim()
