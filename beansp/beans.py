@@ -1649,7 +1649,7 @@ class Beans:
             logger.error("need to include fluences as well as alphas")
             return
 
-        if self.lnprior(dict_to_tuple(self.theta, self.theta_order)) == -np.inf:
+        if self.lnprior(self.theta) == -np.inf:
             logger.error("supplied parameter vector is excluded by the prior")
             return
 
