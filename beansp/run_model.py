@@ -170,7 +170,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
     X = theta_in["X"]
     Z = theta_in["Z"]
     Q_b = theta_in["Q_b"]
-    dist = theta_in["dist"]
+    dist = theta_in["d"]
     xi_b = theta_in["xi_b"]
     xi_p = theta_in["xi_p"]
     mass = theta_in["M_NS"]
