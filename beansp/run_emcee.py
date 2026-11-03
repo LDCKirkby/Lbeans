@@ -21,7 +21,7 @@ def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     """
     vary_list = list(vary.values())
     ndim = len(vary_list)
-    pos = np.array([vart_list + scale * np.random.randn(ndim) for i in range(nwalkers)])
+    pos = np.array([vary_list + scale * np.random.randn(ndim) for i in range(nwalkers)])
 
     valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
 
