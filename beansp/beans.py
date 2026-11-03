@@ -1437,6 +1437,7 @@ class Beans:
         self.theta = theta
         self.theta_keys = theta.keys()
         self.theta_order = list(theta.keys())
+        self.bol_c = theta["bol_c"]
 
         self.numburstssim = numburstssim
         self.lnprior = prior
