@@ -1429,7 +1429,7 @@ class Beans:
 
         self.vary = vary
         self.vary_keys = vary.keys()
-        self.vary.order = list(vary.keys())
+        self.vary_order = list(vary.keys())
         self.fixed = fixed
         self.fixed_keys = fixed.keys()
         self.fixed_order = list(fixed.keys())
