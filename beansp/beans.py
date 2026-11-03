@@ -1407,7 +1407,7 @@ class Beans:
             "R_NS",
             "f_t",
         ]:
-            if key not in vary.keys() or key not in fixed.keys():
+            if key not in vary.keys() and key not in fixed.keys():
                 logger.warning(
                     f"Missing required parameter {key} in input dictionaries, using default value"
                 )
