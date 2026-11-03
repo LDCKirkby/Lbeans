@@ -476,8 +476,10 @@ def prior_1820_30(theta_in, latex=False):
     mass = theta_in["M_NS"]
     radius = theta_in["R_NS"]
     bol_c = theta_in["bol_c"]
-    f_t = theta_in["f_t"]
-
+    if "f_t" in theta_in.keys():
+        f_t = theta_in["f_t"]
+    else:
+        f_t = 1.0
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.

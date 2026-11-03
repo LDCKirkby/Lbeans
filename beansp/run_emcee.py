@@ -33,10 +33,13 @@ def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     :return: list of nwalkers positions
     """
     vary_list = list(vary.values())
+    vary_keys = list(vary.keys())
     ndim = len(vary_list)
     pos = np.array([vary_list + scale * np.random.randn(ndim) for i in range(nwalkers)])
 
-    valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
+    dict_pos = [dict(zip(vary_keys, row)) for row in pos]
+
+    valid = np.array([prior(dict_pos[i]) != -np.inf for i in range(nwalkers)])
 
     print(
         "Initial walker positions within {} of supplied parameter vector, checking for consistency with prior...".format(
@@ -50,7 +53,8 @@ def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
             vary_list + scale * np.random.randn(ndim)
             for i in range(len(np.where(~valid)[0]))
         ]
-        valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
+        dict_pos = [dict(zip(vary_keys, row)) for row in pos]
+        valid = np.array([prior(dict_pos[i]) != -np.inf for i in range(nwalkers)])
         # print (len(np.where(~valid)[0]))
 
     return list(pos)
