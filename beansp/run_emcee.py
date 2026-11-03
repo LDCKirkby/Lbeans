@@ -5,7 +5,19 @@ import pickle
 from multiprocessing import Pool
 import time
 import h5py
-from .beans import dict_to_tuple, tuple_to_dict
+
+
+def tuple_dict(tuple_in, tuple_order, dict_keys):
+    # Converts the theta tuple to dictionary
+    # Needed to compare tuple theta to input theta dictionary
+    tuple_dict = dict.fromkeys(dict_keys)
+
+    i = 0
+    for param in tuple_order:
+        tuple_dict[param] = tuple_in[i]
+        i += 1
+
+    return tuple_dict
 
 
 def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
@@ -24,12 +36,7 @@ def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     ndim = len(vary_list)
     pos = np.array([vary_list + scale * np.random.randn(ndim) for i in range(nwalkers)])
 
-    valid = np.array(
-        [
-            prior(tuple_to_dict(pos[i], list(vary.keys()), vary.keys())) != -np.inf
-            for i in range(nwalkers)
-        ]
-    )
+    valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
 
     print(
         "Initial walker positions within {} of supplied parameter vector, checking for consistency with prior...".format(
