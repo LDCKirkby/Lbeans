@@ -348,7 +348,6 @@ def lnZprior(z):
     )
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_func(theta_in, latex=False):
     """
     This function is the default prior and implements a simple box prior
@@ -408,7 +407,6 @@ def prior_func(theta_in, latex=False):
         return -np.inf
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_kepler(theta_in, latex=False):
     """
     This function applies a more restrictive prior suitable for use with
@@ -467,7 +465,6 @@ def prior_kepler(theta_in, latex=False):
         return -np.inf
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_1820_30(theta_in, latex=False):
     theta_dict = tuple_to_dict(theta_in,theta_order,theta_keys)
 
@@ -534,7 +531,6 @@ def prior_1820_30(theta_in, latex=False):
         return -np.inf
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_mr(theta_in, latex=False):
     """
     This function implements a simple box prior for all the parameters
@@ -590,7 +586,6 @@ def prior_mr(theta_in, latex=False):
         return -np.inf
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_1808(theta_in, latex=False):
     """
     This function implements a simple box prior for all the parameters
@@ -650,7 +645,6 @@ def prior_1808(theta_in, latex=False):
         return -np.inf
 
 
-# TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
 def prior_grid(theta_in, latex=False):
     """
     This function is to accompany grid_interp and implements a simple
@@ -747,7 +741,6 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, self.y)
-    # TODO: Either change theta_in to dict before runmodel call, or within runmodel
     model, valid, model2 = runmodel(theta_in, self, debug=False)
     if not valid:
         return -np.inf, model
@@ -830,7 +823,6 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, bean.y)
-    # TODO: Either change theta_in to dict before runmodel call, or within runmodel
     model, valid, model2 = runmodel(theta_in, bean)
     if not valid:
         return -np.inf, model
@@ -1628,7 +1620,7 @@ class Beans:
             logger.error("need to include fluences as well as alphas")
             return
 
-        if self.lnprior(dict_to_tuple(self.theta, self.theta_order) == -np.inf:
+        if self.lnprior(dict_to_tuple(self.theta, self.theta_order)) == -np.inf:
             logger.error("supplied parameter vector is excluded by the prior")
             return
 
@@ -2053,7 +2045,6 @@ Initial parameters:
 
         vary_dict = tuple_to_dict(vary, self.vary_order, self.vary_keys):
         theta_in = {**vary_dict, **self.fixed}
-        # TODO: Propagate theta dictionary change
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
         # the model run it if not
@@ -3080,7 +3071,7 @@ Initial parameters:
                 new[i] = autocorr_new(chain[:, :n])
 
             # Plot the comparisons
-            # plt.loglog(N, gw2010, "o-", label="G\&W 2010")
+          # plt.loglog(N, gw2010, "o-", label="G\&W 2010")
             plt.loglog(N, new, "o-", label=f"{list(PARAM_LATEX.values())[j]}")
             plt.loglog(N, gw2010, "o-", label=None, color="grey")
             ylim = plt.gca().get_ylim()

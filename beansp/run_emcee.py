@@ -43,7 +43,6 @@ def set_initial_positions(vary, nwalkers, prior, scale=1e-4):
     return list(pos)
 
 
-# TODO: add bolometric correction to the runemcee function, so that it can be passed to lnprob and prior, and then to settle
 def runemcee(
     nwalkers,
     nsteps,
@@ -135,7 +134,6 @@ def runemcee(
 
     # implement multiprocessing following the simple example here:
     # https://emcee.readthedocs.io/en/stable/tutorials/parallel
-    # TODO: Check that emcee is recieving a tuple by the time it is doing its steps.
     with Pool(processes=threads) as pool:
         sampler = emcee.EnsembleSampler(
             nwalkers,
