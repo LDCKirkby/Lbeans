@@ -1374,13 +1374,15 @@ class Beans:
 
         # Uses default if not specified
         if vary is None and fixed is None:
-            theta = {
+            vary = {
                 "X": 0.41,
                 "Z": 0.0151,
                 "Q_b": 0.6,
                 "d": 3.2,
                 "xi_b": 1.0,
                 "xi_p": 1.6,
+            }
+            fixed = {
                 "bol_c": 1.0,
                 "M_NS": 1.5,
                 "R_NS": 11.8,
