@@ -202,7 +202,7 @@ except:
 # multiepoch_mcmc is required to use the grid_interp model
 has_multiepoch_mcmc = True
 try:
-    # TODO perhaps pull the path from an environment variable instead
+    # TODO: perhaps pull the path from an environment variable instead
     sys.path.append("/Users/duncan/python/multiepoch_mcmc")
     from multiepoch_mcmc import grid_interpolator
 
@@ -622,6 +622,29 @@ def prior_1820_30(theta_in, latex=False):
 
     else:
         return -np.inf
+
+
+def tuple_to_dict(theta_tuple, tuple_order):
+    # Converts tuple to dictionary
+    # Need to know the order of the tuple so keys can be mapped correctly
+    theta_dict = {}
+
+    i = 0
+    for param in tuple_order:
+        theta_dict[param] = theta_tuple[i]
+        i += 1
+
+    return theta_dict
+
+
+def dict_to_tuple(theta_dict, tuple_order):
+    # Converts dictionary to a tuple in a set order
+    theta_list = []
+
+    for param in tuple_order:
+        theta_list.append(theta_dict[param])
+    theta_tuple = tuple(theta_list)
+    return theta_tuple
 
 
 def prior_grid(theta_in, latex=False):
@@ -1130,7 +1153,7 @@ class Beans:
         interp="linear",
         smooth=0.02,
         model=settle,
-        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8),
+        theta=None,
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1169,7 +1192,7 @@ class Beans:
           'linear', or 'spline'
         :param smooth: smoothing factor for spline interpolation
         :param model: burst model to use, one of settle or grid_interp
-        :param theta: initial centroid values for walker model parameters, with
+        :param theta: dictionary containing initial centroid values for walker model parameters, with
           *X*, *Z*, *Q_b*, *d*, *xi_b*, *xi_p*, and (optionally) *mass*,
           *radius*, & *f_t*
         :param fluen: set to True (default) to include the fluences in the
@@ -1291,7 +1314,79 @@ class Beans:
             self.train_model = punkt_train
             self.maxgap = maxgap
 
+        # We want theta to be a dictionary
+        # Not a good idea to have a mutable type have a default value
+        # Therefore need to check which values have been input, and use default for the missing required parameters
+
+        default_theta = {
+            "X0": 0.41,
+            "Z": 0.0151,
+            "Q_b": 0.6,
+            "dist": 3.2,
+            "xi_b": 1.0,
+            "xi_p": 1.6,
+            "M_NS": 1.5,
+            "R_NS": 11.8,
+            "f_t": 1.0,
+        }
+        if theta is None:
+            theta = default_theta
+        elif theta is dict:
+            tuple_order = [
+                "X0",
+                "Z",
+                "Q_b",
+                "dist",
+                "xi_b",
+                "xi_p",
+                "M_NS",
+                "R_NS",
+                "f_t",
+            ]
+            for key in default_theta.keys():
+                if not key in theta:
+                    theta[key] = default_value[key]
+                    logger.info("No value provided for ", key, ". Using default value.")
+        elif theta is tuple:
+            match len(theta):
+                case 6:
+                    tuple_order = ["X0", "Z", "Q_b", "dist", "xi_b", "xi_p"]
+                case 7:
+                    tuple_order = ["X0", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS"]
+                case 8:
+                    tuple_order = [
+                        "X0",
+                        "Z",
+                        "Q_b",
+                        "dist",
+                        "xi_b",
+                        "xi_p",
+                        "M_NS",
+                        "R_NS",
+                    ]
+                case 9:
+                    tuple_order = [
+                        "X0",
+                        "Z",
+                        "Q_b",
+                        "dist",
+                        "xi_b",
+                        "xi_p",
+                        "M_NS",
+                        "R_NS",
+                        "f_t",
+                    ]
+                case _:
+                    logger.error("Theta tuple of invalid length.")
+            theta_tuple = theta
+            theta = tuple_to_dict(theta_tuple, tuple_order)
+        else:
+            logger.error(
+                "Invalid theta value supplied. Please check input is of type dict or tuple."
+            )
+            return
         self.theta = theta
+        self.tuple_order = tuple_order
 
         self.numburstssim = numburstssim
         self.lnprior = prior
@@ -2773,7 +2868,7 @@ Initial parameters:
             # This is the original MCMC implementation for beansp, which uses vanilla emcee
             #   https://github.com/dfm/emcee
             # run the chains and save the output as a h5 file
-            # TODO to simplify the subsequent analysis I think this object should be added to the Beans object
+            # TODO: to simplify the subsequent analysis I think this object should be added to the Beans object
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
@@ -2829,7 +2924,7 @@ Initial parameters:
         :param samples: numpy array with samples, to calculate the
           autocorrelation from
         :param reader: object to get the chains from (if not supplied via
-          the samples parameter), via the get_chain method. TODO just pass
+          the samples parameter), via the get_chain method. TODO: just pass
           the samples to make this more general
         :param title: title for the figure; set to None for some generic info, or False to skip
         :param savefile: name of file to save as (skip if None)
@@ -3365,7 +3460,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
 
         # have to duplicate the calculation of redshift and gravity here, as
         # those quantities are not saved to the samples
-        # TODO I think this really should be 7 below, as the (optional) 7 & 8th parameters are mass and radius; but they
+        # TODO: I think this really should be 7 below, as the (optional) 7 & 8th parameters are mass and radius; but they
         #   are always both present, so probably no issue
         if self.ndim >= 8:
             M = np.array(self.samples[:, 6]) * const.M_sun.to("g")  # cgs
@@ -3914,7 +4009,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 self.cc_nchain = 1  # initially
 
                 # common truths/title settings for all corner plots
-                # TODO need to trigger an update when new truths added (not
+                # TODO: need to trigger an update when new truths added (not
                 # just a different burnin)
 
         if truths != self.truths:
@@ -3944,7 +4039,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         # ---------------------------------------------------------------------#
         if "last" in options:
             # show likelihood contributions for last step
-            # TODO could also use the reader.get_last_sample method, at
+            # TODO: could also use the reader.get_last_sample method, at
             # least for p_tot, but this won't give you the likelihood
             # contributions. It does include as the 4th element the prior
             # and model realisations (blobs) though
@@ -4212,7 +4307,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         # ---------------------------------------------------------------------#
         if "converge" in options:
             # do the summary plot, comparing the two halves of the burnin
-            # TODO convert the statements below to the new syntax for ChainConsumer
+            # TODO: convert the statements below to the new syntax for ChainConsumer
 
             _cc = ChainConsumer()
             _n = int(np.shape(self.samples)[0] / 2)
@@ -4288,7 +4383,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 # This approach is not perfect, as some solutions with different
                 # numbers of bursts have the same imatch, so are effectively
                 # equivalent;
-                # TODO should combine the matching section in the plot segment
+                # TODO: should combine the matching section in the plot segment
                 # with this analysis, along with checks to combine solutions
                 # with different burst numbers but the same imatch
 
@@ -4313,7 +4408,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 # predcted fluences and alphas, for comparison with the observations
                 # this calculation replicates what's in runmodel
 
-                # TODO avoid repeating conversion to observed quantities by storing them in the model
+                # TODO: avoid repeating conversion to observed quantities by storing them in the model
                 # this fails with inhomogeneous arrays; need to do something
                 # a bit more complicated
                 # fpred = (np.array(e_b).T*self.fluen_fac/np.array(xib)/np.array(distance)**2).T
@@ -4492,7 +4587,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
             # plt.axis([0.,2.1,0.,2.1])
             plt.axis([0.0, max(np.append(self.samples[:, 5], 2.1)), 0.0, 2.0])
 
-            # TODO check these commands for consistency with the other plots
+            # TODO: check these commands for consistency with the other plots
             # plt.xticks(fontsize=12)
             # plt.yticks(fontsize=12)
 
@@ -5047,7 +5142,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         self.cc = ChainConsumer()
         # augment with some additional parameters, e.g. as used in the
         # 1826 work
-        # TODO probably should check if these have already been added
+        # TODO: probably should check if these have already been added
         self.cc_parameters += ["dxi_b", "xi_p/xi_b"]
         _samples = np.column_stack(
             (
@@ -5096,7 +5191,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 )
                 # shape is (nwalkers, nsteps, ndim)
                 assert np.shape(chain)[2] == 12  # won't work for the other files
-                # TODO need to make this burnin consistent with the main code, i.e. allowing negative values
+                # TODO: need to make this burnin consistent with the main code, i.e. allowing negative values
                 if burnin is not None:
                     chain_flat = chain[:, burnin:, :].reshape((-1, 12))
                 else:
