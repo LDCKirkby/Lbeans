@@ -11,6 +11,9 @@
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import numpy as np
+
+# don't show the annoying np.float64(...
+np.set_printoptions(legacy="1.25")
 import pandas as pd
 import emcee
 import astropy.units as u
@@ -82,6 +85,10 @@ CC_CONFIG = {
     "statistics": "cumulative",
 }
 CC_PLOT_CONFIG = {"serif": True, "usetex": USETEX}
+<<<<<<< HEAD
+=======
+MIN_SAMPLES_PLOT = 1000  # don't show posteriors or predictions if you have fewer than this number of samples in a solution set
+>>>>>>> base
 
 # Some constants & standard units
 
@@ -127,7 +134,10 @@ PARAM_LATEX = {
     "xi_p": r"\ensuremath{\xi_p}",
     "M": r"\ensuremath{M_{\rm NS}}",
     "R": r"\ensuremath{R_{\rm NS}}",
+<<<<<<< HEAD
     "bol_c": r"\ensuremath{bol_c}",
+=======
+>>>>>>> base
     "f_t": r"\ensuremath{f_t}",
     # extras
     "cosi": r"\ensuremath{\cos i}",
@@ -150,7 +160,10 @@ UNIT_LATEX = {
     "xi_p": r"",
     "M": r"$M_\odot$",
     "R": r"km",
+<<<<<<< HEAD
     "bol_c": r"",
+=======
+>>>>>>> base
     "f_t": r"",
     "cosi": r"",
     "g": r"$10^{14}\ {\rm cm\,s^{-2}}$",
@@ -188,10 +201,24 @@ from .mrprior import mr_prior
 from .run_emcee import runemcee
 from .analyse import get_param_uncert_part, get_param_uncert
 
+HAS_BILBY = False
+try:
+    # required for using dynesty sampler
+    import bilby
+    from .run_bilby import runbilby
+
+    HAS_BILBY = True
+except:
+    pass
+
 # multiepoch_mcmc is required to use the grid_interp model
 has_multiepoch_mcmc = True
 try:
+<<<<<<< HEAD
     # TODO: perhaps pull the path from an environment variable instead
+=======
+    # TODO perhaps pull the path from an environment variable instead
+>>>>>>> base
     sys.path.append("/Users/duncan/python/multiepoch_mcmc")
     from multiepoch_mcmc import grid_interpolator
 
@@ -378,7 +405,11 @@ def prior_func(theta_in, latex=False):
         ]
 
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
+<<<<<<< HEAD
     mass, radius, bol_c, f_t = extra + [M_NS, R_NS, 1.0, b_c][len(extra) :]
+=======
+    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -393,7 +424,10 @@ def prior_func(theta_in, latex=False):
         and (1 <= f_t < 10)
         and (1.15 < mass < 2.5)
         and (9 < radius < 17)
+<<<<<<< HEAD
         and (1.0 <= bol_c <= 5.0)
+=======
+>>>>>>> base
     ):
         return 0.0
     else:
@@ -610,7 +644,73 @@ def prior_1808(theta_in, latex=False):
         return -np.inf
 
 
+<<<<<<< HEAD
 # TODO: Adjust this for theta as a dictionary (if passed in as dict needs to be converted to tuple when returned)
+=======
+def prior_1820_30(theta_in, latex=False):
+    """
+    This function implements a gaussian prior for all the parameters
+
+    This prior is explicitly intended for use with 4U 1820-30, and
+    should only be used with extreme caution in other cases!
+
+    :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
+      *xi_p*, and (optionally) *mass*, *radius*, and *f_t*
+    :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
+
+    :return: prior probability
+    """
+
+    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
+    mass, radius, f_t = extra + [1.4, 10.5, 1.0][len(extra) :]
+
+    # Upper and lower bounds of each parameter defined here
+    # Bounds were found through literature for 4U 1820-30 with leyway either side
+    # Assuming a Gaussian prior for each parameter, the mean and standard deviations are defined below
+    if (
+        (0.0 < X < 0.4)
+        and (0.00001 < Z < 0.1)
+        and (1 < dist < 10)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (6 < radius < 17)
+        and (1.15 < mass < 2.5)
+    ):
+        mu_x, sigma_x = 0.05, 0.05
+        mu_z, sigma_z = 0.02, 0.01
+        mu_qb, sigma_qb = 0.4, 0.1
+        mu_dist, sigma_dist = 7.6, 0.4
+        mu_xi_b, sigma_xi_b = 1.32, 0.1
+        mu_xi_p, sigma_xi_p = 2.0, 0.1
+        mu_mass, sigma_mass = 1.58, 0.3
+        mu_radius, sigma_radius = 9.1, 1.8
+
+        prob_X = -0.5 * (X - mu_x) ** 2 / sigma_x**2
+        prob_Z = -0.5 * (Z - mu_z) ** 2 / sigma_z**2
+        prob_Qb = -0.5 * (Q_b - mu_qb) ** 2 / sigma_qb**2
+        prob_dist = -0.5 * (dist - mu_dist) ** 2 / sigma_dist**2
+        prob_xi_b = -0.5 * (xi_b - mu_xi_b) ** 2 / sigma_xi_b**2
+        prob_xi_p = -0.5 * (xi_p - mu_xi_p) ** 2 / sigma_xi_p**2
+        prob_mass = -0.5 * (mass - mu_mass) ** 2 / sigma_mass**2
+        prob_radius = -0.5 * (radius - mu_radius) ** 2 / sigma_radius**2
+
+        return (
+            0.0
+            + prob_X
+            + prob_Z
+            + prob_Qb
+            + prob_dist
+            + prob_xi_b
+            + prob_xi_p
+            + prob_mass
+            + prob_radius
+        )
+    else:
+        return -np.inf
+
+
+>>>>>>> base
 def prior_grid(theta_in, latex=False):
     """
     This function is to accompany grid_interp and implements a simple
@@ -687,7 +787,11 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
 
     # FIX: This doesn't set theta_in to anything, it just defines variables from it that aren't used?
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
+<<<<<<< HEAD
     mass, radius, bol_c = extra + [self.M_NS, self.R_NS, self.bol_c][len(extra) :]
+=======
+    mass, radius = extra + [self.M_NS, self.R_NS][len(extra) :]
+>>>>>>> base
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -764,9 +868,13 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
 
     # FIX: this doesn't set theta_in to anything, just assigns variables that are unused?
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
+<<<<<<< HEAD
     mass, radius, bol_c, f_t = (
         extra + [bean.M_NS, bean.R_NS, bean.bol_c, 1.0][len(extra) :]
     )
+=======
+    mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -1152,6 +1260,7 @@ class Beans:
     except:
         pass
 
+<<<<<<< HEAD
     HAS_BILBY = False
     try:
         # required for using dynesty sampler
@@ -1162,6 +1271,8 @@ class Beans:
     except:
         pass
 
+=======
+>>>>>>> base
     def __init__(
         self,
         config_file=None,
@@ -1177,6 +1288,7 @@ class Beans:
         interp="linear",
         smooth=0.02,
         model=settle,
+<<<<<<< HEAD
         theta={
             "X": 0.41,
             "Z": 0.0151,
@@ -1189,6 +1301,9 @@ class Beans:
             "R_NS": 11.8,
             "f_t": 1.0,
         },
+=======
+        theta=(0.41, 0.0151, 0.6, 3.2, 1.0, 1.6, 1.5, 11.8),
+>>>>>>> base
         sampler="emcee",
         fluen=True,
         alpha=False,
@@ -1447,9 +1562,13 @@ class Beans:
 
         self.ndim = len(self.tuple_order)
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
+<<<<<<< HEAD
             logger.error(
                 "number of dimensions of input parameter vector should be 6-10"
             )
+=======
+            logger.error("number of dimensions of input parameter vector should be 6-9")
+>>>>>>> base
             return
         self.num_systematic = self.ndim - (NDIM_MAX - 1)
         if (self.num_systematic > 0) & (not LNPROB_USES_LNLIKE_SYS):
@@ -1571,7 +1690,11 @@ class Beans:
 
         # Some checks here
 
+<<<<<<< HEAD
         if (self.sampler != "emcee") & (not self.HAS_BILBY):
+=======
+        if (self.sampler != "emcee") & (not HAS_BILBY):
+>>>>>>> base
             logger.error("using samplers other than emcee requires bilby")
             return
 
@@ -1639,7 +1762,11 @@ Initial parameters:
             "" if self.valid else "\n** WARNING ** object is not valid, check params\n",
             self.run_id,
             "Observation data file: {}\n  bolometric correction: {}\n".format(
+<<<<<<< HEAD
                 self.obsname, self.bol_c
+=======
+                self.obsname, self.bc
+>>>>>>> base
             )
             if self.train
             else "",
@@ -1688,9 +1815,13 @@ Initial parameters:
         """
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = theta
+<<<<<<< HEAD
         mass, radius, bol_c, f_t = (
             extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
         )
+=======
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
 #Z = {:.5f} \\ CNO mass fraction
@@ -1706,9 +1837,12 @@ Initial parameters:
         result = result + "\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
         if len(theta) <= 7:
             result += " (fixed)"
+<<<<<<< HEAD
         result = result + "\n#bol_c = {:.2f} \\ bolometric correction".format(bol_c)
         if len(theta) <= 8:
             result += " (fixed)"
+=======
+>>>>>>> base
         if self.num_systematic == 1:
             return (
                 result
@@ -1787,7 +1921,11 @@ Initial parameters:
                 # These parameters only used for "train" mode
                 Config.set("data", "tref", str(self.tref))
                 Config.set("data", "ref_ind", str(self.ref_ind))
+<<<<<<< HEAD
                 Config.set("data", "bc", str(self.bol_c))
+=======
+                Config.set("data", "bc", str(self.bc))
+>>>>>>> base
                 Config.set("data", "interp", str(self.interp))
                 if self.interp == "spline":
                     Config.set("data", "smooth", str(self.smooth))
@@ -1968,7 +2106,10 @@ Initial parameters:
                 * dist**2
                 * xi_p
                 * opz**2
+<<<<<<< HEAD
                 * self.bol_c
+=======
+>>>>>>> base
                 / (radius**2 * (opz - 1))
                 / _mdot_Edd
             )
@@ -2056,9 +2197,13 @@ Initial parameters:
             ls = ""
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
+<<<<<<< HEAD
         mass, radius, bol_c, f_t = (
             extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
         )
+=======
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
         itoff = 1  # time offset for models produced with generate_burst_train
         if (model is None) & show_model:
@@ -2394,9 +2539,13 @@ Initial parameters:
             _comm = "# "
 
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
+<<<<<<< HEAD
         mass, radius, bol_c, f_t = (
             extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
         )
+=======
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
         opz = 1.0 / (np.sqrt(1.0 - self.gmrc2 * mass / radius))
         print(
@@ -2409,10 +2558,17 @@ Initial parameters:
             "{}Persistent fluxes from {}{}".format(
                 _comm,
                 self.obsname if self.obsname is not None else self.burstname,
+<<<<<<< HEAD
                 ", interp={}{}, bol_c={}".format(
                     self.interp,
                     ("" if self.smooth is None else ", smooth={}".format(self.smooth)),
                     self.bol_c,
+=======
+                ", interp={}{}, bc={}".format(
+                    self.interp,
+                    ("" if self.smooth is None else ", smooth={}".format(self.smooth)),
+                    self.bc,
+>>>>>>> base
                 )
                 if self.train
                 else "",
@@ -2538,9 +2694,13 @@ Initial parameters:
         assert len(distrange) == 2
 
         X_0, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
+<<<<<<< HEAD
         mass, radius, bol_c, f_t = (
             extra + [self.M_NS, self.R_NS, 1.0, 1.0][len(extra) :]
         )
+=======
+        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+>>>>>>> base
 
         # Loop over the distance values
 
@@ -2863,7 +3023,11 @@ Initial parameters:
             # This is the original MCMC implementation for beansp, which uses vanilla emcee
             #   https://github.com/dfm/emcee
             # run the chains and save the output as a h5 file
+<<<<<<< HEAD
             # TODO: to simplify the subsequent analysis I think this object should be added to the Beans object
+=======
+            # TODO to simplify the subsequent analysis I think this object should be added to the Beans object
+>>>>>>> base
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
@@ -2890,8 +3054,7 @@ Initial parameters:
         elif sampler == "dynesty":
             # bilby's implementation of dynesty, see
             #
-            breakpoint()
-            result = self.runbilby(self, sampler=sampler, **kwargs)
+            result = runbilby(self, sampler=sampler, **kwargs)
 
         _end = time.time()
         logger.info(
@@ -3069,7 +3232,11 @@ Initial parameters:
         :return: astropy table of burst properties
         """
 
+<<<<<<< HEAD
         if not self.HAS_CONCORD:
+=======
+        if not Beans.HAS_CONCORD:
+>>>>>>> base
             logger.error("alpha calculation requires concord")
             return None
 
@@ -3565,6 +3732,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                     )
 
                 if self.ndim >= 9:
+<<<<<<< HEAD
                     bol_cpred = get_param_uncert(self.samples[sel, 8])
                     latex_rows[8] += " & {}".format(
                         strmeas(bol_cpred[0], bol_cpred[2], bol_cpred[1])
@@ -3579,6 +3747,13 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         strmeas(ftpred[0], ftpred[2], ftpred[1])
                     )
                     rst_rows[9].append(_rma(strmeas(ftpred[0], ftpred[2], ftpred[1])))
+=======
+                    ftpred = get_param_uncert(self.samples[sel, 8])
+                    latex_rows[8] += " & {}".format(
+                        strmeas(ftpred[0], ftpred[2], ftpred[1])
+                    )
+                    rst_rows[8].append(_rma(strmeas(ftpred[0], ftpred[2], ftpred[1])))
+>>>>>>> base
 
                 if len(parts) > 1:
                     header += """------------------------------------------------------------------------------
@@ -3637,6 +3812,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         fmt="%9.6f",
                         header=header,
                     )
+<<<<<<< HEAD
                 elif self.ndim == 9:
                     np.savetxt(
                         f,
@@ -3657,6 +3833,8 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         fmt="%9.6f",
                         header=header,
                     )
+=======
+>>>>>>> base
                 else:
                     np.savetxt(
                         f,
@@ -3672,7 +3850,10 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                             cosipred,
                             gravitypred,
                             redshiftpred,
+<<<<<<< HEAD
                             bol_cpred,
+=======
+>>>>>>> base
                             ftpred,
                         ),
                         fmt="%9.6f",
@@ -3939,7 +4120,11 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
 
         # if burnin >= self.nsteps_completed*0.9:
         if (self.sampler == "emcee") & (
+<<<<<<< HEAD
             (self.nwalkers * (self.nsteps_completed - burnin) < 1000)
+=======
+            (self.nwalkers * (self.nsteps_completed - burnin) < MIN_SAMPLES_PLOT)
+>>>>>>> base
             | (self.nsteps_completed <= burnin)
         ):
             logger.warning(
@@ -4010,12 +4195,19 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
 
                     _samples = np.column_stack((self.samples, cosi, gravity, redshift))
                     self.cc_parameters += ["g", "1+z"]
+<<<<<<< HEAD
 
                 if self.ndim >= 9:
                     bol_c = self.samples[:, 8]
 
                 # now create the chainconsumer object
                 # swap keys for values below to test out LaTeX approach
+=======
+
+                # now create the chainconsumer object
+                # swap keys for values below to test out LaTeX approach
+
+>>>>>>> base
                 _df = pd.DataFrame(
                     _samples, columns=[PARAM_LATEX[x] for x in self.cc_parameters]
                 )
@@ -4067,7 +4259,11 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         # ---------------------------------------------------------------------#
         if "last" in options:
             # show likelihood contributions for last step
+<<<<<<< HEAD
             # TODO: could also use the reader.get_last_sample method, at
+=======
+            # TODO could also use the reader.get_last_sample method, at
+>>>>>>> base
             # least for p_tot, but this won't give you the likelihood
             # contributions. It does include as the 4th element the prior
             # and model realisations (blobs) though
@@ -4179,7 +4375,10 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                     "$\\xi_p$",
                     "$M$",
                     "$R$",
+<<<<<<< HEAD
                     "$bol_c$",
+=======
+>>>>>>> base
                     "$f_t$",
                 ]
                 # plt.clf()
@@ -4497,7 +4696,11 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         # need to check that there are sufficient samples here
                         _sel = np.array(part) == _n
                         _check = np.shape(self.samples[_sel])[0]
+<<<<<<< HEAD
                         if _check > 1000:
+=======
+                        if _check > MIN_SAMPLES_PLOT:
+>>>>>>> base
                             _df = pd.DataFrame(
                                 self.samples[_sel],
                                 columns=[PARAM_LATEX[x] for x in self.cc_parameters],
@@ -4671,13 +4874,26 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 fig, axs = plt.subplot_mosaic(
                     _layout, figsize=figsize, constrained_layout=True
                 )
+<<<<<<< HEAD
                 axs["resid"].sharex(axs["time"])
                 axs["time"].set(xticklabels=[])
+=======
+                # axs['time'].set(xticklabels=[])
+                axs["resid"].sharex(axs["time"])
+                axs[
+                    "time"
+                ].label_outer()  # only want labels on the residual x-axis, not both
+>>>>>>> base
                 ax1 = axs["time"]  # label for the title etc.
                 # indicate by the background colour if the data is present but not used
                 if _has_pflux:
                     # want about 10 bins covering the whole range of peak fluxes
+                    # but need to tailor this on the range of Eddington
+                    # fluxes, to avoid the problem of a very narrow
+                    # distribution of the latter
+                    # _max_int is the maximum intensity of the bars
                     # _bin_width, _max_int = 5, 0.5
+<<<<<<< HEAD
                     (
                         _max_int,
                         _bin_width,
@@ -4700,6 +4916,16 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         )
                         * 5,
                     )
+=======
+                    # _max_int, _bin_width, = 0.5, (int((max(self.bpflux+self.bpfluxe)
+                    #         - min((self.bpflux-self.bpfluxe)[np.concatenate((self.pre, self.non_pre))]))/10./5.)+1)*5
+                    _F_Edd = self.L_Edd / self.samples[:, 3] ** 2
+                    (
+                        _max_int,
+                        _bin_width,
+                    ) = 0.5, int((max(_F_Edd) - min(_F_Edd)) / 10.0 + 0.5)
+
+>>>>>>> base
                     if not self.cmpr_pflux:
                         axs["pflux"].set_facecolor("lightgrey")
                 if (_has_alpha) & (not self.cmpr_alpha):
@@ -4728,6 +4954,7 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 # loop over all the different solutions
                 _label = "matched"
                 for i, numburstssim in enumerate(times.keys()):
+<<<<<<< HEAD
                     # populates both the main and residuals panel for each solution
                     # print (i, numburstssim, times, ebs)
                     timepred = [x[0] for x in times[numburstssim]]
@@ -4824,12 +5051,85 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                                 np.array(alpred_errup)[imatchm1][
                                     self.ifluen[itoff:] - itoff
                                 ][1 - itoff :],
+=======
+                    if self.model_pred["part_stats"][numburstssim] <= MIN_SAMPLES_PLOT:
+                        logger.info(
+                            "skipping model predictions for n={}, too few samples ({})".format(
+                                numburstssim,
+                                self.model_pred["part_stats"][numburstssim],
+                            )
+                        )
+
+                    else:
+                        # populates both the main and residuals panel for each solution
+                        # print (i, numburstssim, times, ebs)
+                        timepred = [x[0] for x in times[numburstssim]]
+                        timepred_errup = [x[1] for x in times[numburstssim]]
+                        timepred_errlow = [x[2] for x in times[numburstssim]]
+                        ebpred = [x[0] for x in ebs[numburstssim]]
+                        ebpred_errup = [x[1] for x in ebs[numburstssim]]
+                        ebpred_errlow = [x[2] for x in ebs[numburstssim]]
+                        axs["time"].errorbar(
+                            timepred[itoff:],
+                            ebpred,
+                            yerr=[ebpred_errlow, ebpred_errup],
+                            linestyle="",
+                            # xerr=[timepred_errup[1:], timepred_errlow[1:]],
+                            marker="*",
+                            ms=STAR_SIZE,
+                            color="C{}".format(i),
+                            label="predicted ({})".format(numburstssim),
+                        )
+
+                        if self.continuous:
+                            # only relevant for train mode with generate_burst_train
+                            ref_tpred = np.argmin(
+                                np.abs(self.bstart[self.ref_ind] - timepred)
+                            )
+                            imatch = burst_time_match(
+                                self.ref_ind, self.bstart, ref_tpred, np.array(timepred)
+                            )
+                            # we don't have a fluence for the first burst, so just show the time
+                            axs["time"].axvline(
+                                timepred[0], color="C{}".format(i), ls="--"
+                            )
+                        else:
+                            imatch = burst_time_match(
+                                0, self.bstart, 0, np.array(timepred)
+                            )
+
+                        # Here we define imatchm1, which is an exact copy of imatch for punkt_train results
+                        # (i.e. where itoff = 0). This array should replace imatch below when indexing
+                        # alpha and fluence arrays, so that the numbering is consistent between the two
+                        # types of models
+                        imatchm1 = [x - itoff for x in imatch if x - itoff >= 0]
+                        axs["time"].plot(
+                            np.array(timepred[itoff:])[imatchm1],
+                            np.array(ebpred)[imatchm1],
+                            linestyle="",
+                            marker="*",
+                            ms=STAR_SIZE / 2,
+                            color="tab:red",
+                            label=_label,
+                            zorder=99,
+                        )
+                        _label = None  # only give the label the first time
+
+                        resid = -(self.bstart - np.array(timepred)[imatch]) * 24.0
+                        axs["resid"].errorbar(
+                            self.bstart,
+                            resid,
+                            yerr=[
+                                np.array(timepred_errlow)[imatch] * 24.0,
+                                np.array(timepred_errup)[imatch] * 24.0,
+>>>>>>> base
                             ],
                             marker="*",
                             ms=STAR_SIZE,
                             linestyle="",
                             color="C{}".format(i),
                         )
+<<<<<<< HEAD
 
                     if _has_pflux:
                         # plot the peak flux values and compare against the Eddington fluxes
@@ -4867,6 +5167,86 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                         # axs['pflux'].set_ylim(0, (int(max(_F_Edd)/_bin_width)+1)*_bin_width )
                         # axs['pflux'].errorbar(np.arange(len(self.bpflux)) + 1, self.bpflux,
                         #              yerr=self.bpfluxe, marker='*', ms=11, linestyle='', color='C0')
+=======
+                        # print some information about this set of analyses
+                        logger.info(
+                            "RMS obs-model offset ({}, {:.2f}%) = {:.4f} hr".format(
+                                numburstssim,
+                                100.0
+                                * self.model_pred["part_stats"][numburstssim]
+                                / len(self.samples),
+                                np.sqrt(np.mean(resid**2)),
+                            )
+                        )
+                        print(numburstssim, imatch)
+
+                        if _has_alpha:
+                            # populate the alphas panel
+                            alpred = [x[0] for x in alphas[numburstssim]]
+                            alpred_errup = [x[1] for x in alphas[numburstssim]]
+                            alpred_errlow = [x[2] for x in alphas[numburstssim]]
+                            # some tricky indexing required here, for consistency with both the
+                            # generate_burst_train and punkt_train results, which have different indexing
+                            # for the alpha and fluence arrays
+                            axs["alpha"].errorbar(
+                                self.alpha[self.ifluen][1:],
+                                np.array(alpred)[imatchm1][self.ifluen[itoff:] - itoff][
+                                    1 - itoff :
+                                ],
+                                xerr=self.alphae[self.ifluen][1:],
+                                yerr=[
+                                    np.array(alpred_errlow)[imatchm1][
+                                        self.ifluen[itoff:] - itoff
+                                    ][1 - itoff :],
+                                    np.array(alpred_errup)[imatchm1][
+                                        self.ifluen[itoff:] - itoff
+                                    ][1 - itoff :],
+                                ],
+                                marker="*",
+                                ms=STAR_SIZE,
+                                linestyle="",
+                                color="C{}".format(i),
+                            )
+
+                        if _has_pflux:
+                            # plot the peak flux values and compare against the Eddington fluxes
+                            # Fluxes are just calculated as bean.L_Edd/dist**2, bean.L_Edd_err/dist**2
+                            # so can generate (for example) a histogram of Eddington fluxes for comparison
+                            # with the measured peak fluxes
+                            # show the model distribution of Eddington fluxes
+                            _bnum = np.arange(len(self.bpflux)) + 1
+                            _F_Edd = (
+                                self.L_Edd
+                                / self.samples[:, 3][
+                                    np.array(self.model_pred["partition"])
+                                    == numburstssim
+                                ]
+                                ** 2
+                            )
+                            _hst, _bins = np.histogram(
+                                _F_Edd,
+                                bins=np.arange(
+                                    int(min(_F_Edd) / _bin_width) * _bin_width,
+                                    max(_F_Edd),
+                                    _bin_width,
+                                ),
+                            )
+
+                            plt.stackplot(
+                                [0, max(_bnum) + 1],
+                                [[_bins[0], _bins[0]]]
+                                + [[_bin_width, _bin_width]] * (len(_hst) - 1),
+                                # colors=['{:.2f}'.format(1-x/max(_hst)*_max_int) for x in _hst])
+                                colors=[
+                                    ("C{}".format(i), x / max(_hst) * _max_int)
+                                    for x in _hst
+                                ],
+                            )
+                            # this does something weird
+                            # axs['pflux'].set_ylim(0, (int(max(_F_Edd)/_bin_width)+1)*_bin_width )
+                            # axs['pflux'].errorbar(np.arange(len(self.bpflux)) + 1, self.bpflux,
+                            #              yerr=self.bpfluxe, marker='*', ms=11, linestyle='', color='C0')
+>>>>>>> base
 
                 # end loop over key(s)
 
@@ -5163,7 +5543,11 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         self.cc = ChainConsumer()
         # augment with some additional parameters, e.g. as used in the
         # 1826 work
+<<<<<<< HEAD
         # TODO: probably should check if these have already been added
+=======
+        # TODO probably should check if these have already been added
+>>>>>>> base
         self.cc_parameters += ["dxi_b", "xi_p/xi_b"]
         _samples = np.column_stack(
             (
@@ -5212,7 +5596,11 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
                 )
                 # shape is (nwalkers, nsteps, ndim)
                 assert np.shape(chain)[2] == 12  # won't work for the other files
+<<<<<<< HEAD
                 # TODO: need to make this burnin consistent with the main code, i.e. allowing negative values
+=======
+                # TODO need to make this burnin consistent with the main code, i.e. allowing negative values
+>>>>>>> base
                 if burnin is not None:
                     chain_flat = chain[:, burnin:, :].reshape((-1, 12))
                 else:
@@ -5394,16 +5782,31 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
             )
             return
 
+<<<<<<< HEAD
         if not os.path.exists(self.run_id + "_chain-plot.pdf"):
             # save the chain plot before we delete the result array
             self.do_analysis(["chain"], savefig=True, show=False)
         delattr(self, "result")
 
+=======
+        # generate some of the figures that need the entire chain
+
+        if not os.path.exists(self.run_id + "_autocorrelationtimes.pdf"):
+            # save the chain plot before we delete the result array
+            self.do_analysis(["autocor"], savefig=True, show=False)
+
+        if not os.path.exists(self.run_id + "_chain-plot.pdf"):
+            # save the chain plot before we delete the result array
+            self.do_analysis(["chain"], savefig=True, show=False)
+        delattr(self, "result")
+
+>>>>>>> base
         logger.info("writing Beans object to {}".format(savefile))
         self.from_archive = True
         pickle.dump(self, open(savefile, "wb"))
         _pfile_size = os.path.getsize(savefile)
 
+<<<<<<< HEAD
         _h5file = self.run_id + ".h5"
         if os.path.exists(_h5file):
             _h5file_size = os.path.getsize(_h5file)
@@ -5419,18 +5822,54 @@ persistent anisotropy factor (xi_p), burst anisotropy factor (xi_b)""".format(
         else:
             logger.warning("{} file not found, cannot remove".format(_h5file))
 
+=======
+>>>>>>> base
         if samples:
             # try to generate a sensible name for the samples file
+            # and save them first, just in case there's an issue with
+            # deleting the .h5 file!
             dummy, file_ext = os.path.splitext(savefile)
             samples_savefile = savefile.replace(file_ext, "_samples" + file_ext)
             logger.info("writing samples and labels to {}".format(samples_savefile))
+<<<<<<< HEAD
             pickle.dump((B.cc_parameters, B.samples), open(samples_savefile, "wb"))
             logger.info("archive complete")
+=======
+            pickle.dump(
+                (self.cc_parameters, self.samples), open(samples_savefile, "wb")
+            )
+        else:
+            logger.warning(
+                "with samples=False, deleting the .h5 file will leave no record of the chains!"
+            )
+>>>>>>> base
 
-            return savefile, samples_savefile
+        _h5file = self.run_id + ".h5"
+        if os.path.exists(_h5file):
+            _h5file_size = os.path.getsize(_h5file)
+            value = input("enter Y[RETURN] to delete .h5 file: ")
+            if (value == "y") | (value == "Y"):
+                _h5file_size = os.path.getsize(_h5file)
+                os.remove(_h5file)
+                logger.info(
+                    "{} -> {}, {:.1f} Mb saved".format(
+                        _h5file, savefile, (_h5file_size - _pfile_size) / 1e6
+                    )
+                )
+        else:
+            logger.warning("{} file not found, cannot remove".format(_h5file))
+            return None
 
         logger.info("archive complete")
 
+        if samples:
+            return savefile, samples_savefile
+
+<<<<<<< HEAD
+        logger.info("archive complete")
+
+=======
+>>>>>>> base
         return savefile
 
 
