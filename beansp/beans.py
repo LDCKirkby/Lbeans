@@ -1622,7 +1622,6 @@ class Beans:
         # # -------------------------------------------------------------------------#
         if test_model:
             logger.info("testing the model works & is valid ...")
-            # TODO: Check runmodel() execution with theta dictionary
             test, valid, test2 = runmodel(
                 self.theta, self, debug=False
             )  # set debug to True for testing
@@ -2025,7 +2024,13 @@ Initial parameters:
         :return: total (prior+model) likelihood, prior likelihood, model array
           (from :meth:`Beans.lnlike`)
         """
-        # TODO: Check inputs for all possible priors match here
+
+        # Checks if theta_in is in correct form for prior functions
+        # Converts it to a dictionary if not
+        if theta_in is tuple:
+            theta_tuple = theta_in
+            theta_in = tuple_to_dict(theta_tuple, self.tuple_order)
+
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
         # the model run it if not
