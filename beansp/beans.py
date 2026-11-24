@@ -2904,10 +2904,12 @@ Initial parameters:
             # run the chains and save the output as a h5 file
             # TODO: to simplify the subsequent analysis I think this object should be added to the Beans object
             # TODO: Check the input for theta dictionary changes
+            # runemcee takes theta as a tuple, & is easiest to pass it as a tuple instead of converting it in the function
+            theta_tuple = dict_to_tuple(self.theta, self.tuple_order)
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
-                self.theta,
+                theta_tuple,
                 self.lnprob,
                 self.lnprior,
                 None,
@@ -2917,6 +2919,7 @@ Initial parameters:
                 self.restart,
                 self.threads,
                 self.stretch_a,
+                self.tuple_order,
                 **kwargs,
             )
 
