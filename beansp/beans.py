@@ -721,7 +721,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     relevant model outputs and calculates the likelihood.
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
-      *xi_p* and (optionally) *mass* & *radius*,
+      *xi_p*, *mass* & *radius*,
     :param x: the "independent" variable, passed to lnlike
     :param y: the "dependent" variable (i.e. measurements), passed to lnlike
     :param yerr: error estimates on y
@@ -730,7 +730,6 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-
     if theta_in is tuple:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, self.tuple_order)
@@ -741,7 +740,6 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, self.y)
-    # TODO: Check runmodel() works for theta dictionary
     model, valid, model2 = runmodel(theta_in, self, debug=False)
     if not valid:
         return -np.inf, model
@@ -807,9 +805,11 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra) :]
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, bean.tuple_order)
+
+    f_t = theta_in["f_t"]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
@@ -817,7 +817,6 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, bean.y)
-    # TODO: Check runmodel() works for theta dictionary
     model, valid, model2 = runmodel(theta_in, bean)
     if not valid:
         return -np.inf, model
