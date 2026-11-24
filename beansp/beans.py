@@ -2089,7 +2089,6 @@ Initial parameters:
         itoff = 1  # time offset for models produced with generate_burst_train
         if (model is None) & show_model:
             # no need to do the matching here
-            # TODO: Check runmodel works with theta dictionary
             test, valid, model = runmodel(
                 self.theta, self, match=(False or not self.continuous), debug=False
             )
@@ -2391,7 +2390,6 @@ Initial parameters:
             )
         )
 
-        # TODO: Check runmodel() works for theta dictionary
         test, valid, full_model = runmodel(
             self.theta, self, match=(self.numburstsobs > 0)
         )
@@ -2421,9 +2419,18 @@ Initial parameters:
             )
             _comm = "# "
 
-        # TODO: Theta mapping needs to be changed for dictionary
-        X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        theta = self.theta
+        X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
+            theta["X"],
+            theta["Z"],
+            theta["Q_b"],
+            theta["dist"],
+            theta["xi_b"],
+            theta["xi_p"],
+            theta["mass"],
+            theta["radius"],
+            theta["f_t"],
+        )
 
         opz = 1.0 / (np.sqrt(1.0 - self.gmrc2 * mass / radius))
         print(
@@ -2564,9 +2571,15 @@ Initial parameters:
 
         assert len(distrange) == 2
 
-        # TODO: Theta mapping needs to be changed for dictionary
-        X_0, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        theta = self.theta
+        Z, Q_b, xi_b, xi_p, mass, radius = (
+            theta["Z"],
+            theta["Q_b"],
+            theta["xi_b"],
+            theta["xi_p"],
+            theta["mass"],
+            theta["radius"],
+        )
 
         # Loop over the distance values
 
@@ -2801,7 +2814,6 @@ Initial parameters:
         )
         # Testing the various functions. Each of these will display the likelihood value, followed by the model-results "blob"
         logger.info("testing the prior and likelihood functions..")
-        # TODO: Change inputs for lnlike function
         print("lnlike:", self.lnlike(self, self.theta, None, self.y, self.yerr))
         if self.sampler == "emcee":
             print("lnprior:", self.lnprior(self.theta))
@@ -2947,8 +2959,8 @@ Initial parameters:
         :param samples: numpy array with samples, to calculate the
           autocorrelation from
         :param reader: object to get the chains from (if not supplied via
-          the samples parameter), via the get_chain method. TODO: just pass
-          the samples to make this more general
+          the samples parameter), via the get_chain method.
+          TODO: just pass the samples to make this more general
         :param title: title for the figure; set to None for some generic info, or False to skip
         :param savefile: name of file to save as (skip if None)
         :param figsize: size for the figure, (tuple, in inches)
