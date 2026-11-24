@@ -2910,6 +2910,7 @@ Initial parameters:
                 self.nwalkers,
                 self.nsteps,
                 theta_tuple,
+                self.tuple_order,
                 self.lnprob,
                 self.lnprior,
                 None,
@@ -2919,7 +2920,6 @@ Initial parameters:
                 self.restart,
                 self.threads,
                 self.stretch_a,
-                self.tuple_order,
                 **kwargs,
             )
 
