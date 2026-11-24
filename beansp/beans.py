@@ -657,7 +657,7 @@ def dict_to_tuple(theta_dict, tuple_order):
     return theta_tuple
 
 
-def prior_grid(theta_in, latex=False):
+def prior_grid(theta_in, order=None, latex=False):
     """
     This function is to accompany grid_interp and implements a simple
     box prior for all the parameters, respecting the grid range
@@ -687,25 +687,25 @@ def prior_grid(theta_in, latex=False):
 
     c = const.c.to("cm s-1")
     G = const.G.to("cm3 g-1 s-2")
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
-    R = radius * 1e5 * u.cm  # cgs
-    M = mass * const.M_sun.to("g")  # cgs
+    R = theta_in["radius"] * 1e5 * u.cm  # cgs
+    M = theta_in["mass"] * const.M_sun.to("g")  # cgs
     redshift = np.power((1 - (2 * G * M / (R * c**2))), -0.5).value
     gravity = (M * redshift * G / R**2 / (u.cm / u.s**2)).value / 1e14  # cgs
 
     # upper bound and lower bounds of each parameter defined here. Bounds are
     # determined by the limits of the grid
     if (
-        (0.64 <= X <= 0.76)
-        and (0.0025 <= Z <= 0.03)
-        and (0.0 <= Q_b <= 0.6)
-        and (1 < dist < 20)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
+        (0.64 <= theta_in["X"] <= 0.76)
+        and (0.0025 <= theta_in["Z"] <= 0.03)
+        and (0.0 <= theta_in["Q_b"] <= 0.6)
+        and (1 < theta_in["dist"] < 20)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
         and (1.86 < gravity < 3.45)
     ):
         return 0.0
@@ -730,9 +730,10 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius = extra + [self.M_NS, self.R_NS][len(extra) :]
+
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, self.tuple_order)
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
