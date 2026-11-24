@@ -388,6 +388,7 @@ def prior_func(theta_in, latex=False):
             "$U[1,10]$",
         ]
 
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
@@ -438,7 +439,7 @@ def prior_kepler(theta_in, latex=False):
             "$U[9,17]$",
             "$U[1,10]$",
         ]
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
@@ -487,7 +488,7 @@ def prior_mr(theta_in, latex=False):
             "steiner",
             "$U[1,10]$",
         ]
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
@@ -538,7 +539,7 @@ def prior_1808(theta_in, latex=False):
             "steiner",
             "$U[1,10]$",
         ]
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
@@ -572,7 +573,7 @@ def prior_1820_30(theta_in, latex=False):
 
     :return: prior probability
     """
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [1.4, 10.5, 1.0][len(extra) :]
 
@@ -677,7 +678,7 @@ def prior_grid(theta_in, latex=False):
 
     c = const.c.to("cm s-1")
     G = const.G.to("cm3 g-1 s-2")
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
 
@@ -720,7 +721,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius = extra + [self.M_NS, self.R_NS][len(extra) :]
 
@@ -730,6 +731,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, self.y)
+    # TODO: Check runmodel() works for theta dictionary
     model, valid, model2 = runmodel(theta_in, self, debug=False)
     if not valid:
         return -np.inf, model
@@ -795,7 +797,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-
+    # TODO: Parameter mapping needs to change for dictionary theta
     X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
     mass, radius, f_t = extra + [bean.M_NS, bean.R_NS, 1.0][len(extra) :]
 
@@ -805,6 +807,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     # modeldata(base, z, x, r1, r2 ,r3)
 
     assert np.allclose(y, bean.y)
+    # TODO: Check runmodel() works for theta dictionary
     model, valid, model2 = runmodel(theta_in, bean)
     if not valid:
         return -np.inf, model
@@ -1465,7 +1468,7 @@ class Beans:
         # we want to record whether we're including systematic errors
         # here; previously this was via the (boolean) has_systematic
 
-        self.ndim = len(self.theta)
+        self.ndim = len(self.theta.keys())
         if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
             logger.error("number of dimensions of input parameter vector should be 6-9")
             return
@@ -1610,7 +1613,7 @@ class Beans:
         # # -------------------------------------------------------------------------#
         if test_model:
             logger.info("testing the model works & is valid ...")
-
+            # TODO: Check runmodel() execution with theta dictionary
             test, valid, test2 = runmodel(
                 self.theta, self, debug=False
             )  # set debug to True for testing
@@ -2013,7 +2016,7 @@ Initial parameters:
         :return: total (prior+model) likelihood, prior likelihood, model array
           (from :meth:`Beans.lnlike`)
         """
-
+        # TODO: Check inputs for all possible priors match here
         lp = self.lnprior(theta_in)
         # Check if the parameters are consistent with the prior, and skip
         # the model run it if not
@@ -2072,6 +2075,7 @@ Initial parameters:
         itoff = 1  # time offset for models produced with generate_burst_train
         if (model is None) & show_model:
             # no need to do the matching here
+            # TODO: Check runmodel works with theta dictionary
             test, valid, model = runmodel(
                 self.theta, self, match=(False or not self.continuous), debug=False
             )
@@ -2373,6 +2377,7 @@ Initial parameters:
             )
         )
 
+        # TODO: Check runmodel() works for theta dictionary
         test, valid, full_model = runmodel(
             self.theta, self, match=(self.numburstsobs > 0)
         )
@@ -2402,6 +2407,7 @@ Initial parameters:
             )
             _comm = "# "
 
+        # TODO: Theta mapping needs to be changed for dictionary
         X, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
         mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
@@ -2544,6 +2550,7 @@ Initial parameters:
 
         assert len(distrange) == 2
 
+        # TODO: Theta mapping needs to be changed for dictionary
         X_0, Z, Q_b, dist, xi_b, xi_p, *extra = self.theta
         mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
 
@@ -2780,6 +2787,7 @@ Initial parameters:
         )
         # Testing the various functions. Each of these will display the likelihood value, followed by the model-results "blob"
         logger.info("testing the prior and likelihood functions..")
+        # TODO: Change inputs for lnlike function
         print("lnlike:", self.lnlike(self, self.theta, None, self.y, self.yerr))
         if self.sampler == "emcee":
             print("lnprior:", self.lnprior(self.theta))
@@ -2869,6 +2877,7 @@ Initial parameters:
             #   https://github.com/dfm/emcee
             # run the chains and save the output as a h5 file
             # TODO: to simplify the subsequent analysis I think this object should be added to the Beans object
+            # TODO: Check the input for theta dictionary changes
             result = runemcee(
                 self.nwalkers,
                 self.nsteps,
