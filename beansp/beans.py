@@ -360,7 +360,7 @@ def lnZprior(z):
     )
 
 
-def prior_func(theta_in, latex=False):
+def prior_func(theta_in, order=None, latex=False):
     """
     This function is the default prior and implements a simple box prior
     for all the parameters. Notably the systematic error on the burst
@@ -369,6 +369,7 @@ def prior_func(theta_in, latex=False):
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
       *xi_p*, and (optionally) *mass*, *radius* & *f_t*
+    :param order: parameter vector that contains the order of theta_in tuple
     :param latex: if True, just return the prior limits suitable for inclusion in a LaTeX table
 
     :return: prior probability
@@ -388,30 +389,30 @@ def prior_func(theta_in, latex=False):
             "$U[1,10]$",
         ]
 
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < X < 0.76)
-        and (0.00001 < Z < 0.056)
-        and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 20)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
-        and (1.15 < mass < 2.5)
-        and (9 < radius < 17)
+        (0.00001 < theta_in["X"] < 0.76)
+        and (0.00001 < theta_in["Z"] < 0.056)
+        and (0.000001 <= theta_in["Q_b"] < 5.0)
+        and (1 < theta_in["dist"] < 20)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
+        and (1.15 < theta_in["mass"] < 2.5)
+        and (9 < theta_in["radius"] < 17)
     ):
         return 0.0
     else:
         return -np.inf
 
 
-def prior_kepler(theta_in, latex=False):
+def prior_kepler(theta_in, order=None, latex=False):
     """
     This function applies a more restrictive prior suitable for use with
     the corr_kepler correction function, which is only defined over the
@@ -439,30 +440,31 @@ def prior_kepler(theta_in, latex=False):
             "$U[9,17]$",
             "$U[1,10]$",
         ]
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.2 < X < 0.8)
-        and (0.005 < Z < 0.1)
-        and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 20)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
-        and (1.15 < mass < 2.5)
-        and (9 < radius < 17)
+        (0.2 < theta_in["X"] < 0.8)
+        and (0.005 < theta_in["Z"] < 0.1)
+        and (0.000001 <= theta_in["Q_b"] < 5.0)
+        and (1 < theta_in["dist"] < 20)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
+        and (1.15 < theta_in["mass"] < 2.5)
+        and (9 < theta_in["radius"] < 17)
     ):
         return 0.0
     else:
         return -np.inf
 
 
-def prior_mr(theta_in, latex=False):
+def prior_mr(theta_in, order=None, latex=False):
     """
     This function implements a simple box prior for all the parameters
     excluding mass and radius, which comes instead from
@@ -488,28 +490,29 @@ def prior_mr(theta_in, latex=False):
             "steiner",
             "$U[1,10]$",
         ]
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < X < 0.76)
-        and (0.000010000001 < Z < 0.056)
-        and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 20)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
+        (0.00001 < theat_in["X"] < 0.76)
+        and (0.000010000001 < theta_in["Z"] < 0.056)
+        and (0.000001 <= theta_in["Q_b"] < 5.0)
+        and (1 < theta_in["dist"] < 20)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
     ):
-        return 0.0 + mr_prior(mass, radius)
+        return 0.0 + mr_prior(theta_in["mass"], theta_in["radius"])
     else:
         return -np.inf
 
 
-def prior_1808(theta_in, latex=False):
+def prior_1808(theta_in, order=None, latex=False):
     """
     This function implements a simple box prior for all the parameters
     excluding mass and radius, which comes instead from
@@ -539,28 +542,33 @@ def prior_1808(theta_in, latex=False):
             "steiner",
             "$U[1,10]$",
         ]
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [M_NS, R_NS, 1.0][len(extra) :]
+
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < X < 0.76)
-        and (Z > 0.000010000001)
-        and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 20)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
+        (0.00001 < theta_in["X"] < 0.76)
+        and (theta_in["Z"] > 0.000010000001)
+        and (0.000001 <= theta_in["Q_b"] < 5.0)
+        and (1 < theta_in["dist"] < 20)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
     ):
-        return 0.0 + lnZprior(Z) + mr_prior(mass, radius)
+        return (
+            0.0
+            + lnZprior(theta_in["Z"])
+            + mr_prior(theta_in["mass"], theta_in["radius"])
+        )
     else:
         return -np.inf
 
 
-def prior_1820_30(theta_in, latex=False):
+def prior_1820_30(theta_in, order=None, latex=False):
     """
     This function implements a simple box prior for all the parameters
 
@@ -573,24 +581,25 @@ def prior_1820_30(theta_in, latex=False):
 
     :return: prior probability
     """
-    # TODO: Parameter mapping needs to change for dictionary theta
-    X, Z, Q_b, dist, xi_b, xi_p, *extra = theta_in
-    mass, radius, f_t = extra + [1.4, 10.5, 1.0][len(extra) :]
+
+    if theta_in is tuple:
+        theta_tuple = theta_in
+        theta_in = tuple_to_dict(theta_tuple, order)
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     # Assuming a Gaussing prior for each parameter, the mean and standard deviation are defined below.
     if (
-        (0.0 < X < 0.4)
-        and (0.00001 < Z < 0.1)
-        and (0.000001 <= Q_b < 5.0)
-        and (1 < dist < 10)
-        and (0.01 < xi_b < 2)
-        and (0.01 < xi_p < 10)
-        and (1 <= f_t < 10)
-        and (1.15 < mass < 2.5)
-        and (6 < radius < 17)
+        (0.0 < theta_in["X"] < 0.4)
+        and (0.00001 < theta_in["Z"] < 0.1)
+        and (0.000001 <= theta_in["Q_b"] < 5.0)
+        and (1 < theta_in["dist"] < 10)
+        and (0.01 < theta_in["xi_b"] < 2)
+        and (0.01 < theta_in["xi_p"] < 10)
+        and (1 <= theta_in["f_t"] < 10)
+        and (1.15 < theta_in["mass"] < 2.5)
+        and (6 < theta_in["radius"] < 17)
     ):
         mu_x, sigma_x = 0.05, 0.05
         mu_z, sigma_z = 0.02, 0.01
@@ -601,14 +610,14 @@ def prior_1820_30(theta_in, latex=False):
         mu_mass, sigma_mass = 1.58, 0.3
         mu_radius, sigma_radius = 9.1, 1.8
 
-        prob_X = -0.5 * (X - mu_x) ** 2 / sigma_x**2
-        prob_Z = -0.5 * (Z - mu_z) ** 2 / sigma_z**2
-        prob_Qb = -0.5 * (Q_b - mu_qb) ** 2 / sigma_qb**2
-        prob_dist = -0.5 * (dist - mu_dist) ** 2 / sigma_dist**2
-        prob_xi_b = -0.5 * (xi_b - mu_xi_b) ** 2 / sigma_xi_b**2
-        prob_xi_p = -0.5 * (xi_p - mu_xi_p) ** 2 / sigma_xi_p**2
-        prob_mass = -0.5 * (mass - mu_mass) ** 2 / sigma_mass**2
-        prob_radius = -0.5 * (radius - mu_radius) ** 2 / sigma_radius**2
+        prob_X = -0.5 * (theta_in["X"] - mu_x) ** 2 / sigma_x**2
+        prob_Z = -0.5 * (theta_in["Z"] - mu_z) ** 2 / sigma_z**2
+        prob_Qb = -0.5 * (theta_in["Q_b"] - mu_qb) ** 2 / sigma_qb**2
+        prob_dist = -0.5 * (theta_in["dist"] - mu_dist) ** 2 / sigma_dist**2
+        prob_xi_b = -0.5 * (theta_in["xi_b"] - mu_xi_b) ** 2 / sigma_xi_b**2
+        prob_xi_p = -0.5 * (theta_in["xi_p"] - mu_xi_p) ** 2 / sigma_xi_p**2
+        prob_mass = -0.5 * (theta_in["mass"] - mu_mass) ** 2 / sigma_mass**2
+        prob_radius = -0.5 * (theta_in["radius"] - mu_radius) ** 2 / sigma_radius**2
         return (
             0.0
             + prob_X
