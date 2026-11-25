@@ -1342,6 +1342,17 @@ class Beans:
         }
         if theta is None:
             theta = default_theta
+            tuple_order = [
+                "X",
+                "Z",
+                "Q_b",
+                "dist",
+                "xi_b",
+                "xi_p",
+                "M_NS",
+                "R_NS",
+                "f_t",
+            ]
         elif type(theta) is dict:
             tuple_order = [
                 "X",
@@ -1391,6 +1402,7 @@ class Beans:
                     ]
                 case _:
                     logger.error("Theta tuple of invalid length.")
+                    return
             theta_tuple = theta
             theta = tuple_to_dict(theta_tuple, tuple_order)
         else:
