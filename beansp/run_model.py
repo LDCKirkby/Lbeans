@@ -173,8 +173,8 @@ def runmodel(theta_in, bean, match=True, debug=False):
         theta_in["dist"],
         theta_in["xi_b"],
         theta_in["xi_p"],
-        theta_in["mass"],
-        theta_in["radius"],
+        theta_in["M_NS"],
+        theta_in["R_NS"],
     )
 
     # by default we assume the model is valid, i.e. has sufficient bursts

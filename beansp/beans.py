@@ -404,8 +404,8 @@ def prior_func(theta_in, order=None, latex=False):
         and (0.01 < theta_in["xi_b"] < 2)
         and (0.01 < theta_in["xi_p"] < 10)
         and (1 <= theta_in["f_t"] < 10)
-        and (1.15 < theta_in["mass"] < 2.5)
-        and (9 < theta_in["radius"] < 17)
+        and (1.15 < theta_in["M_NS"] < 2.5)
+        and (9 < theta_in["R_NS"] < 17)
     ):
         return 0.0
     else:
@@ -456,8 +456,8 @@ def prior_kepler(theta_in, order=None, latex=False):
         and (0.01 < theta_in["xi_b"] < 2)
         and (0.01 < theta_in["xi_p"] < 10)
         and (1 <= theta_in["f_t"] < 10)
-        and (1.15 < theta_in["mass"] < 2.5)
-        and (9 < theta_in["radius"] < 17)
+        and (1.15 < theta_in["M_NS"] < 2.5)
+        and (9 < theta_in["R_NS"] < 17)
     ):
         return 0.0
     else:
@@ -507,7 +507,7 @@ def prior_mr(theta_in, order=None, latex=False):
         and (0.01 < theta_in["xi_p"] < 10)
         and (1 <= theta_in["f_t"] < 10)
     ):
-        return 0.0 + mr_prior(theta_in["mass"], theta_in["radius"])
+        return 0.0 + mr_prior(theta_in["M_NS"], theta_in["R_NS"])
     else:
         return -np.inf
 
@@ -560,9 +560,7 @@ def prior_1808(theta_in, order=None, latex=False):
         and (1 <= theta_in["f_t"] < 10)
     ):
         return (
-            0.0
-            + lnZprior(theta_in["Z"])
-            + mr_prior(theta_in["mass"], theta_in["radius"])
+            0.0 + lnZprior(theta_in["Z"]) + mr_prior(theta_in["M_NS"], theta_in["R_NS"])
         )
     else:
         return -np.inf
@@ -598,8 +596,8 @@ def prior_1820_30(theta_in, order=None, latex=False):
         and (0.01 < theta_in["xi_b"] < 2)
         and (0.01 < theta_in["xi_p"] < 10)
         and (1 <= theta_in["f_t"] < 10)
-        and (1.15 < theta_in["mass"] < 2.5)
-        and (6 < theta_in["radius"] < 17)
+        and (1.15 < theta_in["M_NS"] < 2.5)
+        and (6 < theta_in["R_NS"] < 17)
     ):
         mu_x, sigma_x = 0.05, 0.05
         mu_z, sigma_z = 0.02, 0.01
@@ -616,8 +614,8 @@ def prior_1820_30(theta_in, order=None, latex=False):
         prob_dist = -0.5 * (theta_in["dist"] - mu_dist) ** 2 / sigma_dist**2
         prob_xi_b = -0.5 * (theta_in["xi_b"] - mu_xi_b) ** 2 / sigma_xi_b**2
         prob_xi_p = -0.5 * (theta_in["xi_p"] - mu_xi_p) ** 2 / sigma_xi_p**2
-        prob_mass = -0.5 * (theta_in["mass"] - mu_mass) ** 2 / sigma_mass**2
-        prob_radius = -0.5 * (theta_in["radius"] - mu_radius) ** 2 / sigma_radius**2
+        prob_mass = -0.5 * (theta_in["M_NS"] - mu_mass) ** 2 / sigma_mass**2
+        prob_radius = -0.5 * (theta_in["R_NS"] - mu_radius) ** 2 / sigma_radius**2
         return (
             0.0
             + prob_X
@@ -691,8 +689,8 @@ def prior_grid(theta_in, order=None, latex=False):
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
-    R = theta_in["radius"] * 1e5 * u.cm  # cgs
-    M = theta_in["mass"] * const.M_sun.to("g")  # cgs
+    R = theta_in["R_NS"] * 1e5 * u.cm  # cgs
+    M = theta_in["M_NS"] * const.M_sun.to("g")  # cgs
     redshift = np.power((1 - (2 * G * M / (R * c**2))), -0.5).value
     gravity = (M * redshift * G / R**2 / (u.cm / u.s**2)).value / 1e14  # cgs
 
@@ -1358,7 +1356,9 @@ class Beans:
             for key in default_theta.keys():
                 if not key in theta:
                     theta[key] = default_theta[key]
-                    logger.info("No value provided for ", key, ". Using default value.")
+                    logger.info(
+                        "No value provided for ", str(key), ". Using default value."
+                    )
         elif type(theta) is tuple:
             match len(theta):
                 case 6:
@@ -2427,8 +2427,8 @@ Initial parameters:
             theta["dist"],
             theta["xi_b"],
             theta["xi_p"],
-            theta["mass"],
-            theta["radius"],
+            theta["M_NS"],
+            theta["R_NS"],
             theta["f_t"],
         )
 
@@ -2577,8 +2577,8 @@ Initial parameters:
             theta["Q_b"],
             theta["xi_b"],
             theta["xi_p"],
-            theta["mass"],
-            theta["radius"],
+            theta["M_NS"],
+            theta["R_NS"],
         )
 
         # Loop over the distance values
