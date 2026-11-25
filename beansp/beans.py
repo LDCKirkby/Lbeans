@@ -1888,15 +1888,8 @@ Initial parameters:
                 # print(
                 #     "x %s:::%s:::%s"
                 #     % (option, config.get(section, option), str(type(option))))
-                # FIX: theta option not mapping saved dictionary properly from .ini file
                 if option == "theta":
-                    setattr(
-                        self,
-                        option,
-                        tuple(
-                            map(float, config.get(section, option)[1:-1].split(", "))
-                        ),
-                    )
+                    setattr(self, option, config.read_dict(section, option))
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
                 elif option == "tuple_order":
