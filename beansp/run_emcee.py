@@ -7,7 +7,7 @@ import time
 import h5py
 
 
-def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
+def set_initial_positions(theta, tuple_order, nwalkers, prior, scale=1e-4):
     """
     Distribute the initial positions for the walkers around the supplied theta value,
     making sure they're consistent with the prior
@@ -23,7 +23,9 @@ def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
     ndim = len(theta)
     pos = np.array([theta + scale * np.random.randn(ndim) for i in range(nwalkers)])
 
-    valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
+    valid = np.array(
+        [prior(pos[i], order=tuple_order) != -np.inf for i in range(nwalkers)]
+    )
 
     print(
         "Initial walker positions within {} of supplied parameter vector, checking for consistency with prior...".format(
@@ -37,7 +39,9 @@ def set_initial_positions(theta, nwalkers, prior, scale=1e-4):
             theta + scale * np.random.randn(ndim)
             for i in range(len(np.where(~valid)[0]))
         ]
-        valid = np.array([prior(pos[i]) != -np.inf for i in range(nwalkers)])
+        valid = np.array(
+            [prior(pos[i], order=tuple_order) != -np.inf for i in range(nwalkers)]
+        )
         # print (len(np.where(~valid)[0]))
 
     return list(pos)
@@ -47,6 +51,7 @@ def runemcee(
     nwalkers,
     nsteps,
     theta,
+    tuple_order,
     lnprob,
     prior,
     x,
@@ -168,7 +173,7 @@ def runemcee(
         else:
             # set the intial position of the walkers
             # pos = [theta + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
-            pos = set_initial_positions(theta, nwalkers, prior)
+            pos = set_initial_positions(theta, tuple_order, nwalkers, prior)
 
         print(
             "# ---------------------------------------------------------------------------#"
