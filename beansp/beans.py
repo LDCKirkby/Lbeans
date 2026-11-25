@@ -589,7 +589,6 @@ def prior_1820_30(theta_in, order=None, latex=False):
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     # Assuming a Gaussing prior for each parameter, the mean and standard deviation are defined below.
-    print(theta_in)
     if (
         (0.0 < theta_in["X"] < 0.4)
         and (0.00001 < theta_in["Z"] < 0.1)
