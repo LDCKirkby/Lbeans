@@ -8,6 +8,8 @@
 """Main module. This has functions that do the sampling, save the chains, and analyse the results."""
 
 ## Python packages required:
+import string
+
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import numpy as np
@@ -1913,9 +1915,7 @@ Initial parameters:
                     setattr(
                         self,
                         option,
-                        tuple(
-                            map(float, config.get(section, option)[1:-1].split(", "))
-                        ),
+                        tuple(config.get(section, option)[1:-1].split(", ")),
                     )
                 elif option == "prior":
                     function_name = config.get(section, option).split(" ")[1]
