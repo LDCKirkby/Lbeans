@@ -16,26 +16,29 @@ import numpy as np
 
 # don't show the annoying np.float64(...
 np.set_printoptions(legacy="1.25")
-import pandas as pd
-import emcee
-import astropy.units as u
-import astropy.constants as const
-from astropy.table import Table, MaskedColumn
-from astropy.time import Time
-from matplotlib.ticker import MaxNLocator
-from scipy.interpolate import splrep, BSpline, splint
-from chainconsumer import *
-from multiprocessing import cpu_count
-from math import erf
-import os, sys
-import logging
+import ast
 import gzip
+import logging
+import os
+import pickle
+import sys
 import time
 from configparser import ConfigParser
-import pickle
 
 # import pkg_resources  # part of setuptools
 from importlib.metadata import version
+from math import erf
+from multiprocessing import cpu_count
+
+import astropy.constants as const
+import astropy.units as u
+import emcee
+import pandas as pd
+from astropy.table import MaskedColumn, Table
+from astropy.time import Time
+from chainconsumer import *
+from matplotlib.ticker import MaxNLocator
+from scipy.interpolate import BSpline, splint, splrep
 
 try:
     # this will fail if the package is not pip-installed
@@ -1903,13 +1906,7 @@ Initial parameters:
                 #     "x %s:::%s:::%s"
                 #     % (option, config.get(section, option), str(type(option))))
                 if option == "theta":
-                    config_dict = config.get(section, option).strip("{}")
-                    setattr(
-                        self,
-                        option,
-                        dict(item.split(": ") for item in config_dict.split(", ")),
-                    )
-                    print(self.theta)
+                    setattr(self, option, ast.literal_eval(config.get(section, option)))
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
                 elif option == "tuple_order":
