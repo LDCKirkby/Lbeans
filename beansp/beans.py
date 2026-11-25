@@ -1357,7 +1357,7 @@ class Beans:
             ]
             for key in default_theta.keys():
                 if not key in theta:
-                    theta[key] = default_value[key]
+                    theta[key] = default_theta[key]
                     logger.info("No value provided for ", key, ". Using default value.")
         elif type(theta) is tuple:
             match len(theta):
