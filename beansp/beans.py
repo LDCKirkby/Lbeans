@@ -1909,6 +1909,7 @@ Initial parameters:
                         option,
                         dict(item.split(": ") for item in config_dict.split(", ")),
                     )
+                    print(self.theta)
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
                 elif option == "tuple_order":
