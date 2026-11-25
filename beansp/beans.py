@@ -1901,7 +1901,12 @@ Initial parameters:
                 #     "x %s:::%s:::%s"
                 #     % (option, config.get(section, option), str(type(option))))
                 if option == "theta":
-                    setattr(self, option, config.read_dict(section, option))
+                    config_dict = config.get(section, option).strip("{}")
+                    setattr(
+                        self,
+                        option,
+                        dict(item.split(": ") for item in config_dict.split(", ")),
+                    )
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
                 elif option == "tuple_order":
