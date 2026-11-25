@@ -1716,8 +1716,17 @@ Initial parameters:
         :param indent: number of characters to indent the string from the left
         """
 
-        X, Z, Q_b, dist, xi_b, xi_p, *extra = theta
-        mass, radius, f_t = extra + [self.M_NS, self.R_NS, 1.0][len(extra) :]
+        X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
+            theta["X"],
+            theta["Z"],
+            theta["Q_b"],
+            theta["dist"],
+            theta["xi_b"],
+            theta["xi_p"],
+            theta["M_NS"],
+            theta["R_NS"],
+            theta["f_t"],
+        )
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
 #Z = {:.5f} \\ CNO mass fraction
@@ -1728,11 +1737,7 @@ Initial parameters:
             X, Z, Q_b, dist, xi_b, xi_p
         )
         result = result + "\n#M_NS = {:.3f} M_sun \\ neutron star mass".format(mass)
-        if len(theta) <= 6:
-            result += " (fixed)"
         result = result + "\n#R_NS = {:.3f} km \\ neutron star radius".format(radius)
-        if len(theta) <= 7:
-            result += " (fixed)"
         if self.num_systematic == 1:
             return (
                 result
