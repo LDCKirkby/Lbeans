@@ -389,7 +389,7 @@ def prior_func(theta_in, order=None, latex=False):
             "$U[1,10]$",
         ]
 
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -441,7 +441,7 @@ def prior_kepler(theta_in, order=None, latex=False):
             "$U[1,10]$",
         ]
 
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -491,7 +491,7 @@ def prior_mr(theta_in, order=None, latex=False):
             "$U[1,10]$",
         ]
 
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -543,7 +543,7 @@ def prior_1808(theta_in, order=None, latex=False):
             "$U[1,10]$",
         ]
 
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -581,7 +581,7 @@ def prior_1820_30(theta_in, order=None, latex=False):
     :return: prior probability
     """
 
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -687,7 +687,7 @@ def prior_grid(theta_in, order=None, latex=False):
 
     c = const.c.to("cm s-1")
     G = const.G.to("cm3 g-1 s-2")
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
 
@@ -730,7 +730,7 @@ def lnlike_nosys(self, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, self.tuple_order)
 
@@ -805,7 +805,7 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
     """
 
     # define theta_in = model parameters, which we define priors for
-    if type(theta_in) is tuple:
+    if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, bean.tuple_order)
 
@@ -2034,7 +2034,7 @@ Initial parameters:
 
         # Checks if type(theta_in) is in correct form for prior functions
         # Converts it to a dictionary if not
-        if type(theta_in) is tuple:
+        if type(theta_in) is not dict:
             theta_tuple = theta_in
             theta_in = tuple_to_dict(theta_tuple, self.tuple_order)
 
