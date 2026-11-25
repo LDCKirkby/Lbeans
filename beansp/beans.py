@@ -1828,6 +1828,7 @@ Initial parameters:
             # Config.add_section("emcee")
             Config.add_section("sampler")
             Config.set("sampler", "theta", str(self.theta))
+            Config.set("sampler", "tuple_order", str(self.tuple_order))
             Config.set("sampler", "numburstssim", str(self.numburstssim))
             Config.set("sampler", "prior", str(self.lnprior))
             Config.set("sampler", "corr", str(self.corr))
@@ -1887,6 +1888,7 @@ Initial parameters:
                 # print(
                 #     "x %s:::%s:::%s"
                 #     % (option, config.get(section, option), str(type(option))))
+                # FIX: theta option not mapping saved dictionary properly from .ini file
                 if option == "theta":
                     setattr(
                         self,
@@ -1897,6 +1899,14 @@ Initial parameters:
                     )
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
+                elif option == "tuple_order":
+                    setattr(
+                        self,
+                        option,
+                        tuple(
+                            map(float, config.get(section, option)[1:-1].split(", "))
+                        ),
+                    )
                 elif option == "prior":
                     function_name = config.get(section, option).split(" ")[1]
                     if function_name != str(self.lnprior).split(" ")[1]:
