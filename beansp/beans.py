@@ -1329,7 +1329,7 @@ class Beans:
         # Therefore need to check which values have been input, and use default for the missing required parameters
 
         default_theta = {
-            "X0": 0.41,
+            "X": 0.41,
             "Z": 0.0151,
             "Q_b": 0.6,
             "dist": 3.2,
@@ -1343,7 +1343,7 @@ class Beans:
             theta = default_theta
         elif type(theta) is dict:
             tuple_order = [
-                "X0",
+                "X",
                 "Z",
                 "Q_b",
                 "dist",
@@ -1362,12 +1362,12 @@ class Beans:
         elif type(theta) is tuple:
             match len(theta):
                 case 6:
-                    tuple_order = ["X0", "Z", "Q_b", "dist", "xi_b", "xi_p"]
+                    tuple_order = ["X", "Z", "Q_b", "dist", "xi_b", "xi_p"]
                 case 7:
-                    tuple_order = ["X0", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS"]
+                    tuple_order = ["X", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS"]
                 case 8:
                     tuple_order = [
-                        "X0",
+                        "X",
                         "Z",
                         "Q_b",
                         "dist",
@@ -1378,7 +1378,7 @@ class Beans:
                     ]
                 case 9:
                     tuple_order = [
-                        "X0",
+                        "X",
                         "Z",
                         "Q_b",
                         "dist",
