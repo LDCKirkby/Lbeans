@@ -2915,7 +2915,6 @@ Initial parameters:
                 self.nwalkers,
                 self.nsteps,
                 theta_tuple,
-                self.tuple_order,
                 self.lnprob,
                 self.lnprior,
                 None,
