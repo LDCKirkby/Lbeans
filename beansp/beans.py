@@ -1343,7 +1343,7 @@ class Beans:
         }
         if theta is None:
             theta = default_theta
-        elif theta is dict:
+        elif type(theta) is dict:
             tuple_order = [
                 "X0",
                 "Z",
@@ -1359,7 +1359,7 @@ class Beans:
                 if not key in theta:
                     theta[key] = default_value[key]
                     logger.info("No value provided for ", key, ". Using default value.")
-        elif theta is tuple:
+        elif type(theta) is tuple:
             match len(theta):
                 case 6:
                     tuple_order = ["X0", "Z", "Q_b", "dist", "xi_b", "xi_p"]
