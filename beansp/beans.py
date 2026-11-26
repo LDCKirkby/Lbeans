@@ -1355,7 +1355,7 @@ class Beans:
             tuple_order = tuple(theta.keys())
             for key in DEFAULT_THETA:
                 if key not in theta:
-                    theta[key] = DEFAULT_THETA[key]
+                    # theta[key] = DEFAULT_THETA[key]
                     logger.info(
                         "No value provided for {}. Using default value.".format(key)
                     )
