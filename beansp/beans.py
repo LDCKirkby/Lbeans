@@ -673,7 +673,7 @@ def prior_1820_30(theta_in, order=None, latex=False):
     for key in theta_dict.keys():
         if key in theta_in:
             theta_dict[key] = theta_in[key]
-
+    print(theta_dict)
     X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
