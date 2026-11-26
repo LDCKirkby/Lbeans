@@ -1786,16 +1786,25 @@ Initial parameters:
         :param indent: number of characters to indent the string from the left
         """
 
+        if type(theta) is not dict:
+            theta_dict = tuple_to_dict(theta, self.tuple_order)
+        else:
+            theta_dict = DEFAULT_THETA
+
+        for key in theta_dict.keys():
+            if key in theta:
+                theta_dict[key] = theta[key]
+
         X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
-            theta["X"],
-            theta["Z"],
-            theta["Q_b"],
-            theta["dist"],
-            theta["xi_b"],
-            theta["xi_p"],
-            theta["M_NS"],
-            theta["R_NS"],
-            theta["f_t"],
+            theta_dict["X"],
+            theta_dict["Z"],
+            theta_dict["Q_b"],
+            theta_dict["dist"],
+            theta_dict["xi_b"],
+            theta_dict["xi_p"],
+            theta_dict["M_NS"],
+            theta_dict["R_NS"],
+            theta_dict["f_t"],
         )
 
         result = """#X = {:.3f} \\ hydrogen mass fraction
