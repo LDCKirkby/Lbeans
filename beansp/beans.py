@@ -1379,6 +1379,7 @@ class Beans:
                 "Invalid theta value supplied. Please check input is of type dict or tuple."
             )
             return
+        print(theta)
         self.theta = theta
         self.tuple_order = tuple_order
 
