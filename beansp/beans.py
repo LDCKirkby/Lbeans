@@ -1460,9 +1460,9 @@ class Beans:
         # here; previously this was via the (boolean) has_systematic
 
         self.ndim = len(self.theta.keys())
-        if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
-            logger.error("number of dimensions of input parameter vector should be 6-9")
-            return
+        # if (self.ndim < NDIM_MIN) | (self.ndim > NDIM_MAX):
+        #     logger.error("number of dimensions of input parameter vector should be 6-9")
+        #     return
         self.num_systematic = self.ndim - (NDIM_MAX - 1)
         if (self.num_systematic > 0) & (not LNPROB_USES_LNLIKE_SYS):
             logger.warning("""likelihood calculation does not currently support systematic errors;
