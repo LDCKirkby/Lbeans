@@ -909,7 +909,10 @@ def lnlike_sys(bean, theta_in, x, y, yerr, components=False):
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, bean.tuple_order)
 
-    f_t = theta_in["f_t"]
+    if "f_t" in theta_in.keys():
+        f_t = theta_in["f_t"]
+    else:
+        f_t = bean.default_theta["f_t"]
 
     # call model (function runmodel, in run_model.py) to generate the burst
     # train, or the set of bursts (for "ensemble" mode. In earlier versions
