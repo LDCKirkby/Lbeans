@@ -1359,19 +1359,9 @@ class Beans:
                 "f_t",
             )
         elif type(theta) is dict:
-            tuple_order = (
-                "X",
-                "Z",
-                "Q_b",
-                "dist",
-                "xi_b",
-                "xi_p",
-                "M_NS",
-                "R_NS",
-                "f_t",
-            )
-            for key in default_theta.keys():
-                if not key in theta:
+            tuple_order = tuple(theta.keys())
+            for key in default_theta:
+                if key not in theta:
                     theta[key] = default_theta[key]
                     logger.info(
                         "No value provided for {}. Using default value.".format(key)
