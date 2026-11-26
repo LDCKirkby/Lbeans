@@ -1910,11 +1910,7 @@ Initial parameters:
                 elif option in float_params:
                     setattr(self, option, config.getfloat(section, option))
                 elif option == "tuple_order":
-                    setattr(
-                        self,
-                        option,
-                        tuple(config.get(section, option)[1:-1].strip("'").split(", ")),
-                    )
+                    setattr(self, option, ast.literal_eval(config.get(section, option)))
                 elif option == "prior":
                     function_name = config.get(section, option).split(" ")[1]
                     if function_name != str(self.lnprior).split(" ")[1]:
