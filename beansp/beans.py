@@ -596,14 +596,17 @@ def prior_1820_30(theta_in, order=None, latex=False):
     :return: prior probability
     """
 
+    # Need to rename incase self.theta is passed to prior to keep input theta static
+    # Currently makes a copy of DEFAULT_THETA then overrides default values with the values from theta_in
+    # TODO: Probably a better way to do this
     if type(theta_in) is not dict:
         theta_dict = tuple_to_dict(theta_in, order)
     else:
-        theta_dict = theta_in
+        theta_dict = DEFAULT_THETA
 
-    for key in DEFAULT_THETA:
-        if key not in theta_dict:
-            theta_dict[key] = DEFAULT_THETA[key]
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
