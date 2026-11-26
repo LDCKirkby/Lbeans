@@ -1913,7 +1913,7 @@ Initial parameters:
                     setattr(
                         self,
                         option,
-                        tuple(config.get(section, option)[1:-1].split(", ")),
+                        tuple(config.get(section, option)[1:-1].strip("'").split(", ")),
                     )
                 elif option == "prior":
                     function_name = config.get(section, option).split(" ")[1]
