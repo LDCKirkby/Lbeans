@@ -414,7 +414,7 @@ def prior_func(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
-    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
         theta_dict["Q_b"],
@@ -423,6 +423,7 @@ def prior_func(theta_in, order=None, latex=False):
         theta_dict["xi_p"],
         theta_dict["M_NS"],
         theta_dict["R_NS"],
+        theta_dict["f_t"],
     )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
@@ -482,7 +483,7 @@ def prior_kepler(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
-    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
         theta_dict["Q_b"],
@@ -491,6 +492,7 @@ def prior_kepler(theta_in, order=None, latex=False):
         theta_dict["xi_p"],
         theta_dict["M_NS"],
         theta_dict["R_NS"],
+        theta_dict["f_t"],
     )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
@@ -548,7 +550,7 @@ def prior_mr(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
-    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
         theta_dict["Q_b"],
@@ -557,6 +559,7 @@ def prior_mr(theta_in, order=None, latex=False):
         theta_dict["xi_p"],
         theta_dict["M_NS"],
         theta_dict["R_NS"],
+        theta_dict["f_t"],
     )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
@@ -616,7 +619,7 @@ def prior_1808(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
-    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
         theta_dict["Q_b"],
@@ -625,6 +628,7 @@ def prior_1808(theta_in, order=None, latex=False):
         theta_dict["xi_p"],
         theta_dict["M_NS"],
         theta_dict["R_NS"],
+        theta_dict["f_t"],
     )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
@@ -670,7 +674,7 @@ def prior_1820_30(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
-    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius, f_t = (
         theta_dict["X"],
         theta_dict["Z"],
         theta_dict["Q_b"],
@@ -679,6 +683,7 @@ def prior_1820_30(theta_in, order=None, latex=False):
         theta_dict["xi_p"],
         theta_dict["M_NS"],
         theta_dict["R_NS"],
+        theta_dict["f_t"],
     )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
