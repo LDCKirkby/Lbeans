@@ -1592,10 +1592,14 @@ class Beans:
             logger.error("need to include fluences as well as alphas")
             return
 
+        print("Theta before prior validity check\n")
+        print(self.theta)
         if self.lnprior(self.theta) == -np.inf:
             logger.error("supplied parameter vector is excluded by the prior")
             return
 
+        print("Theta after prior validity check\n")
+        print(self.theta)
         print(
             "# ---------------------------------------------------------------------------#"
         )
