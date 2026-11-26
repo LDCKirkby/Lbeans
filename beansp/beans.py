@@ -406,22 +406,38 @@ def prior_func(theta_in, order=None, latex=False):
         ]
 
     if type(theta_in) is not dict:
-        theta_tuple = theta_in
-        theta_in = tuple_to_dict(theta_tuple, order)
+        theta_dict = tuple_to_dict(theta_in, order)
+    else:
+        theta_dict = DEFAULT_THETA
+
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
+
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
+    )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < theta_in["X"] < 0.76)
-        and (0.00001 < theta_in["Z"] < 0.056)
-        and (0.000001 <= theta_in["Q_b"] < 5.0)
-        and (1 < theta_in["dist"] < 20)
-        and (0.01 < theta_in["xi_b"] < 2)
-        and (0.01 < theta_in["xi_p"] < 10)
-        and (1 <= theta_in["f_t"] < 10)
-        and (1.15 < theta_in["M_NS"] < 2.5)
-        and (9 < theta_in["R_NS"] < 17)
+        (0.00001 < X < 0.76)
+        and (0.00001 < Z < 0.056)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (9 < radius < 17)
     ):
         return 0.0
     else:
@@ -458,22 +474,38 @@ def prior_kepler(theta_in, order=None, latex=False):
         ]
 
     if type(theta_in) is not dict:
-        theta_tuple = theta_in
-        theta_in = tuple_to_dict(theta_tuple, order)
+        theta_dict = tuple_to_dict(theta_in, order)
+    else:
+        theta_dict = DEFAULT_THETA
+
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
+
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
+    )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.2 < theta_in["X"] < 0.8)
-        and (0.005 < theta_in["Z"] < 0.1)
-        and (0.000001 <= theta_in["Q_b"] < 5.0)
-        and (1 < theta_in["dist"] < 20)
-        and (0.01 < theta_in["xi_b"] < 2)
-        and (0.01 < theta_in["xi_p"] < 10)
-        and (1 <= theta_in["f_t"] < 10)
-        and (1.15 < theta_in["M_NS"] < 2.5)
-        and (9 < theta_in["R_NS"] < 17)
+        (0.2 < X < 0.8)
+        and (0.005 < Z < 0.1)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (9 < radius < 17)
     ):
         return 0.0
     else:
@@ -508,22 +540,38 @@ def prior_mr(theta_in, order=None, latex=False):
         ]
 
     if type(theta_in) is not dict:
-        theta_tuple = theta_in
-        theta_in = tuple_to_dict(theta_tuple, order)
+        theta_dict = tuple_to_dict(theta_in, order)
+    else:
+        theta_dict = DEFAULT_THETA
+
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
+
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
+    )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < theat_in["X"] < 0.76)
-        and (0.000010000001 < theta_in["Z"] < 0.056)
-        and (0.000001 <= theta_in["Q_b"] < 5.0)
-        and (1 < theta_in["dist"] < 20)
-        and (0.01 < theta_in["xi_b"] < 2)
-        and (0.01 < theta_in["xi_p"] < 10)
-        and (1 <= theta_in["f_t"] < 10)
+        (0.00001 < X < 0.76)
+        and (0.000010000001 < Z < 0.056)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
     ):
-        return 0.0 + mr_prior(theta_in["M_NS"], theta_in["R_NS"])
+        return 0.0 + mr_prior(mass, radius)
     else:
         return -np.inf
 
@@ -560,24 +608,38 @@ def prior_1808(theta_in, order=None, latex=False):
         ]
 
     if type(theta_in) is not dict:
-        theta_tuple = theta_in
-        theta_in = tuple_to_dict(theta_tuple, order)
+        theta_dict = tuple_to_dict(theta_in, order)
+    else:
+        theta_dict = DEFAULT_THETA
+
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
+
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
+    )
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     if (
-        (0.00001 < theta_in["X"] < 0.76)
-        and (theta_in["Z"] > 0.000010000001)
-        and (0.000001 <= theta_in["Q_b"] < 5.0)
-        and (1 < theta_in["dist"] < 20)
-        and (0.01 < theta_in["xi_b"] < 2)
-        and (0.01 < theta_in["xi_p"] < 10)
-        and (1 <= theta_in["f_t"] < 10)
+        (0.00001 < X < 0.76)
+        and (Z > 0.000010000001)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 20)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
     ):
-        return (
-            0.0 + lnZprior(theta_in["Z"]) + mr_prior(theta_in["M_NS"], theta_in["R_NS"])
-        )
+        return 0.0 + lnZprior(Z) + mr_prior(mass, radius)
     else:
         return -np.inf
 
@@ -608,20 +670,31 @@ def prior_1820_30(theta_in, order=None, latex=False):
         if key in theta_in:
             theta_dict[key] = theta_in[key]
 
+    X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
+    )
+
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
     # reasonable limits.
     # Assuming a Gaussing prior for each parameter, the mean and standard deviation are defined below.
     if (
-        (0.0 < theta_dict["X"] < 0.4)
-        and (0.00001 < theta_dict["Z"] < 0.1)
-        and (0.000001 <= theta_dict["Q_b"] < 5.0)
-        and (1 < theta_dict["dist"] < 10)
-        and (0.01 < theta_dict["xi_b"] < 2)
-        and (0.01 < theta_dict["xi_p"] < 10)
-        and (1 <= theta_dict["f_t"] < 10)
-        and (1.15 < theta_dict["M_NS"] < 2.5)
-        and (6 < theta_dict["R_NS"] < 17)
+        (0.0 < X < 0.4)
+        and (0.00001 < Z < 0.1)
+        and (0.000001 <= Q_b < 5.0)
+        and (1 < dist < 10)
+        and (0.01 < xi_b < 2)
+        and (0.01 < xi_p < 10)
+        and (1 <= f_t < 10)
+        and (1.15 < mass < 2.5)
+        and (6 < radius < 17)
     ):
         mu_x, sigma_x = 0.05, 0.05
         mu_z, sigma_z = 0.02, 0.01
@@ -632,14 +705,14 @@ def prior_1820_30(theta_in, order=None, latex=False):
         mu_mass, sigma_mass = 1.58, 0.3
         mu_radius, sigma_radius = 9.1, 1.8
 
-        prob_X = -0.5 * (theta_dict["X"] - mu_x) ** 2 / sigma_x**2
-        prob_Z = -0.5 * (theta_dict["Z"] - mu_z) ** 2 / sigma_z**2
-        prob_Qb = -0.5 * (theta_dict["Q_b"] - mu_qb) ** 2 / sigma_qb**2
-        prob_dist = -0.5 * (theta_dict["dist"] - mu_dist) ** 2 / sigma_dist**2
-        prob_xi_b = -0.5 * (theta_dict["xi_b"] - mu_xi_b) ** 2 / sigma_xi_b**2
-        prob_xi_p = -0.5 * (theta_dict["xi_p"] - mu_xi_p) ** 2 / sigma_xi_p**2
-        prob_mass = -0.5 * (theta_dict["M_NS"] - mu_mass) ** 2 / sigma_mass**2
-        prob_radius = -0.5 * (theta_dict["R_NS"] - mu_radius) ** 2 / sigma_radius**2
+        prob_X = -0.5 * (X - mu_x) ** 2 / sigma_x**2
+        prob_Z = -0.5 * (Z - mu_z) ** 2 / sigma_z**2
+        prob_Qb = -0.5 * (Q_b - mu_qb) ** 2 / sigma_qb**2
+        prob_dist = -0.5 * (dist - mu_dist) ** 2 / sigma_dist**2
+        prob_xi_b = -0.5 * (xi_b - mu_xi_b) ** 2 / sigma_xi_b**2
+        prob_xi_p = -0.5 * (xi_p - mu_xi_p) ** 2 / sigma_xi_p**2
+        prob_mass = -0.5 * (mass - mu_mass) ** 2 / sigma_mass**2
+        prob_radius = -0.5 * (radius - mu_radius) ** 2 / sigma_radius**2
         return (
             0.0
             + prob_X
@@ -1386,6 +1459,7 @@ class Beans:
         print(theta)
         self.theta = theta
         self.tuple_order = tuple_order
+        self.default_theta = DEFAULT_THETA
 
         self.numburstssim = numburstssim
         self.lnprior = prior

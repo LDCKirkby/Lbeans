@@ -165,16 +165,24 @@ def runmodel(theta_in, bean, match=True, debug=False):
 
     if debug:
         print("Calling runmodel")
+    # Need to rename incase self.theta is passed to prior to keep input theta static
+    # Currently makes a copy of DEFAULT_THETA then overrides default values with the values from theta_in
+    # TODO: Probably a better way to do this
+    theta_dict = bean.DEFAULT_THETA
+
+    for key in theta_dict.keys():
+        if key in theta_in:
+            theta_dict[key] = theta_in[key]
 
     X, Z, Q_b, dist, xi_b, xi_p, mass, radius = (
-        theta_in["X"],
-        theta_in["Z"],
-        theta_in["Q_b"],
-        theta_in["dist"],
-        theta_in["xi_b"],
-        theta_in["xi_p"],
-        theta_in["M_NS"],
-        theta_in["R_NS"],
+        theta_dict["X"],
+        theta_dict["Z"],
+        theta_dict["Q_b"],
+        theta_dict["dist"],
+        theta_dict["xi_b"],
+        theta_dict["xi_p"],
+        theta_dict["M_NS"],
+        theta_dict["R_NS"],
     )
 
     # by default we assume the model is valid, i.e. has sufficient bursts
