@@ -1347,7 +1347,7 @@ class Beans:
         }
         if theta is None:
             theta = default_theta
-            tuple_order = [
+            tuple_order = (
                 "X",
                 "Z",
                 "Q_b",
@@ -1357,9 +1357,9 @@ class Beans:
                 "M_NS",
                 "R_NS",
                 "f_t",
-            ]
+            )
         elif type(theta) is dict:
-            tuple_order = [
+            tuple_order = (
                 "X",
                 "Z",
                 "Q_b",
@@ -1369,7 +1369,7 @@ class Beans:
                 "M_NS",
                 "R_NS",
                 "f_t",
-            ]
+            )
             for key in default_theta.keys():
                 if not key in theta:
                     theta[key] = default_theta[key]
@@ -1379,11 +1379,11 @@ class Beans:
         elif type(theta) is tuple:
             match len(theta):
                 case 6:
-                    tuple_order = ["X", "Z", "Q_b", "dist", "xi_b", "xi_p"]
+                    tuple_order = ("X", "Z", "Q_b", "dist", "xi_b", "xi_p")
                 case 7:
-                    tuple_order = ["X", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS"]
+                    tuple_order = ("X", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS")
                 case 8:
-                    tuple_order = [
+                    tuple_order = (
                         "X",
                         "Z",
                         "Q_b",
@@ -1392,9 +1392,9 @@ class Beans:
                         "xi_p",
                         "M_NS",
                         "R_NS",
-                    ]
+                    )
                 case 9:
-                    tuple_order = [
+                    tuple_order = (
                         "X",
                         "Z",
                         "Q_b",
@@ -1404,7 +1404,7 @@ class Beans:
                         "M_NS",
                         "R_NS",
                         "f_t",
-                    ]
+                    )
                 case _:
                     logger.error("Theta tuple of invalid length.")
                     return
