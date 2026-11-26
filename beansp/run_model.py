@@ -168,7 +168,7 @@ def runmodel(theta_in, bean, match=True, debug=False):
     # Need to rename incase self.theta is passed to prior to keep input theta static
     # Currently makes a copy of DEFAULT_THETA then overrides default values with the values from theta_in
     # TODO: Probably a better way to do this
-    theta_dict = bean.DEFAULT_THETA
+    theta_dict = bean.default_theta
 
     for key in theta_dict.keys():
         if key in theta_in:
