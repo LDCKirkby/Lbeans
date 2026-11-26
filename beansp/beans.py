@@ -102,7 +102,18 @@ FLUX_U, FLUX_U_LATEX = (
     r"$10^{-9}\,{\rm erg\,cm^{-2}\,s^{-1}}$",
 )
 FLUEN_U, FLUEN_U_LATEX = 1e-6 * u.erg / u.cm**2, r"$10^{-6}\,{\rm erg\,cm^{-2}}$"
-
+DEFAULT_THETA = {
+    "X": 0.41,
+    "Z": 0.0151,
+    "Q_b": 0.6,
+    "dist": 3.2,
+    "xi_b": 1.0,
+    "xi_p": 1.6,
+    "M_NS": 1.5,
+    "R_NS": 11.8,
+    "f_t": 1.0,
+}
+DEFAULT_TUPLE_ORDER = ("X", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS", "R_NS", "f_t")
 # Adopted value of the Eddington luminosity/peak luminosity of PRE bursts
 # (preliminary values from Galloway et al. 2026, in prep)
 
@@ -575,8 +586,7 @@ def prior_1820_30(theta_in, order=None, latex=False):
     """
     This function implements a simple box prior for all the parameters
 
-    This prior is explicitly intended for use with 4U 1820-30, and
-    should only be used with extreme caution in other cases!
+    This prior is explicitly intended for use with 4U 1820-30
 
     :param theta_in: parameter vector, with *X*, *Z*, *Q_b*, *d*, *xi_b*,
       *xi_p*, and (optionally) *mass*, *radius*, and *f_t*
@@ -589,6 +599,10 @@ def prior_1820_30(theta_in, order=None, latex=False):
     if type(theta_in) is not dict:
         theta_tuple = theta_in
         theta_in = tuple_to_dict(theta_tuple, order)
+
+    for key in DEFAULT_THETA:
+        if key not in theta_in:
+            theta_in[key] = DEFAULT_THETA[key]
 
     # upper bound and lower bounds of each parameter defined here. Bounds were
     # found by considering an estimated value for each parameter then giving
@@ -1334,67 +1348,27 @@ class Beans:
         # Not a good idea to have a mutable type have a default value
         # Therefore need to check which values have been input, and use default for the missing required parameters
 
-        default_theta = {
-            "X": 0.41,
-            "Z": 0.0151,
-            "Q_b": 0.6,
-            "dist": 3.2,
-            "xi_b": 1.0,
-            "xi_p": 1.6,
-            "M_NS": 1.5,
-            "R_NS": 11.8,
-            "f_t": 1.0,
-        }
         if theta is None:
-            theta = default_theta
-            tuple_order = (
-                "X",
-                "Z",
-                "Q_b",
-                "dist",
-                "xi_b",
-                "xi_p",
-                "M_NS",
-                "R_NS",
-                "f_t",
-            )
+            theta = DEFAULT_THETA
+            tuple_order = DEFAULT_TUPLE_ORDER
         elif type(theta) is dict:
             tuple_order = tuple(theta.keys())
-            for key in default_theta:
+            for key in DEFAULT_THETA:
                 if key not in theta:
-                    theta[key] = default_theta[key]
+                    theta[key] = DEFAULT_THETA[key]
                     logger.info(
                         "No value provided for {}. Using default value.".format(key)
                     )
         elif type(theta) is tuple:
             match len(theta):
                 case 6:
-                    tuple_order = ("X", "Z", "Q_b", "dist", "xi_b", "xi_p")
+                    tuple_order = DEFAULT_TUPLE_ORDER[:6]
                 case 7:
-                    tuple_order = ("X", "Z", "Q_b", "dist", "xi_b", "xi_p", "M_NS")
+                    tuple_order = DEFAULT_TUPLE_ORDER[:7]
                 case 8:
-                    tuple_order = (
-                        "X",
-                        "Z",
-                        "Q_b",
-                        "dist",
-                        "xi_b",
-                        "xi_p",
-                        "M_NS",
-                        "R_NS",
-                    )
+                    tuple_order = DEFAULT_TUPLE_ORDER[:8]
                 case 9:
-                    tuple_order = (
-                        "X",
-                        "Z",
-                        "Q_b",
-                        "dist",
-                        "xi_b",
-                        "xi_p",
-                        "M_NS",
-                        "R_NS",
-                        "f_t",
-                    )
+                    tuple_order = DEFAULT_TUPLE_ORDER
                 case _:
                     logger.error("Theta tuple of invalid length.")
                     return
